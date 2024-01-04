@@ -3,14 +3,9 @@ import { useContext } from "react";
 import "./Delete_Item.css";
 import { FetchingStatus } from "../../../utils/context";
 import { Api } from "../../../utils/Api";
-import {
-  clearTokens,
-  getAccessToken,
-  getRefreshToken,
-  setTokens,
-} from "../../../utils/tokensStorage";
 import { useNavigate } from "react-router";
 import { refreshMyToken } from "../../../utils/setNewAccessToken";
+import { clearTokens, getAccessToken } from "../../../utils/tokensStorage";
 export default function DeleteItem({
   itemInChange,
   setItemInChange,
@@ -20,13 +15,14 @@ export default function DeleteItem({
   item,
   setItemIsUpdated,
   setPhotoChanged,
+  collReq,
 }) {
   const navigate = useNavigate();
   // eslint-disable-next-line
   const [fetchingStatus, setFetchingStatus] = useContext(FetchingStatus);
   const sendDeleteRequest = async (token) => {
     const headers = { Authorization: token };
-    await Api.delete(`/Inventory/${item._id}`, {
+    await Api.delete(`${collReq}/${item._id}`, {
       data: item,
       headers: headers,
     });

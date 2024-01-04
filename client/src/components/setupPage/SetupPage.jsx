@@ -8,12 +8,11 @@ import "./SetupPage.css";
 import { useEffect } from "react";
 
 import { useNavigate } from "react-router";
+import { Api } from "../../utils/Api";
 import { clearTokens, getAccessToken } from "../../utils/tokensStorage";
 import { refreshMyToken } from "../../utils/setNewAccessToken";
-import e from "cors";
-import { Api } from "../../utils/Api";
 
-export default function SetupPage() {
+export default function SetupPage({ collReq }) {
   const navigate = useNavigate();
   // eslint-disable-next-line
   const [inventoryData, setInventoryData] = useState([]);
@@ -24,13 +23,13 @@ export default function SetupPage() {
     btnVisible: true,
     formVisible: false,
   });
-  const [kindOfSort, setKindOfSort] = useState("category");
+  const [kindOfSort, setKindOfSort] = useState("name");
   const sendRequest = async (token) => {
     const headers = { Authorization: token };
     setFetchingStatus((prev) => {
       return { ...prev, status: true, loading: true };
     });
-    const { data } = await Api.get("/Inventory", { headers });
+    const { data } = await Api.get(collReq, { headers });
     setFetchingStatus((prev) => {
       return {
         ...prev,
@@ -98,95 +97,86 @@ export default function SetupPage() {
         return inventoryData?.sort(
           (a, b) => parseFloat(a.number) - parseFloat(b.number)
         );
-      case "desc":
-        return inventoryData?.sort((a, b) => (a.desc > b.desc ? 1 : -1));
-      case "category":
+      case "name":
+        return inventoryData?.sort((a, b) => (a.name > b.name ? 1 : -1));
+      case "mail":
+        return inventoryData?.sort((a, b) => (a.mail > b.mail ? 1 : -1));
+      case "bankProps":
         return inventoryData?.sort((a, b) =>
-          a.category > b.category ? 1 : -1
-        );
-      case "length":
-        return inventoryData?.sort(
-          (a, b) => parseFloat(a.length) - parseFloat(b.length)
-        );
-
-      case "weight":
-        return inventoryData?.sort(
-          (a, b) => parseFloat(a.weight) - parseFloat(b.weight)
+          a.bankProps > b.bankProps ? 1 : -1
         );
       default:
-        return inventoryData?.sort((a, b) =>
-          a.category > b.category ? 1 : -1
-        );
+        return inventoryData?.sort((a, b) => (a.name > b.name ? 1 : -1));
     }
   };
   return (
-    <div>
-      <div>
-        <form className="Item_form">
-          <div className="item_image">
-            <img className="imageHead" src="/jpgImage.png" alt="" />
-          </div>
+    <div className="inventory-container">
+      <form className="Item_form">
+        <button
+          id="name"
+          className="input_show_item head"
+          style={{
+            width:
+              collReq === "/inventory" || collReq === "/provider"
+                ? "63%"
+                : "25%",
+          }}
+          onClick={(e) => {
+            e.preventDefault();
+            setKindOfSort(() => "name");
+          }}
+        >
+          מוצר
+        </button>
+        <button
+          id="number"
+          className="input_show_item head"
+          style={{ width: "15%" }}
+          onClick={(e) => {
+            e.preventDefault();
+            setKindOfSort(() => "number");
+          }}
+        >
+          {collReq === "/inventory" ? "מחיר" : "מספר / טלפון"}
+        </button>
+        {collReq === "/contact" && (
           <button
-            id="weight"
+            id="mail"
             className="input_show_item head"
-            style={{ width: "10%" }}
+            style={{
+              width:
+                collReq === "/inventory" || collReq === "/provider"
+                  ? "15%"
+                  : "23.5%",
+            }}
             onClick={(e) => {
               e.preventDefault();
-              setKindOfSort(() => "weight");
+              setKindOfSort(() => "mail");
             }}
           >
-            משקל
+            דואר אלקטרוני
           </button>
+        )}
+        {collReq === "/contact" && (
           <button
-            id="length"
+            id="bankProps"
             className="input_show_item head"
-            style={{ width: "10%" }}
+            style={{ width: "15%" }}
             onClick={(e) => {
               e.preventDefault();
-              setKindOfSort(() => "length");
+              setKindOfSort(() => "bankProps");
             }}
           >
-            אורך
+            פרטי בנק
           </button>
-          <button
-            id="kind"
-            className="input_show_item head select-category"
-            onClick={(e) => {
-              e.preventDefault();
-              setKindOfSort(() => "cetegory");
-            }}
-          >
-            סוג
-          </button>
-          <button
-            id="desc"
-            className="input_show_item head desc-style"
-            onClick={(e) => {
-              e.preventDefault();
-              setKindOfSort(() => "desc");
-            }}
-          >
-            תאור
-          </button>
-          <button
-            id="number"
-            className="input_show_item head"
-            style={{ width: "10%" }}
-            onClick={(e) => {
-              e.preventDefault();
-              setKindOfSort(() => "number");
-            }}
-          >
-            מספר
-          </button>
-          <button style={{ visibility: "hidden" }} className="edit_btn">
-            edit
-          </button>
-          <button style={{ visibility: "hidden" }} className="delete_btn">
-            delete
-          </button>
-        </form>
-      </div>
+        )}
+        <button style={{ visibility: "hidden" }} className="edit_btn">
+          edit
+        </button>
+        <button style={{ visibility: "hidden" }} className="delete_btn">
+          delete
+        </button>
+      </form>
 
       {(!fetchingStatus.loading || inventoryData.length > 0) &&
         sortedInventory(kindOfSort).map((item) => {
@@ -198,19 +188,19 @@ export default function SetupPage() {
               setItemInChange={setItemInChange}
               myData={inventoryData}
               setItemIsUpdated={setItemIsUpdated}
+              collReq={collReq}
             />
           );
         })}
-      {!addItemToggle.formVisible &&
-        !fetchingStatus.error &&
-        !fetchingStatus.loading && (
-          <AddItemBtn setaddItemToggle={setaddItemToggle}></AddItemBtn>
-        )}
+      {!addItemToggle.formVisible && !fetchingStatus.loading && (
+        <AddItemBtn setaddItemToggle={setaddItemToggle}></AddItemBtn>
+      )}
       {!addItemToggle.btnVisible && (
         <AddItem
           setaddItemToggle={setaddItemToggle}
           setInventoryData={setInventoryData}
           setItemIsUpdated={setItemIsUpdated}
+          collReq={collReq}
         ></AddItem>
       )}
     </div>

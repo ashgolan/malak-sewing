@@ -18,3 +18,7 @@
     transform: rotate(360deg);
   }
 }
+.inventory-container {
+  display: flex;
+  flex-direction: column;
+}

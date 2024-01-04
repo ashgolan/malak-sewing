@@ -9,7 +9,7 @@
 .add-row {
   display: flex;
   flex-direction: row-reverse;
-  justify-content: space-between;
+  justify-content: center;
   border-top: 1px solid #55555533;
   border-bottom: 1px solid #55555533;
 }

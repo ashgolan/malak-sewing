@@ -3,9 +3,9 @@ import "./EditItem.css";
 import { FetchingStatus } from "../../../utils/context";
 import { useContext } from "react";
 import { Api } from "../../../utils/Api";
-import { clearTokens, getAccessToken } from "../../../utils/tokensStorage";
 import { useNavigate } from "react-router";
 import { refreshMyToken } from "../../../utils/setNewAccessToken";
+import { clearTokens, getAccessToken } from "../../../utils/tokensStorage";
 export default function EditItem({
   item,
   itemInChange,
@@ -14,12 +14,9 @@ export default function EditItem({
   setChangeStatus,
   itemsValues,
   setItemIsUpdated,
-  photoChanged,
-  setPhotoChanged,
+  collReq,
 }) {
   const navigate = useNavigate();
-  // const [accessToken, setAccessToken] = useState(getAccessToken());
-  // eslint-disable-next-line
   const [fetchingStatus, setFetchingStatus] = useContext(FetchingStatus);
   const checkInputsValues = () => {
     for (let i in itemsValues) {
@@ -27,36 +24,38 @@ export default function EditItem({
     }
   };
   const isInputsChanged = () => {
-    if (
-      itemsValues.number !== item.number ||
-      itemsValues.desc !== item.desc ||
-      itemsValues.category !== item.category ||
-      itemsValues.weight !== item.weight ||
-      itemsValues.length !== item.length ||
-      photoChanged
-    )
-      return true;
-  };
-  const getFormData = () => {
-    let formData = new FormData();
-    formData.append("number", itemsValues.number);
-    formData.append("desc", itemsValues.desc);
-    formData.append("category", itemsValues.category);
-    formData.append("weight", itemsValues.weight);
-    formData.append("length", itemsValues.length);
-    formData.append("image", itemsValues.image);
-    formData.append("lastPath", item.imagePath);
-    return formData;
+    if (collReq === "/contact") {
+      if (
+        itemsValues.number !== item.number ||
+        itemsValues.name !== item.name ||
+        itemsValues.mail !== item.mail ||
+        itemsValues.bankProps !== item.bankProps
+      )
+        return true;
+    } else {
+      if (itemsValues.number !== item.number || itemsValues.name !== item.name)
+        return true;
+    }
+    return false;
   };
   const sendRequest = async (token) => {
     const headers = { Authorization: token };
     setFetchingStatus((prev) => {
       return { ...prev, status: true, loading: true };
     });
-    await Api.patch(`/Inventory/${item._id}`, getFormData(), {
-      headers: headers,
-      "content-type": "multipart/form-data",
-    });
+    if (collReq === "/contact") {
+      await Api.patch(`${collReq}/${item._id}`, itemsValues, {
+        headers: headers,
+      });
+    } else {
+      await Api.patch(
+        `${collReq}/${item._id}`,
+        { name: itemsValues.name, number: itemsValues.number },
+        {
+          headers: headers,
+        }
+      );
+    }
     setFetchingStatus((prev) => {
       return {
         ...prev,
@@ -65,7 +64,6 @@ export default function EditItem({
         message: "המוצר עודכן בהצלחה",
       };
     });
-    setPhotoChanged(false);
     setItemIsUpdated((prev) => !prev);
     setTimeout(() => {
       setFetchingStatus((prev) => {
