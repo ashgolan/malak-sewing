@@ -6,10 +6,11 @@ import {
   getProvider,
   updateProvider,
 } from "../controllers/provider.controller.js";
+import { verifyAccessToken } from "../middleware/verifyAccessToken.js";
 
 export const providerRouter = Router();
-providerRouter.get("/", getAllProviders);
-providerRouter.get("/:id", getProvider);
-providerRouter.post("/", createProvider);
-providerRouter.patch("/:id", updateProvider);
-providerRouter.delete("/:id", deleteProvider);
+providerRouter.get("/", verifyAccessToken, getAllProviders);
+providerRouter.get("/:id", verifyAccessToken, getProvider);
+providerRouter.post("/", verifyAccessToken, createProvider);
+providerRouter.patch("/:id", verifyAccessToken, updateProvider);
+providerRouter.delete("/:id", verifyAccessToken, deleteProvider);

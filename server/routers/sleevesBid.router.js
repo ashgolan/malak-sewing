@@ -6,10 +6,11 @@ import {
   getSleevesBid,
   updateSleevesBid,
 } from "../controllers/sleevesBid.controller.js";
+import { verifyAccessToken } from "../middleware/verifyAccessToken.js";
 
 export const sleevesBidRouter = Router();
-sleevesBidRouter.get("/", getAllSleevesBid);
-sleevesBidRouter.get("/:id", getSleevesBid);
-sleevesBidRouter.post("/", createsleevesBid);
-sleevesBidRouter.patch("/:id", updateSleevesBid);
-sleevesBidRouter.delete("/:id", deleteSleevesBid);
+sleevesBidRouter.get("/", verifyAccessToken, getAllSleevesBid);
+sleevesBidRouter.get("/:id", verifyAccessToken, getSleevesBid);
+sleevesBidRouter.post("/", verifyAccessToken, createsleevesBid);
+sleevesBidRouter.patch("/:id", verifyAccessToken, updateSleevesBid);
+sleevesBidRouter.delete("/:id", verifyAccessToken, deleteSleevesBid);

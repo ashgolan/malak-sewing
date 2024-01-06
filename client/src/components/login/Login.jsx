@@ -30,7 +30,7 @@ export default function Login({ setLoggedIn }) {
       setFetchingStatus((prev) => {
         return { ...prev, status: true, loading: true };
       });
-      const { data } = await Api.post("/user/login", login);
+      const { data } = await Api.post("/users/login", login);
       setUserId(data?.adminUser?._id);
       setFetchingStatus((prev) => {
         return {

@@ -6,10 +6,11 @@ import {
   getSale,
   updateSale,
 } from "../controllers/sale.controller.js";
+import { verifyAccessToken } from "../middleware/verifyAccessToken.js";
 
 export const saleRouter = Router();
-saleRouter.get("/", getAllSales);
-saleRouter.get("/:id", getSale);
-saleRouter.post("/", createSale);
-saleRouter.patch("/:id", updateSale);
-saleRouter.delete("/:id", deleteSale);
+saleRouter.get("/", verifyAccessToken, getAllSales);
+saleRouter.get("/:id", verifyAccessToken, getSale);
+saleRouter.post("/", verifyAccessToken, createSale);
+saleRouter.patch("/:id", verifyAccessToken, updateSale);
+saleRouter.delete("/:id", verifyAccessToken, deleteSale);

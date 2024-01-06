@@ -6,10 +6,11 @@ import {
   getContact,
   updateContact,
 } from "../controllers/contact.controllers.js";
+import { verifyAccessToken } from "../middleware/verifyAccessToken.js";
 
 export const contactRouter = Router();
-contactRouter.get("/", getAllContacts);
-contactRouter.get("/:id", getContact);
-contactRouter.post("/", createContact);
-contactRouter.patch("/:id", updateContact);
-contactRouter.delete("/:id", deleteContact);
+contactRouter.get("/", verifyAccessToken, getAllContacts);
+contactRouter.get("/:id", verifyAccessToken, getContact);
+contactRouter.post("/", verifyAccessToken, createContact);
+contactRouter.patch("/:id", verifyAccessToken, updateContact);
+contactRouter.delete("/:id", verifyAccessToken, deleteContact);

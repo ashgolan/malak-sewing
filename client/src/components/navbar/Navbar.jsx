@@ -14,14 +14,14 @@ export default function Navbar() {
     try {
       const headers = { Authorization: getAccessToken() };
       await Api.post(
-        "/user/logout",
+        "/users/logout",
         {
           _id: getUserId(),
-          accessToken: getAccessToken(),
           key: process.env.REACT_APP_ADMIN,
         },
         { headers }
       );
+      console.log(getAccessToken());
       clearTokens();
       navigate("/");
     } catch (e) {
@@ -41,6 +41,7 @@ export default function Navbar() {
         <div className="img-uppernav">
           <img
             className="logout-img"
+            style={{ visibility: getAccessToken() ? "visible" : "hidden" }}
             alt={""}
             src="/switch.png"
             onClick={logout}

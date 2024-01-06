@@ -6,10 +6,11 @@ import {
   getInventory,
   updateInventory,
 } from "../controllers/inventory.controller.js";
+import { verifyAccessToken } from "../middleware/verifyAccessToken.js";
 
 export const inventoryRouter = Router();
-inventoryRouter.get("/", getAllInventories);
-inventoryRouter.get("/:id", getInventory);
-inventoryRouter.post("/", createInventory);
-inventoryRouter.patch("/:id", updateInventory);
-inventoryRouter.delete("/:id", deleteInventory);
+inventoryRouter.get("/", verifyAccessToken, getAllInventories);
+inventoryRouter.get("/:id", verifyAccessToken, getInventory);
+inventoryRouter.post("/", verifyAccessToken, createInventory);
+inventoryRouter.patch("/:id", verifyAccessToken, updateInventory);
+inventoryRouter.delete("/:id", verifyAccessToken, deleteInventory);
