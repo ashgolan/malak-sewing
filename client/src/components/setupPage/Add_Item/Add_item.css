@@ -14,7 +14,9 @@
   border-bottom: 1px solid #55555533;
 }
 .add-row > input {
-  text-align: center;
+  text-align: right;
+  direction: rtl;
+  padding: 0.5% 1%;
 }
 .add_item {
   margin: 0.5%;

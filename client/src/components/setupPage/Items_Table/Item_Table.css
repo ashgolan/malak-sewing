@@ -19,6 +19,7 @@
   color: whitesmoke;
   text-align: right;
   padding: 0.5% 2%;
+  direction: rtl;
 }
 .select-category {
   width: 10%;
