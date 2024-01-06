@@ -11,5 +11,5 @@ export const saleRouter = Router();
 saleRouter.get("/", getAllSales);
 saleRouter.get("/:id", getSale);
 saleRouter.post("/", createSale);
-saleRouter.patch("/", updateSale);
+saleRouter.patch("/:id", updateSale);
 saleRouter.delete("/:id", deleteSale);

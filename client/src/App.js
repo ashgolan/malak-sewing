@@ -13,6 +13,7 @@ import Inventories from "./components/inventories/Inventories";
 import Contacts from "./components/contacts/Contacts";
 import SleevesBids from "./components/SleevesBids/SleevesBids";
 import Expenses from "./components/expenses/Expenses";
+import Sales from "./components/sales/Sales";
 
 function App() {
   const navigate = useNavigate();
@@ -59,7 +60,7 @@ function App() {
             element={<SleevesBids></SleevesBids>}
           ></Route>
           <Route path="/expenses" element={<Expenses></Expenses>}></Route>
-
+          <Route path="/sales" element={<Sales></Sales>}></Route>
           <Route path="/homePage" element={<HomePage></HomePage>}></Route>
         </Routes>
       </FetchingStatus.Provider>

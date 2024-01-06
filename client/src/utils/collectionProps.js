@@ -1,10 +1,10 @@
 export const getCollectionProps = (collReq) => {
   switch (collReq) {
-    case "/inventory":
+    case "/inventories":
       return ["name", "number"];
-    case "/provider":
+    case "/providers":
       return ["name", "number"];
-    case "/contact":
+    case "/contacts":
       return ["name", "number", "bankProps", "mail"];
     case "/sleevesBids":
       return ["name", "number", "date", "tax", "quantity", "totalAmount"];

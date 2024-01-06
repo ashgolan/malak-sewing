@@ -1,9 +1,10 @@
 import React from "react";
 import SetupPage from "../setupPage/SetupPage";
-export default function Inventories() {
+
+export default function Sales() {
   return (
     <>
-      <SetupPage collReq={"/inventories"}></SetupPage>
+      <SetupPage collReq={"/sales"}></SetupPage>
     </>
   );
 }

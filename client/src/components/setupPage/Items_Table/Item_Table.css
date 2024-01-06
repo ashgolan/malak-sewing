@@ -18,11 +18,15 @@
   background-color: rgb(48, 45, 45);
   color: whitesmoke;
   text-align: right;
-  padding: 0.5% 2%;
+  padding: 0.5%;
   direction: rtl;
 }
 .select-category {
   width: 10%;
+  padding: 0.3% 0;
+}
+.select-product {
+  width: 20%;
   padding: 0.3% 0;
 }
 .desc-style {
@@ -38,13 +42,16 @@
   .select-category {
     width: 9%;
   }
+  .select-product {
+    width: 17%;
+  }
 }
 
 .head {
-  background-color: rgb(255, 238, 0);
+  background-color: rgb(255, 245, 112);
   color: rgb(0, 0, 0);
   font-size: 1rem;
-  padding: 0.5% 2%;
+  padding: 0.5%;
 }
 .head:hover {
   background-color: brown;

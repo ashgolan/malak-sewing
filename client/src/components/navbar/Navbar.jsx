@@ -58,10 +58,10 @@ export default function Navbar() {
         <Link to={"/sleevesBids"}>
           <button style={{ backgroundColor: "lightslategray" }}>שרוולים</button>
         </Link>
-        <Link to={'/expenses'}>
+        <Link to={"/expenses"}>
           <button style={{ backgroundColor: "lightpink" }}>הוצאות</button>
         </Link>
-        <Link>
+        <Link to={"/sales"}>
           <button style={{ backgroundColor: "lightsalmon" }}>מכירות</button>
         </Link>
       </div>

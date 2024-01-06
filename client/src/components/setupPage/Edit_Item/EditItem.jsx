@@ -27,7 +27,7 @@ export default function EditItem({
   };
   const isInputsChanged = () => {
     switch (collReq) {
-      case "/contact":
+      case "/contacts":
         return (
           itemsValues.number !== item.number ||
           itemsValues.name !== item.name ||
@@ -52,7 +52,7 @@ export default function EditItem({
           itemsValues.totalAmount !== item.totalAmount
         );
 
-      case "/inventory":
+      case "/inventories":
         return (
           itemsValues.number !== item.number || itemsValues.name !== item.name
         );
@@ -86,7 +86,7 @@ export default function EditItem({
           }
         );
         break;
-      case "/contact":
+      case "/contacts":
         await Api.patch(
           `${collReq}/${item._id}`,
           {
@@ -100,7 +100,7 @@ export default function EditItem({
           }
         );
         break;
-      case "/inventory":
+      case "/inventories":
         await Api.patch(
           `${collReq}/${item._id}`,
           { name: itemsValues.name, number: itemsValues.number },
@@ -236,6 +236,7 @@ export default function EditItem({
   return (
     <button
       style={{
+        width: collReq === "/sales" ? "7%" : "11%",
         visibility:
           !itemInChange || changeStatus.itemId === item._id
             ? "visible"

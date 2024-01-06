@@ -97,13 +97,25 @@ export default function SetupPage({ collReq }) {
         return inventoryData?.sort(
           (a, b) => parseFloat(a.number) - parseFloat(b.number)
         );
+      case "clientName":
+        return inventoryData?.sort(
+          (a, b) => parseFloat(a.clientName) - parseFloat(b.clientName)
+        );
       case "totalAmount":
         return inventoryData?.sort(
           (a, b) => parseFloat(a.totalAmount) - parseFloat(b.totalAmount)
         );
+      case "discount":
+        return inventoryData?.sort(
+          (a, b) => parseFloat(a.discount) - parseFloat(b.discount)
+        );
       case "taxPercent":
         return inventoryData?.sort(
           (a, b) => parseFloat(a.taxPercent) - parseFloat(b.taxPercent)
+        );
+      case "setupPrice":
+        return inventoryData?.sort(
+          (a, b) => parseFloat(a.setupPrice) - parseFloat(b.setupPrice)
         );
       case "name":
         return inventoryData?.sort((a, b) => (a.name > b.name ? 1 : -1));
@@ -122,11 +134,13 @@ export default function SetupPage({ collReq }) {
   return (
     <div className="inventory-container">
       <form className="Item_form">
-        {(collReq === "/sleevesBids" || collReq === "/expenses") && (
+        {(collReq === "/sleevesBids" ||
+          collReq === "/expenses" ||
+          collReq === "/sales") && (
           <button
             id="date"
             className="input_show_item head"
-            style={{ width: "13%" }}
+            style={{ width: collReq === "/sales" ? "10%" : "13%" }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "date");
@@ -135,13 +149,28 @@ export default function SetupPage({ collReq }) {
             תאריך
           </button>
         )}
+        {collReq === "/sales" && (
+          <button
+            id="clientName"
+            className="input_show_item head"
+            style={{ width: "12%" }}
+            onClick={(e) => {
+              e.preventDefault();
+              setKindOfSort(() => "clientName");
+            }}
+          >
+            קליינט
+          </button>
+        )}
         <button
           id="name"
           className="input_show_item head"
           style={{
             width:
-              collReq === "/inventory" || collReq === "/provider"
-                ? "63%"
+              collReq === "/inventories" || collReq === "/providers"
+                ? "62%"
+                : collReq === "/sales"
+                ? "15%"
                 : "25%",
           }}
           onClick={(e) => {
@@ -154,25 +183,63 @@ export default function SetupPage({ collReq }) {
         <button
           id="number"
           className="input_show_item head"
-          style={{ width: "15%" }}
+          style={{ width: collReq === "/sales" ? "7%" : "15%" }}
           onClick={(e) => {
             e.preventDefault();
             setKindOfSort(() => "number");
           }}
         >
-          {collReq === "/inventory" || collReq === "/expenses"
+          {collReq === "/inventories" ||
+          collReq === "/expenses" ||
+          collReq === "/sales"
             ? "מחיר"
             : "מספר / טלפון"}
         </button>
-        {collReq === "/contact" && (
+        {collReq === "/sales" && (
+          <button
+            id="discount"
+            className="input_show_item head"
+            style={{ width: "7%" }}
+            onClick={(e) => {
+              e.preventDefault();
+              setKindOfSort(() => "discount");
+            }}
+          >
+            הנחה
+          </button>
+        )}
+        {collReq === "/sales" && (
+          <button
+            id="sale"
+            className="input_show_item head"
+            style={{ width: "7%" }}
+            onClick={(e) => {
+              e.preventDefault();
+              setKindOfSort(() => "sale");
+            }}
+          >
+            מ.נטו
+          </button>
+        )}
+        {collReq === "/sales" && (
+          <button
+            id="setupPrice"
+            className="input_show_item head"
+            style={{ width: "5%" }}
+            onClick={(e) => {
+              e.preventDefault();
+              setKindOfSort(() => "setupPrice");
+            }}
+          >
+            התקנה
+          </button>
+        )}
+        {collReq === "/contacts" && (
           <button
             id="mail"
             className="input_show_item head"
             style={{
-              width:
-                collReq === "/inventory" || collReq === "/provider"
-                  ? "15%"
-                  : "23.5%",
+              width: "20%",
             }}
             onClick={(e) => {
               e.preventDefault();
@@ -182,11 +249,11 @@ export default function SetupPage({ collReq }) {
             דואר אלקטרוני
           </button>
         )}
-        {collReq === "/contact" && (
+        {collReq === "/contacts" && (
           <button
             id="bankProps"
             className="input_show_item head"
-            style={{ width: "15%" }}
+            style={{ width: "17%" }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "bankProps");
@@ -195,11 +262,11 @@ export default function SetupPage({ collReq }) {
             פרטי בנק
           </button>
         )}
-        {collReq === "/sleevesBids" && (
+        {(collReq === "/sleevesBids" || collReq === "/sales") && (
           <button
             id="quantity"
             className="input_show_item head"
-            style={{ width: "7%" }}
+            style={{ width: collReq === "/sales" ? "5%" : "7%" }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "quantity");
@@ -208,7 +275,7 @@ export default function SetupPage({ collReq }) {
             כמות
           </button>
         )}
-        {collReq === "/sleevesBids" && (
+        {(collReq === "/sleevesBids" || collReq === "/sales") && (
           <button
             id="tax"
             className="input_show_item head"
@@ -225,7 +292,7 @@ export default function SetupPage({ collReq }) {
           <button
             id="taxPercent"
             className="input_show_item head"
-            style={{ width: "15%" }}
+            style={{ width: "7%" }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "taxPercent");
@@ -234,11 +301,20 @@ export default function SetupPage({ collReq }) {
             אחוז מע"מ
           </button>
         )}
-        {(collReq === "/sleevesBids" || collReq === "/expenses") && (
+        {(collReq === "/sleevesBids" ||
+          collReq === "/expenses" ||
+          collReq === "/sales") && (
           <button
             id="totalAmount"
             className="input_show_item head"
-            style={{ width: "9%" }}
+            style={{
+              width:
+                collReq === "/expenses"
+                  ? "17%"
+                  : collReq === "/sales"
+                  ? "7%"
+                  : "6%",
+            }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "totalAmount");
@@ -248,10 +324,22 @@ export default function SetupPage({ collReq }) {
           </button>
         )}
 
-        <button style={{ visibility: "hidden" }} className="edit_btn">
+        <button
+          style={{
+            visibility: "hidden",
+            width: collReq === "/sales" ? "7%" : "11%",
+          }}
+          className="edit_btn"
+        >
           edit
         </button>
-        <button style={{ visibility: "hidden" }} className="delete_btn">
+        <button
+          style={{
+            visibility: "hidden",
+            width: collReq === "/sales" ? "7%" : "11%",
+          }}
+          className="delete_btn"
+        >
           delete
         </button>
       </form>

@@ -21,11 +21,11 @@ const PORT = process.env.PORT || 5000;
 
 app.use(Express.json());
 app.use(cors());
-app.use("/user", userRouter);
-app.use("/inventory", inventoryRouter);
-app.use("/provider", providerRouter);
-app.use("/sale", saleRouter);
-app.use("/contact", contactRouter);
+app.use("/users", userRouter);
+app.use("/inventories", inventoryRouter);
+app.use("/providers", providerRouter);
+app.use("/sales", saleRouter);
+app.use("/contacts", contactRouter);
 app.use("/sleevesBids", sleevesBidRouter);
 app.use("/expenses", expenseRouter);
 app.listen(PORT, () => {

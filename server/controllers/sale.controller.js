@@ -2,9 +2,9 @@ import { Sale } from "../models/sale.model.js";
 
 export const getAllSales = async (req, res) => {
   try {
-    const sales = await Sale.find();
-    if (!sales) throw Error("sales not found");
-    res.send(sales);
+    const sale = await Sale.find();
+    if (!sale) throw Error("sale not found");
+    res.send(sale);
   } catch (e) {
     res.send(e.message);
   }
@@ -30,7 +30,9 @@ export const createSale = async (req, res) => {
 };
 export const deleteSale = async (req, res) => {
   try {
-    const sale = await Sale.findByIdAndDelete({ _id: req.params.id });
+    const sale = await Sale.findByIdAndDelete({
+      _id: req.params.id,
+    });
     if (!sale) throw Error("bad data was inserted!");
     res.send(sale);
   } catch (e) {
@@ -40,8 +42,12 @@ export const deleteSale = async (req, res) => {
 export const updateSale = async (req, res) => {
   try {
     const sale = await Sale.findByIdAndUpdate(
-      { _id: req.body._id },
-      { $set: req.body }
+      { _id: req.params.id },
+      {
+        $set: {
+          ...req.body,
+        },
+      }
     );
     if (!sale) throw Error("bad data was inserted!");
     res.send(sale);

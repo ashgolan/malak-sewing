@@ -176,7 +176,7 @@ export default function AddItem({
     control: (base) => ({
       ...base,
       textAlign: "center",
-      backgroundColor: "rgb(248, 253, 174)",
+      border: "none",
     }),
     menu: (base) => ({
       ...base,
@@ -188,14 +188,17 @@ export default function AddItem({
       ref={productFormData}
       onSubmit={confirmAddingItem}
       className="addItem_form"
+      style={{ width: collReq === "/sales" && "95%" }}
     >
       <div className="add-row">
-        {(collReq === "/sleevesBids" || collReq === "/expenses") && (
+        {(collReq === "/sleevesBids" ||
+          collReq === "/expenses" ||
+          collReq === "/sales") && (
           <input
             name="date"
             type="date"
             id="date"
-            style={{ width: "25%" }}
+            style={{ width: collReq === "/sales" ? "10%" : "25%" }}
             required
             className="add_item"
             placeholder="בחר תאריך"
@@ -207,31 +210,65 @@ export default function AddItem({
             }
           ></input>
         )}
-        <input
-          name="name"
-          id="name"
-          required
-          autoFocus={true}
-          className="add_item"
-          style={{ width: "35%" }}
-          placeholder={
-            collReq === "/inventory" || collReq === "/expenses" ? "מוצר" : "שם"
-          }
-          onChange={(e) =>
-            setItemsValues((prev) => {
-              return { ...prev, name: e.target.value };
-            })
-          }
-          value={itemsValues.name}
-        ></input>
+        {collReq === "/sales" && (
+          <input
+            name="clientName"
+            id="clientName"
+            required
+            autoFocus={true}
+            className="add_item"
+            style={{ width: "15%" }}
+            placeholder={"קליינט"}
+            onChange={(e) =>
+              setItemsValues((prev) => {
+                return { ...prev, clientName: e.target.value };
+              })
+            }
+            value={itemsValues.clientName}
+          ></input>
+        )}
+        {collReq === "/sales" && (
+          <Select
+            className="add_item select-product "
+            placeholder="בחר מוצר"
+            styles={customStyles}
+            menuPlacement="auto"
+            required
+          ></Select>
+        )}
+        {collReq !== "/sales" && (
+          <input
+            name="name"
+            id="name"
+            required
+            autoFocus={true}
+            className="add_item"
+            style={{ width: "35%" }}
+            placeholder={
+              collReq === "/inventories" ||
+              collReq === "/expenses" ||
+              collReq === "/sales"
+                ? "מוצר"
+                : "שם"
+            }
+            onChange={(e) =>
+              setItemsValues((prev) => {
+                return { ...prev, name: e.target.value };
+              })
+            }
+            value={itemsValues.name}
+          ></input>
+        )}
         <input
           name="number"
           id="number"
-          style={{ width: "15%" }}
+          style={{ width: collReq === "/sales" ? "10%" : "15%" }}
           required
           className="add_item"
           placeholder={
-            collReq === "/contact" || collReq === "/provider" ? "מספר" : "מחיר"
+            collReq === "/contacts" || collReq === "/providers"
+              ? "מספר"
+              : "מחיר"
           }
           onChange={(e) =>
             setItemsValues((prev) => {
@@ -246,7 +283,21 @@ export default function AddItem({
           }
           value={itemsValues.number}
         ></input>
-        {collReq === "/contact" && (
+        {collReq === "/sales" && (
+          <input
+            name="setupPrice"
+            id="setupPrice"
+            style={{ width: "10%" }}
+            required
+            className="add_item"
+            placeholder={"התקנה"}
+            // onChange={(e) =>
+
+            // }
+            value={itemsValues.number}
+          ></input>
+        )}
+        {collReq === "/contacts" && (
           <input
             name="mail"
             id="mail"
@@ -262,7 +313,7 @@ export default function AddItem({
             value={itemsValues.mail}
           ></input>
         )}
-        {collReq === "/contact" && (
+        {collReq === "/contacts" && (
           <input
             name="bankProps"
             id="bankProps"
@@ -278,11 +329,11 @@ export default function AddItem({
             value={itemsValues.bankProps}
           ></input>
         )}
-        {collReq === "/sleevesBids" && (
+        {(collReq === "/sleevesBids" || collReq === "/sales") && (
           <input
             name="quantity"
             id="quantity"
-            style={{ width: "10%" }}
+            style={{ width: collReq === "/sales" ? "5%" : "10%" }}
             required
             className="add_item"
             placeholder="כמות"
@@ -298,7 +349,7 @@ export default function AddItem({
             value={itemsValues.quantity}
           ></input>
         )}
-        {collReq === "/sleevesBids" && (
+        {(collReq === "/sleevesBids" || collReq === "/sales") && (
           <Select
             id="tax"
             options={allTaxSelect}

@@ -116,6 +116,7 @@ export default function DeleteItem({
   return (
     <button
       style={{
+        width: collReq === "/sales" ? "7%" : "11%",
         visibility:
           !itemInChange || changeStatus.itemId === item._id
             ? "visible"
