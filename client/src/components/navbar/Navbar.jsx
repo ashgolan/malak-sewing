@@ -55,10 +55,10 @@ export default function Navbar() {
         <Link to={"/contacts"}>
           <button style={{ backgroundColor: "lightcoral" }}>אנשי קשר</button>
         </Link>
-        <Link>
+        <Link to={"/sleevesBids"}>
           <button style={{ backgroundColor: "lightslategray" }}>שרוולים</button>
         </Link>
-        <Link>
+        <Link to={'/expenses'}>
           <button style={{ backgroundColor: "lightpink" }}>הוצאות</button>
         </Link>
         <Link>

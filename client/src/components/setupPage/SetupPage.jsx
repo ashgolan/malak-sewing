@@ -97,8 +97,18 @@ export default function SetupPage({ collReq }) {
         return inventoryData?.sort(
           (a, b) => parseFloat(a.number) - parseFloat(b.number)
         );
+      case "totalAmount":
+        return inventoryData?.sort(
+          (a, b) => parseFloat(a.totalAmount) - parseFloat(b.totalAmount)
+        );
+      case "taxPercent":
+        return inventoryData?.sort(
+          (a, b) => parseFloat(a.taxPercent) - parseFloat(b.taxPercent)
+        );
       case "name":
         return inventoryData?.sort((a, b) => (a.name > b.name ? 1 : -1));
+      case "date":
+        return inventoryData?.sort((a, b) => (a.date > b.date ? 1 : -1));
       case "mail":
         return inventoryData?.sort((a, b) => (a.mail > b.mail ? 1 : -1));
       case "bankProps":
@@ -112,6 +122,19 @@ export default function SetupPage({ collReq }) {
   return (
     <div className="inventory-container">
       <form className="Item_form">
+        {(collReq === "/sleevesBids" || collReq === "/expenses") && (
+          <button
+            id="date"
+            className="input_show_item head"
+            style={{ width: "13%" }}
+            onClick={(e) => {
+              e.preventDefault();
+              setKindOfSort(() => "date");
+            }}
+          >
+            תאריך
+          </button>
+        )}
         <button
           id="name"
           className="input_show_item head"
@@ -137,7 +160,9 @@ export default function SetupPage({ collReq }) {
             setKindOfSort(() => "number");
           }}
         >
-          {collReq === "/inventory" ? "מחיר" : "מספר / טלפון"}
+          {collReq === "/inventory" || collReq === "/expenses"
+            ? "מחיר"
+            : "מספר / טלפון"}
         </button>
         {collReq === "/contact" && (
           <button
@@ -170,6 +195,59 @@ export default function SetupPage({ collReq }) {
             פרטי בנק
           </button>
         )}
+        {collReq === "/sleevesBids" && (
+          <button
+            id="quantity"
+            className="input_show_item head"
+            style={{ width: "7%" }}
+            onClick={(e) => {
+              e.preventDefault();
+              setKindOfSort(() => "quantity");
+            }}
+          >
+            כמות
+          </button>
+        )}
+        {collReq === "/sleevesBids" && (
+          <button
+            id="tax"
+            className="input_show_item head"
+            style={{ width: "10%" }}
+            onClick={(e) => {
+              e.preventDefault();
+              setKindOfSort(() => "tax");
+            }}
+          >
+            מע"מ
+          </button>
+        )}
+        {collReq === "/expenses" && (
+          <button
+            id="taxPercent"
+            className="input_show_item head"
+            style={{ width: "15%" }}
+            onClick={(e) => {
+              e.preventDefault();
+              setKindOfSort(() => "taxPercent");
+            }}
+          >
+            אחוז מע"מ
+          </button>
+        )}
+        {(collReq === "/sleevesBids" || collReq === "/expenses") && (
+          <button
+            id="totalAmount"
+            className="input_show_item head"
+            style={{ width: "9%" }}
+            onClick={(e) => {
+              e.preventDefault();
+              setKindOfSort(() => "totalAmount");
+            }}
+          >
+            סה"כ
+          </button>
+        )}
+
         <button style={{ visibility: "hidden" }} className="edit_btn">
           edit
         </button>

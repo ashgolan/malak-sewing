@@ -8,6 +8,8 @@ import { providerRouter } from "./routers/provider.router.js";
 import { saleRouter } from "./routers/sale.router.js";
 import { userRouter } from "./routers/user.router.js";
 import { contactRouter } from "./routers/contact.router.js";
+import { sleevesBidRouter } from "./routers/sleevesBid.router.js";
+import { expenseRouter } from "./routers/expense.router.js";
 
 const app = Express();
 const __dirname = url.fileURLToPath(new URL("./", import.meta.url));
@@ -24,6 +26,8 @@ app.use("/inventory", inventoryRouter);
 app.use("/provider", providerRouter);
 app.use("/sale", saleRouter);
 app.use("/contact", contactRouter);
+app.use("/sleevesBids", sleevesBidRouter);
+app.use("/expenses", expenseRouter);
 app.listen(PORT, () => {
   console.log("connecting to port", PORT);
 });

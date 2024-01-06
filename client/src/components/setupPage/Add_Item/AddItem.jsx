@@ -6,11 +6,19 @@ import { FetchingStatus } from "../../../utils/context";
 import { refreshMyToken } from "../../../utils/setNewAccessToken";
 import "./Add_item.css";
 import { clearTokens, getAccessToken } from "../../../utils/tokensStorage";
+import Select from "react-select";
 export default function AddItem({
   setaddItemToggle,
   setItemIsUpdated,
   collReq,
 }) {
+  const date = new Date();
+  const year = date.getFullYear();
+  const month =
+    date.getMonth() + 1 < 10
+      ? "0" + (date.getMonth() + 1)
+      : date.getMonth() + 1;
+  const day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
   const navigate = useNavigate();
   const productFormData = useRef();
   // eslint-disable-next-line
@@ -20,25 +28,60 @@ export default function AddItem({
     name: "",
     mail: "",
     bankProps: "",
+    quantity: "",
+    tax: "",
+    taxPercent: "",
+    date: year + "-" + month + "-" + day,
+    totalAmount: 0,
   });
   const sendPostRequest = async (token) => {
     const headers = {
       Authorization: token,
     };
     setFetchingStatus({ loading: true, error: false });
-    if (collReq === "/contact") {
-      await Api.post(collReq, itemsValues, {
-        headers: headers,
-      });
-    } else {
-      await Api.post(
-        collReq,
-        { name: itemsValues.name, number: itemsValues.number },
-        {
-          headers: headers,
-        }
-      );
+    switch (collReq) {
+      case "/sleevesBids":
+        await Api.post(
+          collReq,
+          {
+            name: itemsValues.name,
+            number: itemsValues.number,
+            date: itemsValues.date,
+            tax: itemsValues.tax,
+            quantity: itemsValues.quantity,
+            totalAmount: itemsValues.totalAmount,
+          },
+          {
+            headers: headers,
+          }
+        );
+        break;
+      case "/expenses":
+        await Api.post(
+          collReq,
+          {
+            name: itemsValues.name,
+            number: itemsValues.number,
+            date: itemsValues.date,
+            taxPercent: itemsValues.taxPercent,
+            totalAmount: itemsValues.totalAmount,
+          },
+          {
+            headers: headers,
+          }
+        );
+        break;
+      case "/contacts":
+      default:
+        await Api.post(
+          collReq,
+          { name: itemsValues.name, number: itemsValues.number },
+          {
+            headers: headers,
+          }
+        );
     }
+
     setItemIsUpdated((prev) => !prev);
 
     setFetchingStatus((prev) => {
@@ -123,7 +166,23 @@ export default function AddItem({
     e.preventDefault();
     setaddItemToggle({ btnVisible: true, formVisible: false });
   };
-
+  const allTaxSelect = [
+    { value: true, label: "כן" },
+    { value: false, label: "לא" },
+  ].map((item) => {
+    return { value: item.value, label: item.label };
+  });
+  const customStyles = {
+    control: (base) => ({
+      ...base,
+      textAlign: "center",
+      backgroundColor: "rgb(248, 253, 174)",
+    }),
+    menu: (base) => ({
+      ...base,
+      textAlign: "center",
+    }),
+  };
   return (
     <form
       ref={productFormData}
@@ -131,6 +190,23 @@ export default function AddItem({
       className="addItem_form"
     >
       <div className="add-row">
+        {(collReq === "/sleevesBids" || collReq === "/expenses") && (
+          <input
+            name="date"
+            type="date"
+            id="date"
+            style={{ width: "25%" }}
+            required
+            className="add_item"
+            placeholder="בחר תאריך"
+            value={itemsValues.date}
+            onChange={(e) =>
+              setItemsValues((prev) => {
+                return { ...prev, date: e.target.value };
+              })
+            }
+          ></input>
+        )}
         <input
           name="name"
           id="name"
@@ -138,7 +214,9 @@ export default function AddItem({
           autoFocus={true}
           className="add_item"
           style={{ width: "35%" }}
-          placeholder={collReq === "/inventory" ? "מוצר" : "שם"}
+          placeholder={
+            collReq === "/inventory" || collReq === "/expenses" ? "מוצר" : "שם"
+          }
           onChange={(e) =>
             setItemsValues((prev) => {
               return { ...prev, name: e.target.value };
@@ -152,10 +230,18 @@ export default function AddItem({
           style={{ width: "15%" }}
           required
           className="add_item"
-          placeholder={collReq === "/contact" ? "מספר" : "מחיר"}
+          placeholder={
+            collReq === "/contact" || collReq === "/provider" ? "מספר" : "מחיר"
+          }
           onChange={(e) =>
             setItemsValues((prev) => {
-              return { ...prev, number: e.target.value };
+              return {
+                ...prev,
+                number: e.target.value,
+                totalAmount: prev.quantity
+                  ? e.target.value * prev.quantity
+                  : (e.target.value * prev.taxPercent) / 100,
+              };
             })
           }
           value={itemsValues.number}
@@ -190,6 +276,64 @@ export default function AddItem({
               })
             }
             value={itemsValues.bankProps}
+          ></input>
+        )}
+        {collReq === "/sleevesBids" && (
+          <input
+            name="quantity"
+            id="quantity"
+            style={{ width: "10%" }}
+            required
+            className="add_item"
+            placeholder="כמות"
+            onChange={(e) =>
+              setItemsValues((prev) => {
+                return {
+                  ...prev,
+                  quantity: e.target.value,
+                  totalAmount: e.target.value * prev.number,
+                };
+              })
+            }
+            value={itemsValues.quantity}
+          ></input>
+        )}
+        {collReq === "/sleevesBids" && (
+          <Select
+            id="tax"
+            options={allTaxSelect}
+            className="add_item select-category"
+            placeholder='מע"ם'
+            defaultValue={itemsValues.tax}
+            onChange={(e) => {
+              setItemsValues((prev) => {
+                return { ...prev, tax: e.value };
+              });
+            }}
+            styles={customStyles}
+            menuPlacement="auto"
+            required
+          />
+        )}
+        {collReq === "/expenses" && (
+          <input
+            name="taxPercent"
+            id="taxPercent"
+            style={{ width: "10%" }}
+            required
+            className="add_item"
+            placeholder="אחוז מעמ"
+            onChange={(e) =>
+              setItemsValues((prev) => {
+                return {
+                  ...prev,
+                  taxPercent: e.target.value,
+                  totalAmount:
+                    +prev.number + +(e.target.value / 100) * prev.number,
+                };
+              })
+            }
+            value={itemsValues.taxPercent}
           ></input>
         )}
       </div>

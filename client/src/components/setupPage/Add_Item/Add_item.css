@@ -20,8 +20,8 @@
   margin: 0.5%;
   font-size: 1rem;
   border: none;
-  background-color: rgb(248, 253, 174);
-  color: rgb(0, 0, 0);
+  border-bottom: 1px solid rgb(97, 83, 81);
+  color: rgb(24, 14, 14);
 }
 .confirm_addItem,
 .remove_addItem {

@@ -6,6 +6,7 @@ import { Api } from "../../../utils/Api";
 import { useNavigate } from "react-router";
 import { refreshMyToken } from "../../../utils/setNewAccessToken";
 import { clearTokens, getAccessToken } from "../../../utils/tokensStorage";
+import { getCollectionProps } from "../../../utils/collectionProps";
 export default function EditItem({
   item,
   itemInChange,
@@ -19,42 +20,118 @@ export default function EditItem({
   const navigate = useNavigate();
   const [fetchingStatus, setFetchingStatus] = useContext(FetchingStatus);
   const checkInputsValues = () => {
+    const thisProps = getCollectionProps(collReq);
     for (let i in itemsValues) {
-      if (itemsValues[i] === "") return true;
+      if (itemsValues[i] === "" && thisProps.includes(i)) return true;
     }
   };
   const isInputsChanged = () => {
-    if (collReq === "/contact") {
-      if (
-        itemsValues.number !== item.number ||
-        itemsValues.name !== item.name ||
-        itemsValues.mail !== item.mail ||
-        itemsValues.bankProps !== item.bankProps
-      )
-        return true;
-    } else {
-      if (itemsValues.number !== item.number || itemsValues.name !== item.name)
-        return true;
+    switch (collReq) {
+      case "/contact":
+        return (
+          itemsValues.number !== item.number ||
+          itemsValues.name !== item.name ||
+          itemsValues.mail !== item.mail ||
+          itemsValues.bankProps !== item.bankProps
+        );
+      case "/sleevesBids":
+        return (
+          itemsValues.number !== item.number ||
+          itemsValues.name !== item.name ||
+          itemsValues.date !== item.date ||
+          itemsValues.tax !== item.tax ||
+          itemsValues.quantity !== item.quantity ||
+          itemsValues.totalAmount !== item.totalAmount
+        );
+      case "/expenses":
+        return (
+          itemsValues.number !== item.number ||
+          itemsValues.name !== item.name ||
+          itemsValues.date !== item.date ||
+          itemsValues.taxPercent !== item.taxPercent ||
+          itemsValues.totalAmount !== item.totalAmount
+        );
+
+      case "/inventory":
+        return (
+          itemsValues.number !== item.number || itemsValues.name !== item.name
+        );
+
+      default:
+        return (
+          itemsValues.number !== item.number || itemsValues.name !== item.name
+        );
     }
-    return false;
   };
   const sendRequest = async (token) => {
     const headers = { Authorization: token };
     setFetchingStatus((prev) => {
       return { ...prev, status: true, loading: true };
     });
-    if (collReq === "/contact") {
-      await Api.patch(`${collReq}/${item._id}`, itemsValues, {
-        headers: headers,
-      });
-    } else {
-      await Api.patch(
-        `${collReq}/${item._id}`,
-        { name: itemsValues.name, number: itemsValues.number },
-        {
-          headers: headers,
-        }
-      );
+
+    switch (collReq) {
+      case "/sleevesBids":
+        await Api.patch(
+          `${collReq}/${item._id}`,
+          {
+            name: itemsValues.name,
+            number: itemsValues.number,
+            date: itemsValues.date,
+            tax: itemsValues.tax,
+            quantity: itemsValues.quantity,
+            totalAmount: itemsValues.totalAmount,
+          },
+          {
+            headers: headers,
+          }
+        );
+        break;
+      case "/contact":
+        await Api.patch(
+          `${collReq}/${item._id}`,
+          {
+            name: itemsValues.name,
+            number: itemsValues.number,
+            mail: itemsValues.mail,
+            bankProps: itemsValues.bankProps,
+          },
+          {
+            headers: headers,
+          }
+        );
+        break;
+      case "/inventory":
+        await Api.patch(
+          `${collReq}/${item._id}`,
+          { name: itemsValues.name, number: itemsValues.number },
+          {
+            headers: headers,
+          }
+        );
+        break;
+      case "/expenses":
+        await Api.patch(
+          `${collReq}/${item._id}`,
+          {
+            name: itemsValues.name,
+            number: itemsValues.number,
+            date: itemsValues.date,
+            taxPercent: itemsValues.taxPercent,
+            totalAmount: itemsValues.totalAmount,
+          },
+          {
+            headers: headers,
+          }
+        );
+        break;
+      default:
+        await Api.patch(
+          `${collReq}/${item._id}`,
+          { name: itemsValues.name, number: itemsValues.number },
+          {
+            headers: headers,
+          }
+        );
     }
     setFetchingStatus((prev) => {
       return {

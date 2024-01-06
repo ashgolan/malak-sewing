@@ -11,6 +11,8 @@ import { clearTokens } from "./utils/tokensStorage";
 import Providers from "./components/providers/Providers";
 import Inventories from "./components/inventories/Inventories";
 import Contacts from "./components/contacts/Contacts";
+import SleevesBids from "./components/SleevesBids/SleevesBids";
+import Expenses from "./components/expenses/Expenses";
 
 function App() {
   const navigate = useNavigate();
@@ -30,7 +32,7 @@ function App() {
 
   return (
     <div>
-      <IdleTimer timeout={60 * 60 * 1000} onIdle={handleIdle} />
+      <IdleTimer timeout={5 * 60 * 1000} onIdle={handleIdle} />
       <Navbar></Navbar>
       {fetchingStatus.message && (
         <h5 className="message">{fetchingStatus.message}</h5>
@@ -52,6 +54,12 @@ function App() {
           ></Route>
           <Route path="/providers" element={<Providers></Providers>}></Route>
           <Route path="/contacts" element={<Contacts></Contacts>}></Route>
+          <Route
+            path="/sleevesBids"
+            element={<SleevesBids></SleevesBids>}
+          ></Route>
+          <Route path="/expenses" element={<Expenses></Expenses>}></Route>
+
           <Route path="/homePage" element={<HomePage></HomePage>}></Route>
         </Routes>
       </FetchingStatus.Provider>
