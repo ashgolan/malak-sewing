@@ -11,6 +11,7 @@ export default function AddItem({
   setaddItemToggle,
   setItemIsUpdated,
   collReq,
+  inventories,
 }) {
   const date = new Date();
   const year = date.getFullYear();
@@ -29,7 +30,11 @@ export default function AddItem({
     mail: "",
     bankProps: "",
     quantity: "",
+    clientName: "",
+    discount: "",
+    setupPrice: "",
     tax: "",
+    sale: "",
     taxPercent: "",
     date: year + "-" + month + "-" + day,
     totalAmount: 0,
@@ -45,9 +50,13 @@ export default function AddItem({
           collReq,
           {
             name: itemsValues.name,
+            clientName: itemsValues.clientName,
             number: itemsValues.number,
             date: itemsValues.date,
             tax: itemsValues.tax,
+            sale: itemsValues.tax,
+            discount: itemsValues.discount,
+            setupPrice: itemsValues.setupPrice,
             quantity: itemsValues.quantity,
             totalAmount: itemsValues.totalAmount,
           },
@@ -62,8 +71,29 @@ export default function AddItem({
           {
             name: itemsValues.name,
             number: itemsValues.number,
+            discount: itemsValues.discount,
             date: itemsValues.date,
             taxPercent: itemsValues.taxPercent,
+            totalAmount: itemsValues.totalAmount,
+          },
+          {
+            headers: headers,
+          }
+        );
+        break;
+      case "/sales":
+        await Api.post(
+          collReq,
+          {
+            date: itemsValues.date,
+            clientName: itemsValues.clientName,
+            name: itemsValues.name,
+            number: itemsValues.number,
+            discount: itemsValues.discount,
+            sale: itemsValues.sale,
+            setupPrice: itemsValues.setupPrice,
+            tax: itemsValues.tax,
+            quantity: itemsValues.quantity,
             totalAmount: itemsValues.totalAmount,
           },
           {
@@ -183,6 +213,9 @@ export default function AddItem({
       textAlign: "center",
     }),
   };
+  const allInventories = inventories?.map((item) => {
+    return { value: item._id, label: item.name };
+  });
   return (
     <form
       ref={productFormData}
@@ -198,7 +231,7 @@ export default function AddItem({
             name="date"
             type="date"
             id="date"
-            style={{ width: collReq === "/sales" ? "10%" : "25%" }}
+            style={{ width: collReq === "/sales" ? "11%" : "25%" }}
             required
             className="add_item"
             placeholder="בחר תאריך"
@@ -229,13 +262,27 @@ export default function AddItem({
         )}
         {collReq === "/sales" && (
           <Select
+            options={allInventories}
             className="add_item select-product "
             placeholder="בחר מוצר"
             styles={customStyles}
             menuPlacement="auto"
             required
+            onChange={(e) => {
+              const filteredItem = inventories.filter(
+                (item) => item._id === e.value
+              )[0];
+              setItemsValues((prev) => {
+                return {
+                  ...prev,
+                  name: e.label,
+                  number: filteredItem.number,
+                };
+              });
+            }}
           ></Select>
         )}
+
         {collReq !== "/sales" && (
           <input
             name="name"
@@ -274,27 +321,94 @@ export default function AddItem({
             setItemsValues((prev) => {
               return {
                 ...prev,
-                number: e.target.value,
-                totalAmount: prev.quantity
-                  ? e.target.value * prev.quantity
-                  : (e.target.value * prev.taxPercent) / 100,
+                number: +e.target.value,
+                sale:
+                  +e.target.value - (+prev.discount * +e.target.value) / 100,
+                totalAmount: !(collReq === "/sales")
+                  ? +prev.quantity
+                    ? +e.target.value * +prev.quantity
+                    : +e.target.value +
+                      +(+e.target.value * +prev.taxPercent) / 100
+                  : (+e.target.value -
+                      (+e.target.value * +prev.discount) / 100) *
+                      +prev.quantity +
+                    +prev.setupPrice,
               };
             })
           }
           value={itemsValues.number}
         ></input>
+
+        {collReq === "/sales" && (
+          <input
+            name="discount"
+            id="discount"
+            style={{ width: "7%" }}
+            required
+            className="add_item"
+            placeholder={"הנחה"}
+            onChange={(e) => {
+              setItemsValues((prev) => {
+                return {
+                  ...prev,
+                  discount: +e.target.value,
+                  sale: +prev.number - (+prev.number * +e.target.value) / 100,
+                  totalAmount:
+                    (+prev.number - (+prev.number * +e.target.value) / 100) *
+                      +prev.quantity +
+                    +prev.setupPrice,
+                };
+              });
+            }}
+            value={itemsValues.discount}
+          ></input>
+        )}
+        {collReq === "/sales" && (
+          <input
+            name="sale"
+            id="sale"
+            style={{ width: "7%" }}
+            required
+            className="add_item"
+            placeholder={"נטו"}
+            onChange={(e) => {
+              setItemsValues((prev) => {
+                return {
+                  ...prev,
+                  discount: +e.target.value,
+                  sale: +prev.number - (+prev.number * +e.target.value) / 100,
+                  totalAmount:
+                    (+prev.number - (+prev.number * +e.target.value) / 100) *
+                      +prev.quantity +
+                    +prev.setupPrice,
+                };
+              });
+            }}
+            disabled
+            value={+itemsValues.sale}
+          ></input>
+        )}
         {collReq === "/sales" && (
           <input
             name="setupPrice"
             id="setupPrice"
-            style={{ width: "10%" }}
+            style={{ width: "7%" }}
             required
             className="add_item"
             placeholder={"התקנה"}
-            // onChange={(e) =>
-
-            // }
-            value={itemsValues.number}
+            onChange={(e) => {
+              setItemsValues((prev) => {
+                return {
+                  ...prev,
+                  setupPrice: e.target.value,
+                  totalAmount:
+                    (+prev.number - (+prev.number * +prev.discount) / 100) *
+                      +prev.quantity +
+                    +e.target.value,
+                };
+              });
+            }}
+            value={itemsValues.setupPrice}
           ></input>
         )}
         {collReq === "/contacts" && (
@@ -337,15 +451,20 @@ export default function AddItem({
             required
             className="add_item"
             placeholder="כמות"
-            onChange={(e) =>
+            onChange={(e) => {
               setItemsValues((prev) => {
                 return {
                   ...prev,
                   quantity: e.target.value,
-                  totalAmount: e.target.value * prev.number,
+                  totalAmount:
+                    collReq === "/sales"
+                      ? (+prev.number - (+prev.number * +prev.discount) / 100) *
+                          +e.target.value +
+                        +prev.setupPrice
+                      : e.target.value * prev.number,
                 };
-              })
-            }
+              });
+            }}
             value={itemsValues.quantity}
           ></input>
         )}

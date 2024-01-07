@@ -13,9 +13,9 @@ export default function ItemsTable({
   myData,
   setItemIsUpdated,
   collReq,
+  inventories,
+  report,
 }) {
-  const [photoChanged, setPhotoChanged] = useState(false);
-  const fileInput = useRef();
   const [changeStatus, setChangeStatus] = useState({
     editText: "עריכה",
     delete: "מחיקה",
@@ -42,12 +42,12 @@ export default function ItemsTable({
       const thisItem = myData?.find((t) => t._id === item._id);
       setItemsValues((prev) => {
         return {
-          name: thisItem.name,
-          clientName: thisItem.clientName,
-          number: thisItem.number,
-          discount: thisItem.discount,
-          sale: thisItem.sale,
-          setupPrice: thisItem.setupPrice,
+          name: thisItem.name ? thisItem.name : "",
+          clientName: thisItem.clientName ? thisItem.clientName : "",
+          number: thisItem.number ? thisItem.number : "",
+          discount: thisItem.discount ? thisItem.discount : "",
+          sale: thisItem.sale ? thisItem.sale : "",
+          setupPrice: thisItem.setupPrice ? thisItem.setupPrice : "",
           mail: thisItem.mail ? thisItem.mail : "",
           bankProps: thisItem.bankProps ? thisItem.bankProps : "",
           quantity: thisItem.quantity ? thisItem.quantity : "",
@@ -70,12 +70,9 @@ export default function ItemsTable({
   const customStyles = {
     control: (base) => ({
       ...base,
-      textAlign: "center",
+      textAlign: "right",
       backgroundColor: "rgb(48, 45, 45)",
       border: "none",
-      // whiteSpace: "nowrap",
-      // overflow: "hidden",
-      // textOverflow: "ellipsis",
     }),
     placeholder: (provided) => ({
       ...provided,
@@ -98,7 +95,9 @@ export default function ItemsTable({
       };
     },
   };
-
+  const allInventories = inventories?.map((item) => {
+    return { value: item._id, label: item.name };
+  });
   return (
     <div>
       <form className="Item_form" key={`form${item.id}`}>
@@ -124,7 +123,7 @@ export default function ItemsTable({
             id="clientName"
             className="input_show_item"
             style={{
-              width: "12%",
+              width: report?.type ? "20%" : "12%",
             }}
             disabled={changeStatus.disabled}
             value={itemsValues.clientName}
@@ -135,25 +134,64 @@ export default function ItemsTable({
             }}
           ></input>
         )}
-        <input
-          id="name"
-          className="input_show_item"
-          style={{
-            width:
-              collReq === "/inventories" || collReq === "/providers"
-                ? "62%"
-                : collReq === "/sales"
-                ? "15%"
-                : "25%",
-          }}
-          disabled={changeStatus.disabled}
-          value={itemsValues.name}
-          onChange={(e) => {
-            setItemsValues((prev) => {
-              return { ...prev, name: e.target.value };
-            });
-          }}
-        ></input>
+        {collReq === "/sales" && (
+          <Select
+            options={allInventories}
+            className="input_show_item select-product-head "
+            placeholder="בחר מוצר"
+            isDisabled={changeStatus.disabled}
+            styles={customStyles}
+            menuPlacement="auto"
+            required
+            onChange={(e) => {
+              const filteredItem = inventories.filter(
+                (item) => item._id === e.value
+              )[0];
+              setItemsValues((prev) => {
+                return {
+                  ...prev,
+                  name: e.label,
+                  number: filteredItem.number,
+                  sale:
+                    +filteredItem.number -
+                    (+prev.discount * +filteredItem.number) / 100,
+                  totalAmount: !(collReq === "/sales")
+                    ? +prev.quantity
+                      ? +filteredItem.number * +prev.quantity
+                      : +filteredItem.number +
+                        +(+filteredItem.number * +prev.taxPercent) / 100
+                    : (+filteredItem.number -
+                        (+filteredItem.number * +prev.discount) / 100) *
+                        +prev.quantity +
+                      +prev.setupPrice,
+                };
+              });
+            }}
+          ></Select>
+        )}
+        {collReq !== "/sales" && (
+          <input
+            id="name"
+            className="input_show_item"
+            style={{
+              width:
+                collReq === "/inventories" || collReq === "/providers"
+                  ? "62%"
+                  : collReq === "/sales"
+                  ? "15%"
+                  : report?.type
+                  ? "45%"
+                  : "25%",
+            }}
+            disabled={changeStatus.disabled}
+            value={itemsValues.name}
+            onChange={(e) => {
+              setItemsValues((prev) => {
+                return { ...prev, name: e.target.value };
+              });
+            }}
+          ></input>
+        )}
         <input
           id="number"
           className="input_show_item"
@@ -340,28 +378,30 @@ export default function ItemsTable({
             value={+itemsValues.totalAmount.toFixed(2)}
           ></input>
         )}
-
-        <EditItem
-          item={item}
-          itemInChange={itemInChange}
-          setItemInChange={setItemInChange}
-          changeStatus={changeStatus}
-          setChangeStatus={setChangeStatus}
-          itemsValues={itemsValues}
-          setItemIsUpdated={setItemIsUpdated}
-          collReq={collReq}
-        ></EditItem>
-        <DeleteItem
-          itemInChange={itemInChange}
-          setItemInChange={setItemInChange}
-          item={item}
-          changeStatus={changeStatus}
-          setChangeStatus={setChangeStatus}
-          setItemsValues={setItemsValues}
-          setItemIsUpdated={setItemIsUpdated}
-          setPhotoChanged={setPhotoChanged}
-          collReq={collReq}
-        ></DeleteItem>
+        {!report?.type && (
+          <EditItem
+            item={item}
+            itemInChange={itemInChange}
+            setItemInChange={setItemInChange}
+            changeStatus={changeStatus}
+            setChangeStatus={setChangeStatus}
+            itemsValues={itemsValues}
+            setItemIsUpdated={setItemIsUpdated}
+            collReq={collReq}
+          ></EditItem>
+        )}
+        {!report?.type && (
+          <DeleteItem
+            itemInChange={itemInChange}
+            setItemInChange={setItemInChange}
+            item={item}
+            changeStatus={changeStatus}
+            setChangeStatus={setChangeStatus}
+            setItemsValues={setItemsValues}
+            setItemIsUpdated={setItemIsUpdated}
+            collReq={collReq}
+          ></DeleteItem>
+        )}
       </form>
     </div>
   );

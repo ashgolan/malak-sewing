@@ -29,6 +29,10 @@
   width: 20%;
   padding: 0.3% 0;
 }
+.select-product-head {
+  width: 15%;
+  padding: 0.3% 0;
+}
 .desc-style {
   width: 24%;
 }
@@ -51,7 +55,7 @@
   background-color: rgb(255, 245, 112);
   color: rgb(0, 0, 0);
   font-size: 1rem;
-  padding: 0.5%;
+  /* padding: 0.5%; */
 }
 .head:hover {
   background-color: brown;

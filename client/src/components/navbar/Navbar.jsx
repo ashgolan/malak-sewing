@@ -31,7 +31,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav>
+    <nav style={{ pointerEvents: getAccessToken() ? "auto" : "none" }}>
       <div className="upper-nav">
         <div className="img-uppernav">
           <img className="logo-img" src="./logo.jpg" alt="" />
@@ -65,6 +65,19 @@ export default function Navbar() {
         <Link to={"/sales"}>
           <button style={{ backgroundColor: "lightsalmon" }}>מכירות</button>
         </Link>
+        <div className="img-uppernav">
+          <img
+            className="logout-img"
+            style={{
+              width: "70%",
+            }}
+            alt={""}
+            onClick={() => {
+              navigate("/chartHomepage");
+            }}
+            src="/draw.png"
+          />
+        </div>
       </div>
     </nav>
   );

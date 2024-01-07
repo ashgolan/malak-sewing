@@ -14,6 +14,7 @@ import Contacts from "./components/contacts/Contacts";
 import SleevesBids from "./components/SleevesBids/SleevesBids";
 import Expenses from "./components/expenses/Expenses";
 import Sales from "./components/sales/Sales";
+import ChartHomepage from "./components/charts/ChartHomepage";
 
 function App() {
   const navigate = useNavigate();
@@ -61,6 +62,10 @@ function App() {
           ></Route>
           <Route path="/expenses" element={<Expenses></Expenses>}></Route>
           <Route path="/sales" element={<Sales></Sales>}></Route>
+          <Route
+            path="/chartHomepage"
+            element={<ChartHomepage></ChartHomepage>}
+          ></Route>
           <Route path="/homePage" element={<HomePage></HomePage>}></Route>
         </Routes>
       </FetchingStatus.Provider>

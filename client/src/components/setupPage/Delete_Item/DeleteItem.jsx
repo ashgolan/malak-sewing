@@ -14,7 +14,6 @@ export default function DeleteItem({
   setItemsValues,
   item,
   setItemIsUpdated,
-  setPhotoChanged,
   collReq,
 }) {
   const navigate = useNavigate();
@@ -106,7 +105,6 @@ export default function DeleteItem({
           message: null,
         };
       });
-      setPhotoChanged(false);
     }
     if (changeStatus.delete === "אישור") {
       deleteData();

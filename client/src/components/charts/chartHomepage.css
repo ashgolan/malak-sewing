@@ -1,0 +1,14 @@
+.charts-title {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row-reverse;
+  width: 70%;
+  margin: 1% auto;
+}
+.charts-title > button {
+  border: none;
+  background-color: lightgreen;
+  border-radius: 2rem;
+  padding: 0.5% 10%;
+  cursor: pointer;
+}
