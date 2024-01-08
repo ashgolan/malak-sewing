@@ -100,18 +100,25 @@ export default function SetupPage({ collReq, report, updatedReport }) {
   const filterByReport = (sortedData) => {
     if (!report?.type) return sortedData;
     if (report?.month && report.year) {
-      return sortedData.filter(
-        (item) =>
-          new Date(item.date).getFullYear() === report?.year &&
-          (new Date(item.date).getMonth() + "1" === report?.month ||
-            new Date(item.date).getMonth() === report?.month)
-      );
+      return sortedData.filter((item) => {
+        const month =
+          new Date(item.date).getMonth() + 1 < 10
+            ? `0${new Date(item.date).getMonth() + 1}`
+            : new Date(item.date).getMonth() + 1;
+
+        return (
+          month == report?.month &&
+          new Date(item.date).getFullYear() === report?.year
+        );
+      });
     } else if (report?.month) {
-      return sortedData.filter(
-        (item) =>
-          new Date(item.date).getMonth() + "1" === report?.month ||
-          new Date(item.date).getMonth() === report?.month
-      );
+      return sortedData.filter((item) => {
+        const month =
+          new Date(item.date).getMonth() + 1 < 10
+            ? `0${new Date(item.date).getMonth() + 1}`
+            : new Date(item.date).getMonth() + 1;
+        return month == report?.month;
+      });
     } else {
       return sortedData.filter(
         (item) => new Date(item.date).getFullYear() === report?.year
@@ -143,6 +150,10 @@ export default function SetupPage({ collReq, report, updatedReport }) {
       case "setupPrice":
         return fetchedData?.sort(
           (a, b) => parseFloat(a.setupPrice) - parseFloat(b.setupPrice)
+        );
+      case "quantity":
+        return fetchedData?.sort(
+          (a, b) => parseFloat(a.quantity) - parseFloat(b.quantity)
         );
       case "name":
         return fetchedData?.sort((a, b) => (a.name > b.name ? 1 : -1));

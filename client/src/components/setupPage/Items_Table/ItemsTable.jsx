@@ -123,7 +123,7 @@ export default function ItemsTable({
             id="clientName"
             className="input_show_item"
             style={{
-              width: report?.type ? "20%" : "12%",
+              width: report?.type ? "25%" : "12%",
             }}
             disabled={changeStatus.disabled}
             value={itemsValues.clientName}
@@ -138,11 +138,12 @@ export default function ItemsTable({
           <Select
             options={allInventories}
             className="input_show_item select-product-head "
-            placeholder="בחר מוצר"
+            placeholder={itemsValues?.name ? itemsValues.name : "בחר מוצר"}
             isDisabled={changeStatus.disabled}
             styles={customStyles}
             menuPlacement="auto"
             required
+            defaultValue={itemsValues.name}
             onChange={(e) => {
               const filteredItem = inventories.filter(
                 (item) => item._id === e.value
