@@ -6,38 +6,62 @@ import { FetchingStatus } from "../../utils/context";
 import { Api } from "../../utils/Api";
 import { clearTokens, getAccessToken } from "../../utils/tokensStorage";
 import { refreshMyToken } from "../../utils/setNewAccessToken";
+import { getDataByTotals } from "../../utils/getDataByTotals";
+import ChartDataLabels from "chartjs-plugin-datalabels";
 
-function ChartPage({ report, updateChart }) {
+function ChartPage({ report }) {
   const navigate = useNavigate();
   const [fetchingStatus, setFetchingStatus] = useContext(FetchingStatus);
-  const [fetchingData, setFetchingData] = useState([]);
-  const [valuesAndLabels, setValuesAndLabels] = useState({
-    labels: [],
-    values: [],
-  });
+  const [fetchingData, setFetchingData] = useState({});
 
   const [chartData, setChartData] = useState({
-    labels: valuesAndLabels.labels,
+    labels: [],
     datasets: [
       {
-        label: "Monthly Sales",
-        data: valuesAndLabels.values,
-        backgroundColor: "rgba(75, 192, 192, 0.2)",
-        borderColor: "rgba(75, 192, 192, 1)",
+        label: report?.month && report?.year ? "סכום חודשי" : "סכום יומי",
+        data: [],
+        backgroundColor: [
+          "#4CAF50",
+          "#2196F3",
+          "#FFC107",
+          "#FF5722",
+          "#E91E63",
+          "#673AB7",
+          "#00BCD4",
+          "#FF9800",
+          "#8BC34A",
+          "#795548",
+          "#9C27B0",
+          "#607D8B",
+        ],
         borderWidth: 1,
       },
     ],
   });
+  const chartOptions = {
+    plugins: {
+      datalabels: {
+        color: "#ffffff",
+        formatter: function (value) {
+          return Math.round(value);
+        },
+      },
+    },
+
+    scales: {
+      y: {
+        beginAtZero: true,
+      },
+    },
+  };
+
   const sendRequest = async (token) => {
     const headers = { Authorization: token };
     setFetchingStatus((prev) => {
       return { ...prev, status: true, loading: true };
     });
-    const collReq =
-      report?.type === "expensesChart" || report?.type === "/expenses"
-        ? "/expenses"
-        : "/sales";
-    const { data } = await Api.get(collReq, { headers });
+    const { data: salesData } = await Api.get("/sales", { headers });
+    const { data: expensesData } = await Api.get("/expenses", { headers });
 
     setFetchingStatus((prev) => {
       return {
@@ -46,7 +70,7 @@ function ChartPage({ report, updateChart }) {
         loading: false,
       };
     });
-    setFetchingData(data);
+    setFetchingData({ salesData: salesData, expensesData: expensesData });
   };
 
   useEffect(() => {
@@ -101,114 +125,52 @@ function ChartPage({ report, updateChart }) {
     };
     fetchData();
   }, []);
+
   const getChart = (data) => {
-    if (report?.month && report.year) {
+    if (report?.month && report?.year) {
       setChartData({
-        labels: data
-          .filter((item) => {
-            const month =
-              new Date(item.date).getMonth() + 1 < 10
-                ? `0${new Date(item.date).getMonth() + 1}`
-                : new Date(item.date).getMonth() + 1;
-
-            return (
-              month == report?.month &&
-              new Date(item.date).getFullYear() === report?.year
-            );
-          })
-          .map((item) => new Date(item.date).getDate().toString()),
+        labels: Object?.keys(
+          getDataByTotals(data)[report?.year].find(
+            (item) => item.month === report?.month
+          )?.dayInTheMonth || []
+        ),
         datasets: [
           {
-            ...chartData.datasets[0], // Preserve other dataset properties
-            data: data
-              .filter((item) => {
-                const month =
-                  new Date(item.date).getMonth() + 1 < 10
-                    ? `0${new Date(item.date).getMonth() + 1}`
-                    : new Date(item.date).getMonth() + 1;
-
-                return (
-                  month == report?.month &&
-                  new Date(item.date).getFullYear() === report?.year
-                );
-              })
-              .map((item) => item.totalAmount),
+            ...chartData.datasets[0],
+            data: Object?.values(
+              getDataByTotals(data)[report?.year].find(
+                (item) => item.month === report?.month
+              )?.dayInTheMonth || []
+            ),
           },
         ],
       });
-    } else if (report?.month) {
+    } else if (report?.year) {
       setChartData({
-        labels: data
-          .filter((item) => {
-            const month =
-              new Date(item.date).getMonth() + 1 < 10
-                ? `0${new Date(item.date).getMonth() + 1}`
-                : new Date(item.date).getMonth() + 1;
-            return month == report?.month;
-          })
-          .map((item) => new Date(item.date).getDate()),
+        labels: getDataByTotals(data)[report?.year]?.map((item) => item.month),
         datasets: [
           {
-            ...chartData.datasets[0], // Preserve other dataset properties
-            data: data
-              .filter((item) => {
-                const month =
-                  new Date(item.date).getMonth() + 1 < 10
-                    ? `0${new Date(item.date).getMonth() + 1}`
-                    : new Date(item.date).getMonth() + 1;
-                return month == report?.month;
-              })
-              .map((item) => item.totalAmount),
-          },
-        ],
-      });
-    } else {
-      setChartData({
-        labels: data
-          .filter((item) => {
-            const month =
-              new Date(item.date).getMonth() + 1 < 10
-                ? `0${new Date(item.date).getMonth() + 1}`
-                : new Date(item.date).getMonth() + 1;
-            return month == report?.month;
-          })
-          .map((item) => new Date(item.date).getMonth()),
-        datasets: [
-          {
-            ...chartData.datasets[0], // Preserve other dataset properties
-            data: data
-              .filter((item) => {
-                const month =
-                  new Date(item.date).getMonth() + 1 < 10
-                    ? `0${new Date(item.date).getMonth() + 1}`
-                    : new Date(item.date).getMonth() + 1;
-                return month == report?.month;
-              })
-              .map((item) => item.totalAmount),
+            ...chartData.datasets[0],
+            data: getDataByTotals(data)[report?.year]?.map(
+              (item) => item.totalAmount
+            ),
           },
         ],
       });
     }
   };
-
+  const showChartHandler = () => {
+    report?.type === "expensesCharts" || report?.type === "/expenses"
+      ? getChart(fetchingData?.expensesData)
+      : getChart(fetchingData?.salesData);
+  };
   return (
     <div className="chart-container">
-      <button
-        onClick={() => {
-          getChart(fetchingData);
-        }}
-      >
-        chart
-      </button>
+      {report?.year && <button onClick={showChartHandler}>הצג מידע</button>}
       <Bar
         data={chartData}
-        options={{
-          scales: {
-            y: {
-              beginAtZero: true,
-            },
-          },
-        }}
+        options={chartOptions}
+        plugins={[ChartDataLabels]}
       />
     </div>
   );

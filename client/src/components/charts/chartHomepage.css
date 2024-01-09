@@ -14,7 +14,16 @@
 }
 .chart-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  width: 50%;
+  align-items: center;
+  width: 40%;
   margin: auto;
+}
+.chart-container > button {
+  border: none;
+  border-radius: 2rem;
+  background-color: orangered;
+  color: white;
+  padding: 1% 20%;
 }

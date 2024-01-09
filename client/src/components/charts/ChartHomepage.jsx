@@ -93,18 +93,20 @@ function ChartHomepage() {
           }}
           styles={customStyles}
         ></Select>
-        <Select
-          options={allMonths}
-          placeholder="בחר חודש"
-          onChange={(e) => {
-            setReport((prev) => {
-              setUpdatedReport((prev) => !prev);
-              return { ...prev, month: e.value };
-            });
-            setUpdateChart((prev) => !prev);
-          }}
-          styles={customStyles}
-        ></Select>
+        {report.year && (
+          <Select
+            options={allMonths}
+            placeholder="בחר חודש"
+            onChange={(e) => {
+              setReport((prev) => {
+                setUpdatedReport((prev) => !prev);
+                return { ...prev, month: e.value };
+              });
+              setUpdateChart((prev) => !prev);
+            }}
+            styles={customStyles}
+          ></Select>
+        )}
       </div>
       {report.type &&
         (report.type === "/expenses" || report.type === "/sales") && (

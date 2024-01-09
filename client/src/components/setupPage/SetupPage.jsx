@@ -198,7 +198,15 @@ export default function SetupPage({ collReq, report, updatedReport }) {
   };
 
   return (
-    <div className="inventory-container">
+    <div
+      className="inventory-container"
+      style={{
+        width:
+          collReq === "/inventories" || collReq === "/providers"
+            ? "70%"
+            : "100%",
+      }}
+    >
       <form className="Item_form">
         {(collReq === "/sleevesBids" ||
           collReq === "/expenses" ||
