@@ -9,11 +9,10 @@ import { refreshMyToken } from "../../utils/setNewAccessToken";
 import { getDataByTotals } from "../../utils/getDataByTotals";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 
-function ChartPage({ report }) {
+function ChartPage({ report, setShowChart, showChart }) {
   const navigate = useNavigate();
   const [fetchingStatus, setFetchingStatus] = useContext(FetchingStatus);
   const [fetchingData, setFetchingData] = useState({});
-
   const [chartData, setChartData] = useState({
     labels: [],
     datasets: [
@@ -62,6 +61,9 @@ function ChartPage({ report }) {
     });
     const { data: salesData } = await Api.get("/sales", { headers });
     const { data: expensesData } = await Api.get("/expenses", { headers });
+    const { data: sleevesBidsData } = await Api.get("/sleevesBids", {
+      headers,
+    });
 
     setFetchingStatus((prev) => {
       return {
@@ -70,7 +72,11 @@ function ChartPage({ report }) {
         loading: false,
       };
     });
-    setFetchingData({ salesData: salesData, expensesData: expensesData });
+    setFetchingData({
+      salesData: salesData,
+      expensesData: expensesData,
+      sleevesBidsData: sleevesBidsData,
+    });
   };
 
   useEffect(() => {
@@ -130,7 +136,7 @@ function ChartPage({ report }) {
     if (report?.month && report?.year) {
       setChartData({
         labels: Object?.keys(
-          getDataByTotals(data)[report?.year].find(
+          getDataByTotals(data)[report?.year]?.find(
             (item) => item.month === report?.month
           )?.dayInTheMonth || []
         ),
@@ -138,7 +144,7 @@ function ChartPage({ report }) {
           {
             ...chartData.datasets[0],
             data: Object?.values(
-              getDataByTotals(data)[report?.year].find(
+              getDataByTotals(data)[report?.year]?.find(
                 (item) => item.month === report?.month
               )?.dayInTheMonth || []
             ),
@@ -162,16 +168,21 @@ function ChartPage({ report }) {
   const showChartHandler = () => {
     report?.type === "expensesCharts" || report?.type === "/expenses"
       ? getChart(fetchingData?.expensesData)
+      : report?.type === "sleevesBidsCharts" || report?.type === "/sleevesBids"
+      ? getChart(fetchingData?.sleevesBidsData)
       : getChart(fetchingData?.salesData);
+    setShowChart(true);
   };
   return (
     <div className="chart-container">
       {report?.year && <button onClick={showChartHandler}>הצג מידע</button>}
-      <Bar
-        data={chartData}
-        options={chartOptions}
-        plugins={[ChartDataLabels]}
-      />
+      {showChart && (
+        <Bar
+          data={chartData}
+          options={chartOptions}
+          plugins={[ChartDataLabels]}
+        />
+      )}
     </div>
   );
 }

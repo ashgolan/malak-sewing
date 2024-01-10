@@ -5,17 +5,13 @@ const month =
   date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
 const day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
 
-const saleSchema = new Schema({
+const workerExpensesSchema = new Schema({
   date: { type: String, default: year + "-" + month + "-" + day },
+  location: { type: String, required: true },
   clientName: { type: String, required: true },
-  name: { type: String, required: true },
-  quantity: { type: Number, required: true },
+  equipment: { type: String, required: true },
   number: { type: Number, required: true },
-  discount: { type: Number, default: 0 },
-  sale: { type: Number, default: 0 },
-  expenses: { type: Number, default: 0 },
-  totalAmount: { type: Number, default: 0 },
   tax: { type: Boolean, default: false },
 });
 
-export const Sale = model("Sale", saleSchema);
+export const WorkerExpenses = model("WorkerExpenses", workerExpensesSchema);

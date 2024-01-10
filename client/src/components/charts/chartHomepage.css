@@ -2,7 +2,7 @@
   display: flex;
   justify-content: space-around;
   flex-direction: row-reverse;
-  width: 40%;
+  width: 50%;
   margin: 1% auto;
 }
 .charts-title > button {
@@ -26,4 +26,13 @@
   background-color: orangered;
   color: white;
   padding: 1% 20%;
+}
+.select-chart {
+  width: 50%;
+}
+.downloadPdf {
+  width: 5%;
+}
+.downloadPdf > img {
+  width: 100%;
 }

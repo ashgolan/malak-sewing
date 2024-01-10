@@ -1,6 +1,6 @@
 .edit_btn {
   padding: 1%;
-  border: none;
+  border: 0.5px whitesmoke solid;
   background-color: rgb(9, 94, 9);
   color: whitesmoke;
   cursor: pointer;

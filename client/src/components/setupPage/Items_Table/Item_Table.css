@@ -3,18 +3,20 @@
   padding: 0.3% 0;
   display: flex;
   flex-direction: row-reverse;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
   margin: auto;
 }
 .Item_form > input,
 .Item_form > .select-category,
+.Item_form > .select-product,
+.Item_form > .select-product-head,
 .head {
   height: 46px;
 }
 
 .input_show_item {
-  border: none;
+  border: 0.5px whitesmoke solid;
   background-color: rgb(48, 45, 45);
   color: whitesmoke;
   text-align: right;

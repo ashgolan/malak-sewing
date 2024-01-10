@@ -21,7 +21,6 @@ export default function Navbar() {
         },
         { headers }
       );
-      console.log(getAccessToken());
       clearTokens();
       navigate("/");
     } catch (e) {
@@ -55,6 +54,9 @@ export default function Navbar() {
         </Link>
         <Link to={"/contacts"}>
           <button style={{ backgroundColor: "lightcoral" }}>אנשי קשר</button>
+        </Link>
+        <Link to={"/workersExpenses"}>
+          <button style={{ backgroundColor: "orange" }}>עובדים</button>
         </Link>
         <Link to={"/sleevesBids"}>
           <button style={{ backgroundColor: "lightslategray" }}>שרוולים</button>

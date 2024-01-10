@@ -21,6 +21,7 @@ export default function EditItem({
   const [fetchingStatus, setFetchingStatus] = useContext(FetchingStatus);
   const checkInputsValues = () => {
     const thisProps = getCollectionProps(collReq);
+    if (!thisProps) return;
     for (let i in itemsValues) {
       if (itemsValues[i] === "" && thisProps.includes(i)) return true;
     }
@@ -43,6 +44,15 @@ export default function EditItem({
           itemsValues.quantity !== item.quantity ||
           itemsValues.totalAmount !== item.totalAmount
         );
+      case "/workersExpenses":
+        return (
+          itemsValues.date !== item.date ||
+          itemsValues.location !== item.location ||
+          itemsValues.clientName !== item.clientName ||
+          itemsValues.equipment !== item.equipment ||
+          itemsValues.number !== item.number ||
+          itemsValues.tax !== item.tax
+        );
       case "/sales":
         return (
           itemsValues.number !== item.number ||
@@ -61,7 +71,7 @@ export default function EditItem({
           itemsValues.number !== item.number ||
           itemsValues.name !== item.name ||
           itemsValues.date !== item.date ||
-          itemsValues.taxPercent !== item.taxPercent ||
+          itemsValues.paymentDate !== item.paymentDate ||
           itemsValues.totalAmount !== item.totalAmount
         );
 
@@ -93,6 +103,22 @@ export default function EditItem({
             tax: itemsValues.tax,
             quantity: itemsValues.quantity,
             totalAmount: itemsValues.totalAmount,
+          },
+          {
+            headers: headers,
+          }
+        );
+        break;
+      case "/workersExpenses":
+        await Api.patch(
+          `${collReq}/${item._id}`,
+          {
+            date: itemsValues.date,
+            location: itemsValues.location,
+            clientName: itemsValues.clientName,
+            equipment: itemsValues.equipment,
+            number: itemsValues.number,
+            tax: itemsValues.tax,
           },
           {
             headers: headers,
@@ -149,7 +175,7 @@ export default function EditItem({
             name: itemsValues.name,
             number: itemsValues.number,
             date: itemsValues.date,
-            taxPercent: itemsValues.taxPercent,
+            paymentDate: itemsValues.paymentDate,
             totalAmount: itemsValues.totalAmount,
           },
           {
@@ -171,7 +197,7 @@ export default function EditItem({
         ...prev,
         status: false,
         loading: false,
-        message: "המוצר עודכן בהצלחה",
+        message: "העידכון בוצע בהצלחה",
       };
     });
     setItemIsUpdated((prev) => !prev);

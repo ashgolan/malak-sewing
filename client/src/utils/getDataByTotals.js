@@ -1,4 +1,5 @@
-export const getDataByTotals = (fetchingData) => {
+export const getDataByTotals = (data) => {
+  const fetchingData = data?.sort((a, b) => (a.date > b.date ? 1 : -1));
   const dataByTotal = {};
   for (let i = 0; i < fetchingData.length; i++) {
     const year = new Date(fetchingData[i]?.date).getFullYear();
@@ -10,7 +11,8 @@ export const getDataByTotals = (fetchingData) => {
     if (!dataByTotal.hasOwnProperty(year)) {
       const monthObj = { month: month, totalAmount: 0, dayInTheMonth: {} };
       if (!monthObj.dayInTheMonth.hasOwnProperty(day))
-        monthObj.dayInTheMonth[day] = +fetchingData[i]?.totalAmount;
+        monthObj.dayInTheMonth[`${day}/${month}`] =
+          +fetchingData[i]?.totalAmount;
       monthObj.totalAmount += +fetchingData[i]?.totalAmount;
       dataByTotal[year] = [];
       dataByTotal[year].push(monthObj);
@@ -20,16 +22,19 @@ export const getDataByTotals = (fetchingData) => {
       );
       if (!findMonthObj) {
         const monthObj = { month: month, totalAmount: 0, dayInTheMonth: {} };
-        monthObj.dayInTheMonth[day] = +fetchingData[i]?.totalAmount;
+        monthObj.dayInTheMonth[`${day}/${month}`] =
+          +fetchingData[i]?.totalAmount;
         monthObj.totalAmount += +fetchingData[i]?.totalAmount;
         dataByTotal[year].push(monthObj);
       } else {
         dataByTotal[year].forEach((element) => {
           if (element.month === month) {
             if (element.dayInTheMonth.hasOwnProperty(day.toString())) {
-              element.dayInTheMonth[day] += +fetchingData[i]?.totalAmount;
+              element.dayInTheMonth[`${day}/${month}`] +=
+                +fetchingData[i]?.totalAmount;
             } else {
-              element.dayInTheMonth[day] = +fetchingData[i]?.totalAmount;
+              element.dayInTheMonth[`${day}/${month}`] =
+                +fetchingData[i]?.totalAmount;
             }
             element.totalAmount += +fetchingData[i]?.totalAmount;
           }

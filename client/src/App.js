@@ -15,6 +15,7 @@ import SleevesBids from "./components/SleevesBids/SleevesBids";
 import Expenses from "./components/expenses/Expenses";
 import Sales from "./components/sales/Sales";
 import ChartHomepage from "./components/charts/ChartHomepage";
+import WorkersExpenses from "./components/workersExpenses/WorkersExpenses";
 
 function App() {
   const navigate = useNavigate();
@@ -61,6 +62,10 @@ function App() {
             element={<SleevesBids></SleevesBids>}
           ></Route>
           <Route path="/expenses" element={<Expenses></Expenses>}></Route>
+          <Route
+            path="/workersExpenses"
+            element={<WorkersExpenses></WorkersExpenses>}
+          ></Route>
           <Route path="/sales" element={<Sales></Sales>}></Route>
           <Route
             path="/chartHomepage"
