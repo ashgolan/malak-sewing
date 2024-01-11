@@ -29,7 +29,7 @@ export const getDataByTotals = (data) => {
       } else {
         dataByTotal[year].forEach((element) => {
           if (element.month === month) {
-            if (element.dayInTheMonth.hasOwnProperty(day.toString())) {
+            if (element.dayInTheMonth.hasOwnProperty(`${day}/${month}`)) {
               element.dayInTheMonth[`${day}/${month}`] +=
                 +fetchingData[i]?.totalAmount;
             } else {
@@ -42,6 +42,6 @@ export const getDataByTotals = (data) => {
       }
     }
   }
-
+  console.log(dataByTotal);
   return dataByTotal;
 };

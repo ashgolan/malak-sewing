@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Bar } from "react-chartjs-2";
 import { chart as ChartJS } from "chart.js/auto";
 import { getDataByTotals } from "../../utils/getDataByTotals";
-import ChartDataLabels from "chartjs-plugin-datalabels";
+// import ChartDataLabels from "chartjs-plugin-datalabels";
 
 function ChartPage({ report, setShowChart, showChart, fetchingData }) {
   const [chartData, setChartData] = useState({
@@ -30,14 +30,14 @@ function ChartPage({ report, setShowChart, showChart, fetchingData }) {
     ],
   });
   const chartOptions = {
-    plugins: {
-      datalabels: {
-        color: "#ffffff",
-        formatter: function (value) {
-          return Math.round(value);
-        },
-      },
-    },
+    // plugins: {
+    //   datalabels: {
+    //     color: "#ffffff",
+    //     formatter: function (value) {
+    //       return Math.round(value);
+    //     },
+    //   },
+    // },
 
     scales: {
       y: {
@@ -94,7 +94,7 @@ function ChartPage({ report, setShowChart, showChart, fetchingData }) {
         <Bar
           data={chartData}
           options={chartOptions}
-          plugins={[ChartDataLabels]}
+          // plugins={[ChartDataLabels]}
         />
       )}
     </div>
