@@ -1,18 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Bar } from "react-chartjs-2";
 import { chart as ChartJS } from "chart.js/auto";
-import { useNavigate } from "react-router-dom";
-import { FetchingStatus } from "../../utils/context";
-import { Api } from "../../utils/Api";
-import { clearTokens, getAccessToken } from "../../utils/tokensStorage";
-import { refreshMyToken } from "../../utils/setNewAccessToken";
 import { getDataByTotals } from "../../utils/getDataByTotals";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 
-function ChartPage({ report, setShowChart, showChart }) {
-  const navigate = useNavigate();
-  const [fetchingStatus, setFetchingStatus] = useContext(FetchingStatus);
-  const [fetchingData, setFetchingData] = useState({});
+function ChartPage({ report, setShowChart, showChart, fetchingData }) {
   const [chartData, setChartData] = useState({
     labels: [],
     datasets: [
@@ -53,84 +45,6 @@ function ChartPage({ report, setShowChart, showChart }) {
       },
     },
   };
-
-  const sendRequest = async (token) => {
-    const headers = { Authorization: token };
-    setFetchingStatus((prev) => {
-      return { ...prev, status: true, loading: true };
-    });
-    const { data: salesData } = await Api.get("/sales", { headers });
-    const { data: expensesData } = await Api.get("/expenses", { headers });
-    const { data: sleevesBidsData } = await Api.get("/sleevesBids", {
-      headers,
-    });
-
-    setFetchingStatus((prev) => {
-      return {
-        ...prev,
-        status: false,
-        loading: false,
-      };
-    });
-    setFetchingData({
-      salesData: salesData,
-      expensesData: expensesData,
-      sleevesBidsData: sleevesBidsData,
-    });
-  };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        await sendRequest(getAccessToken());
-      } catch (error) {
-        if (error.response && error.response.status === 401) {
-          try {
-            const newAccessToken = await refreshMyToken();
-            try {
-              await sendRequest(newAccessToken);
-            } catch (e) {
-              throw e;
-            }
-          } catch (refreshError) {
-            setFetchingStatus((prev) => {
-              return {
-                ...prev,
-                status: false,
-                loading: false,
-              };
-            });
-            clearTokens();
-
-            navigate("/homepage");
-          }
-        } else {
-          clearTokens();
-
-          setFetchingStatus((prev) => {
-            return {
-              ...prev,
-              status: false,
-              loading: false,
-              message: ".. תקלה ביבוא הנתונים",
-            };
-          });
-          setTimeout(() => {
-            setFetchingStatus((prev) => {
-              return {
-                ...prev,
-                status: false,
-                loading: false,
-                message: null,
-              };
-            });
-            navigate("/homepage");
-          }, 1000);
-        }
-      }
-    };
-    fetchData();
-  }, []);
 
   const getChart = (data) => {
     if (report?.month && report?.year) {

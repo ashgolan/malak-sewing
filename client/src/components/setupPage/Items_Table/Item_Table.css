@@ -54,12 +54,14 @@
 }
 
 .head {
-  background-color: rgb(255, 245, 112);
-  color: rgb(0, 0, 0);
+  background-color: transparent;
+  border-bottom: 2px solid rgb(96, 228, 124);
+  color: rgb(30, 46, 75);
+  font-weight: bold;
   font-size: 1rem;
-  /* padding: 0.5%; */
+  padding-bottom: 0;
 }
 .head:hover {
-  background-color: brown;
-  color: white;
+  border-bottom: 2px solid rgb(228, 96, 96);
+  color: rgb(189, 10, 10);
 }

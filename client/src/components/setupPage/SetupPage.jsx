@@ -13,7 +13,13 @@ import { clearTokens, getAccessToken } from "../../utils/tokensStorage";
 import { refreshMyToken } from "../../utils/setNewAccessToken";
 import Select from "react-select";
 
-export default function SetupPage({ collReq, report, updatedReport }) {
+export default function SetupPage({
+  collReq,
+  report,
+  updatedReport,
+  isFetching,
+  fetchingData,
+}) {
   const navigate = useNavigate();
   // eslint-disable-next-line
   const [fetchedData, setFetchingData] = useState([]);
@@ -27,19 +33,60 @@ export default function SetupPage({ collReq, report, updatedReport }) {
   const [kindOfSort, setKindOfSort] = useState("name");
   const [inventories, setInventories] = useState([]);
   const [providers, setProviders] = useState([]);
+  // const calcTotal = (theFetchedData) => {
+  //   let total = 0;
+  //   theFetchedData.forEach((element) => {
+  //     const year = new Date(element.date).getFullYear();
+  //     const month =
+  //       new Date(element.date).getMonth() + 1 < 10
+  //         ? `0${new Date(element.date).getMonth() + 1}`
+  //         : `${new Date(element.date).getMonth() + 1}`;
+
+  //     if (report?.year && report?.month) {
+  //       if (report?.year === year && report?.month === month)
+  //         total += element.totalAmount;
+  //     } else if (report?.year) {
+  //       if (report?.year === year) total += element.totalAmount;
+  //     } else {
+  //       total += element.totalAmount;
+  //     }
+  //   });
+  //   setTotalAmountOfData(total);
+  // };
+  const getTotals = () => {
+    let total = 0;
+    filterByReport(sortedInventory(kindOfSort)).forEach((element) => {
+      total += element.totalAmount;
+    });
+    return total;
+  };
   const sendRequest = async (token) => {
     const headers = { Authorization: token };
     setFetchingStatus((prev) => {
       return { ...prev, status: true, loading: true };
     });
-    const { data } = await Api.get(collReq, { headers });
-    if (collReq === "/sales") {
-      const { data: inventories } = await Api.get("/inventories", { headers });
-      setInventories(inventories);
-    }
-    if (collReq === "/expenses") {
-      const { data: providers } = await Api.get("/providers", { headers });
-      setProviders(providers);
+
+    if (isFetching) {
+      if (collReq === "/sales") {
+        setFetchingData(fetchingData.salesData);
+      } else if (collReq === "/expenses") {
+        setFetchingData(fetchingData.expensesData);
+      } else {
+        setFetchingData(fetchingData.sleevesBidsData);
+      }
+    } else {
+      const { data } = await Api.get(collReq, { headers });
+      if (collReq === "/sales") {
+        const { data: inventories } = await Api.get("/inventories", {
+          headers,
+        });
+        setInventories(inventories);
+      }
+      if (collReq === "/expenses") {
+        const { data: providers } = await Api.get("/providers", { headers });
+        setProviders(providers);
+      }
+      setFetchingData(data);
     }
     setFetchingStatus((prev) => {
       return {
@@ -48,7 +95,6 @@ export default function SetupPage({ collReq, report, updatedReport }) {
         loading: false,
       };
     });
-    setFetchingData(data);
   };
   useEffect(() => {
     const fetchData = async () => {
@@ -137,8 +183,8 @@ export default function SetupPage({ collReq, report, updatedReport }) {
           (a, b) => parseFloat(a.number) - parseFloat(b.number)
         );
       case "clientName":
-        return fetchedData?.sort(
-          (a, b) => parseFloat(a.clientName) - parseFloat(b.clientName)
+        return fetchedData?.sort((a, b) =>
+          a.clientName > b.clientName ? 1 : -1
         );
       case "totalAmount":
         return fetchedData?.sort(
@@ -147,6 +193,10 @@ export default function SetupPage({ collReq, report, updatedReport }) {
       case "discount":
         return fetchedData?.sort(
           (a, b) => parseFloat(a.discount) - parseFloat(b.discount)
+        );
+      case "sale":
+        return fetchedData?.sort(
+          (a, b) => parseFloat(a.sale) - parseFloat(b.sale)
         );
       case "expenses":
         return fetchedData?.sort(
@@ -158,6 +208,8 @@ export default function SetupPage({ collReq, report, updatedReport }) {
         );
       case "name":
         return fetchedData?.sort((a, b) => (a.name > b.name ? 1 : -1));
+      case "tax":
+        return fetchedData?.sort((a, b) => (a.tax > b.tax ? 1 : -1));
       case "location":
         return fetchedData?.sort((a, b) => (a.location > b.location ? 1 : -1));
       case "equipment":
@@ -200,16 +252,33 @@ export default function SetupPage({ collReq, report, updatedReport }) {
     option: (provided, state) => ({
       ...provided,
       backgroundColor: "rgb(255, 245, 112)",
-      // color: state.isFocused ? "rgb(48, 45, 45)" : "inherit",
     }),
     dropdownIndicator: (base) => ({
       ...base,
-      display: "none", // Hide the default dropdown indicator arrow
+      display: "none",
     }),
   };
 
   return (
     <div className="inventory-container">
+      {getTotals() > 0 && (
+        <label
+          htmlFor=""
+          style={{
+            width: "30%",
+            margin: "auto",
+            textAlign: "center",
+            fontWeight: "bold",
+            color: "brown",
+            borderBottom: "2px solid orange",
+          }}
+        >
+          {"  "}
+          {`סכום כל התנועות : `}
+          {getTotals()}
+          {` ש"ח `}
+        </label>
+      )}
       <form
         className="Item_form"
         style={{
@@ -261,38 +330,27 @@ export default function SetupPage({ collReq, report, updatedReport }) {
             קליינט
           </button>
         )}
-        {collReq !== "/sales" &&
-          collReq !== "/workersExpenses" &&
-          collReq !== "/expenses" && (
-            <button
-              id="name"
-              className="input_show_item head"
-              style={{
-                width:
-                  collReq === "/inventories" || collReq === "/providers"
-                    ? "62%"
-                    : report?.type
-                    ? "45%"
-                    : "25%",
-              }}
-              onClick={(e) => {
-                e.preventDefault();
-                setKindOfSort(() => "name");
-              }}
-            >
-              מוצר
-            </button>
-          )}
-        {(collReq === "/sales" || collReq === "/expenses") && (
-          <Select
-            className="input_show_item select-product-head head"
-            // style={{ width: "15%" }}
-            placeholder={collReq === "/expenses" ? "ספק" : "מוצר"}
-            styles={customStyles}
-            menuPlacement="auto"
-            required
-            isDisabled={true}
-          ></Select>
+        {collReq !== "/workersExpenses" && (
+          <button
+            id="name"
+            className="input_show_item head"
+            style={{
+              width:
+                collReq === "/inventories" || collReq === "/providers"
+                  ? "62%"
+                  : collReq === "/sales" || collReq === "/expenses"
+                  ? "15%"
+                  : report?.type
+                  ? "45%"
+                  : "25%",
+            }}
+            onClick={(e) => {
+              e.preventDefault();
+              setKindOfSort(() => "name");
+            }}
+          >
+            מוצר
+          </button>
         )}
         {collReq === "/workersExpenses" && (
           <button
