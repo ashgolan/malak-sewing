@@ -32,12 +32,7 @@ export default function Navbar() {
   return (
     <nav style={{ pointerEvents: getAccessToken() ? "auto" : "none" }}>
       <div className="upper-nav">
-        <div className="img-uppernav">
-          <img className="logo-img" src="./logo.jpg" alt="" />
-        </div>
-      </div>
-      <div className="buttons-nav">
-        <div className="img-uppernav">
+        <div className="img-uppernav-logout">
           <img
             className="logout-img"
             style={{ visibility: getAccessToken() ? "visible" : "hidden" }}
@@ -46,6 +41,21 @@ export default function Navbar() {
             onClick={logout}
           />
         </div>
+        <div className="img-uppernav-logo">
+          <img className="logo-img" src="./logo.jpg" alt="" />
+        </div>
+        <div className="img-uppernav-bid">
+          <img
+            className="bid-img"
+            src="./bid.png"
+            onClick={() => {
+              navigate("/bids");
+            }}
+            alt=""
+          />
+        </div>
+      </div>
+      <div className="buttons-nav">
         <Link to={"/inventories"}>
           <button style={{ backgroundColor: "lightblue" }}>מוצרים</button>
         </Link>
@@ -66,6 +76,9 @@ export default function Navbar() {
         </Link>
         <Link to={"/sales"}>
           <button style={{ backgroundColor: "lightsalmon" }}>מכירות</button>
+        </Link>
+        <Link to={"/orfers"}>
+          <button style={{ backgroundColor: "#9DBC98" }}>הזמנות</button>
         </Link>
         <div className="img-uppernav">
           <img

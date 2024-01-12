@@ -8,15 +8,52 @@ nav {
 .upper-nav {
   display: flex;
   justify-content: center;
+  align-items: center;
+}
+.upper-nav > a {
+  text-decoration: none;
+  width: 20%;
+  display: flex;
+  justify-content: center;
+}
+.upper-nav > a > button {
+  border-radius: 1.5rem 0 1.5rem 0;
+  padding: 2% 20%;
+  border: none;
+}
+.img-uppernav-logout,
+.img-uppernav-bid {
+  width: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.img-uppernav-logout > .logout-img {
+  cursor: pointer;
+  width: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.img-uppernav-bid > .bid-img {
+  cursor: pointer;
+  width: 30%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.img-uppernav-logo {
+  width: 60%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .img-uppernav {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.logout-img {
-  width: 30%;
-}
+
 nav > .buttons-nav {
   width: 100%;
   display: flex;
@@ -46,7 +83,4 @@ nav > .buttons-nav {
   padding: 1% 20%;
   border: none;
   border-radius: 2rem;
-}
-.logout-img {
-  cursor: pointer;
 }

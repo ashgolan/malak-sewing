@@ -1,0 +1,81 @@
+.bid_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+.header_container {
+  padding: 0 5%;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  align-items: center;
+  border-top: 1px solid #55555533;
+  border-bottom: 1px solid #55555533;
+}
+
+.totalAmount-container {
+  margin-left: 1%;
+  display: flex;
+  width: 20%;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgb(247, 234, 53);
+}
+
+.name,
+.date,
+.save {
+  padding: 0.5% 2%;
+  margin: 1%;
+  color: black;
+  text-align: right;
+  direction: rtl;
+}
+.totalAmount-container > .name {
+  border: none;
+  background-color: transparent;
+  text-align: center;
+  width: 70%;
+}
+.totalAmount-container > .name::placeholder {
+  text-align: center;
+}
+
+.totalAmount-container > .currency {
+  padding: 1%;
+  border: none;
+  text-align: right;
+  width: 30%;
+  background-color: transparent;
+}
+.save {
+  background-color: brown;
+  color: whitesmoke;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.name::placeholder,
+.date::placeholder {
+  text-align: right;
+}
+.addWRow_btn {
+  width: 5%;
+  padding: 1%;
+  cursor: pointer;
+  margin-bottom: 10%;
+}
+
+@media screen and (max-width: 1000px) {
+  .name,
+  .date,
+  .save {
+    width: 30%;
+  }
+  .save {
+    width: 20%;
+  }
+}

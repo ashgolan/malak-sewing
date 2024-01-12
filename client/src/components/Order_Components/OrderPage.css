@@ -1,0 +1,85 @@
+.orderRow {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  margin: 0.5rem 0;
+  width: 100%;
+  margin: auto;
+}
+.orderRow div,
+.orderRow img {
+  width: 10rem;
+  padding: 0.5rem;
+  font-size: 0.9rem;
+  border: 1px rgb(202, 196, 196) dotted;
+  text-align: right;
+}
+
+.orderRow:last-child {
+  margin-bottom: 6%;
+}
+
+.order-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+.order-selection {
+  width: 30%;
+  padding: 1% 5%;
+  border-radius: 10px;
+  border: 1px rgb(148, 141, 37) solid;
+  font-size: 1.1rem;
+  margin: 1%;
+  color: rgb(6, 47, 122);
+  text-align: center;
+  cursor: pointer;
+}
+.titles {
+  border: 1px rgb(148, 141, 37) solid;
+  color: brown;
+  font-weight: bold;
+}
+.orderheader {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 70%;
+  margin: 1% auto;
+  padding: 0.5%;
+  background-color: #ebe3d5;
+}
+@media screen and (max-width: 1000px) {
+  .orderheader {
+    width: 90%;
+  }
+}
+
+.orderheader img {
+  width: 6%;
+  cursor: pointer;
+}
+.approve-cancel-bid {
+  display: flex;
+  width: 15%;
+}
+.approving {
+  border: none;
+  padding: 1.5% 7%;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.select-item-in-Order {
+  min-width: 50%;
+  max-width: 75%;
+  min-height: 2rem;
+  max-height: 3rem;
+  font-size: 0.9rem;
+  text-align: center;
+}
+#pdfOrder {
+  width: 100%;
+  padding: 0 1%;
+}
