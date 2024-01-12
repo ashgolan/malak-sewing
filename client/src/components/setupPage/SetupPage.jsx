@@ -11,7 +11,6 @@ import { useNavigate } from "react-router";
 import { Api } from "../../utils/Api";
 import { clearTokens, getAccessToken } from "../../utils/tokensStorage";
 import { refreshMyToken } from "../../utils/setNewAccessToken";
-import Select from "react-select";
 
 export default function SetupPage({
   collReq,
@@ -30,29 +29,9 @@ export default function SetupPage({
     btnVisible: true,
     formVisible: false,
   });
-  const [kindOfSort, setKindOfSort] = useState("name");
+  const [kindOfSort, setKindOfSort] = useState("date");
   const [inventories, setInventories] = useState([]);
   const [providers, setProviders] = useState([]);
-  // const calcTotal = (theFetchedData) => {
-  //   let total = 0;
-  //   theFetchedData.forEach((element) => {
-  //     const year = new Date(element.date).getFullYear();
-  //     const month =
-  //       new Date(element.date).getMonth() + 1 < 10
-  //         ? `0${new Date(element.date).getMonth() + 1}`
-  //         : `${new Date(element.date).getMonth() + 1}`;
-
-  //     if (report?.year && report?.month) {
-  //       if (report?.year === year && report?.month === month)
-  //         total += element.totalAmount;
-  //     } else if (report?.year) {
-  //       if (report?.year === year) total += element.totalAmount;
-  //     } else {
-  //       total += element.totalAmount;
-  //     }
-  //   });
-  //   setTotalAmountOfData(total);
-  // };
   const getTotals = () => {
     let total = 0;
     filterByReport(sortedInventory(kindOfSort)).forEach((element) => {
@@ -229,36 +208,10 @@ export default function SetupPage({
           a.bankProps > b.bankProps ? 1 : -1
         );
       default:
-        return fetchedData?.sort((a, b) => (a.name > b.name ? 1 : -1));
+        return fetchedData?.sort((a, b) => (a.date > b.date ? 1 : -1));
     }
   };
-  const customStyles = {
-    control: (base) => ({
-      ...base,
-      textAlign: "right",
-      backgroundColor: "rgb(255, 245, 112)",
-      border: "none",
-      boxShadow: "none",
-    }),
-    placeholder: (provided) => ({
-      ...provided,
-      color: "black",
-    }),
-    menu: (base) => ({
-      ...base,
-      textAlign: "center",
-      backgroundColor: "rgb(255, 245, 112)",
-    }),
-    option: (provided, state) => ({
-      ...provided,
-      backgroundColor: "rgb(255, 245, 112)",
-    }),
-    dropdownIndicator: (base) => ({
-      ...base,
-      display: "none",
-    }),
-  };
-
+ 
   return (
     <div className="inventory-container">
       {getTotals() > 0 && (

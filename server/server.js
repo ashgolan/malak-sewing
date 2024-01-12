@@ -11,6 +11,7 @@ import { contactRouter } from "./routers/contact.router.js";
 import { sleevesBidRouter } from "./routers/sleevesBid.router.js";
 import { expenseRouter } from "./routers/expense.router.js";
 import { workersExpensesRouter } from "./routers/workersExpenses.router.js";
+import { bidRouter } from "./routers/bid.router.js";
 
 const app = Express();
 const __dirname = url.fileURLToPath(new URL("./", import.meta.url));
@@ -25,6 +26,7 @@ app.use(cors());
 app.use("/users", userRouter);
 app.use("/inventories", inventoryRouter);
 app.use("/providers", providerRouter);
+app.use("/bids", bidRouter);
 app.use("/sales", saleRouter);
 app.use("/contacts", contactRouter);
 app.use("/sleevesBids", sleevesBidRouter);

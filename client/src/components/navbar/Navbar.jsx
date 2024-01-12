@@ -77,9 +77,10 @@ export default function Navbar() {
         <Link to={"/sales"}>
           <button style={{ backgroundColor: "lightsalmon" }}>מכירות</button>
         </Link>
-        <Link to={"/orfers"}>
+        <Link to={"/orders"}>
           <button style={{ backgroundColor: "#9DBC98" }}>הזמנות</button>
         </Link>
+
         <div className="img-uppernav">
           <img
             className="logout-img"

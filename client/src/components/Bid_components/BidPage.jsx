@@ -43,7 +43,7 @@ export default function BidPage() {
       .filter((item) => item.checked === true)
       .map((item, index) => ({ ...item, id: index }));
     const { data } = await Api.post(
-      "/Bids",
+      "/bids",
       { ...bid, data: IndextheData },
       { headers }
     );
@@ -65,7 +65,7 @@ export default function BidPage() {
         };
       });
     }, 1000);
-    navigate("/order");
+    navigate("/orders");
   };
 
   const sendGetRequest = async (token) => {

@@ -18,6 +18,7 @@ import ChartHomepage from "./components/charts/ChartHomepage";
 import WorkersExpenses from "./components/workersExpenses/WorkersExpenses";
 import BidPage from "./components/Bid_components/BidPage";
 import OrderPage from "./components/Order_Components/OrderPage";
+import FreeBidPage from "./components/Bid_components/FreeBidPage";
 
 function App() {
   const navigate = useNavigate();
@@ -70,6 +71,10 @@ function App() {
           ></Route>
           <Route path="/sales" element={<Sales></Sales>}></Route>
           <Route path="/bids" element={<BidPage></BidPage>}></Route>
+          <Route
+            path="/freeBidPage"
+            element={<FreeBidPage></FreeBidPage>}
+          ></Route>
           <Route path="/orders" element={<OrderPage></OrderPage>}></Route>
           <Route
             path="/chartHomepage"

@@ -11,18 +11,19 @@ export default function BidRow({ numOfRow, myData, itemInBid, setBid, bid }) {
     name: itemInBid && !itemChanged ? itemInBid.name : null,
     quantity: itemInBid && !itemChanged ? itemInBid.quantity : "",
     number: itemInBid && !itemChanged ? itemInBid.number : "",
-    totalAmount: itemInBid && !itemChanged ? itemInBid.totalAmount : "",
+    totalAmount: itemInBid && !itemChanged ? itemInBid.totalAmount : 0,
     checked: itemInBid && !itemChanged ? itemInBid.checked : false,
   });
   const allItems = myData?.map((item, index) => {
     return { value: item._id, label: item.name };
   });
   const uncheckItem = () => {
-    const myFilteredData = bid?.data?.filter((item) => {
-      if (item.id !== numOfRow) {
+    const myFilteredData = bid?.data?.map((item) => {
+      if (item.id === numOfRow) {
         item.checked = false;
-        return item;
+        item.totalAmount = 0;
       }
+      return item;
     });
     const sum = myFilteredData.reduce((accumulator, object) => {
       return +accumulator + +object.totalAmount;
@@ -74,7 +75,7 @@ export default function BidRow({ numOfRow, myData, itemInBid, setBid, bid }) {
           number: foundItem && foundItem.number,
           name: foundItem && foundItem.name,
           quantity: foundItem && "",
-          totalAmount: foundItem && "",
+          totalAmount: foundItem && 0,
           checked: false,
         };
       });
@@ -122,15 +123,19 @@ export default function BidRow({ numOfRow, myData, itemInBid, setBid, bid }) {
     } else if (isFilled && itemInBid) {
       e.target.checked
         ? setBid((prev) => {
+            const sum = [...prev.data, { ...itemInRow, checked: true }].reduce(
+              (accumulator, object) => {
+                return +accumulator + +object.totalAmount;
+              },
+              0
+            );
             return {
               ...prev,
+              totalAmount: sum,
               data: [
                 ...prev.data,
                 {
                   ...itemInRow,
-                  totalWeight: (
-                    +itemInRow.number * +itemInRow.quantity
-                  ).toFixed(2),
                   checked: true,
                 },
               ].sort((s1, s2) => {
@@ -156,11 +161,16 @@ export default function BidRow({ numOfRow, myData, itemInBid, setBid, bid }) {
   const customStyles = {
     control: (base) => ({
       ...base,
+      color: "black",
       textAlign: "right",
       padding: "1% 0",
       whiteSpace: "nowrap",
       overflow: "hidden",
       textOverflow: "ellipsis",
+    }),
+    placeholder: (provided) => ({
+      ...provided,
+      color: "black",
     }),
     menu: (base) => ({
       ...base,
@@ -186,7 +196,8 @@ export default function BidRow({ numOfRow, myData, itemInBid, setBid, bid }) {
       <input
         name="quantity"
         className="input_box"
-        placeholder={!itemInBid ? `כמות` : itemInBid.quantity}
+        placeholder={`כמות`}
+        // placeholder={!itemInBid ? `כמות` : itemInBid.quantity}
         value={!bid.isApproved ? itemInRow.quantity : ""}
         onChange={(e) => {
           setBySelectedValue(e);

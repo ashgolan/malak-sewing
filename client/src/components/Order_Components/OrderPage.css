@@ -18,6 +18,10 @@
 .orderRow:last-child {
   margin-bottom: 6%;
 }
+.header-logo-of-bid {
+  display: flex;
+  justify-content: center;
+}
 
 .order-container {
   display: flex;

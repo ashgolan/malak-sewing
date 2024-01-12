@@ -22,9 +22,8 @@ export default function OrderPage() {
   const [selectedOption, setSelectedOption] = useState(null);
   const [bidIsDeleted, setBidIsDeleted] = useState(false);
   const [bidIsUpdated, setBidIsUpdated] = useState(false);
-
+  const [showLogo, setShowLogo] = useState("none");
   const navigate = useNavigate();
-
   const sendApprovedRequest = async (token) => {
     const headers = { Authorization: token };
     setFetchingStatus((prev) => {
@@ -34,13 +33,13 @@ export default function OrderPage() {
       .filter((item) => item.checked === true)
       .map((item, index) => ({ ...item, id: index }));
     await Api.patch(
-      `/Bids/`,
+      `/bids/`,
       {
         _id: selectedBid._id,
         isApproved: true,
         clientName: selectedBid.clientName,
         totalAmount: selectedBid.totalAmount,
-        color: selectedBid.color,
+        target: selectedBid.target,
         date: selectedBid.date,
         data: filteredDataByChecked,
       },
@@ -76,7 +75,7 @@ export default function OrderPage() {
     setFetchingStatus((prev) => {
       return { ...prev, status: true, loading: true };
     });
-    await Api.delete(`/Bids/${selectedBid._id}`, {
+    await Api.delete(`/bids/${selectedBid._id}`, {
       data: selectedBid,
       headers: headers,
     });
@@ -93,15 +92,17 @@ export default function OrderPage() {
         message: "ההצעה נמחקה בהצלחה",
       };
     });
-    setFetchingStatus((prev) => {
-      return {
-        ...prev,
-        status: false,
-        loading: false,
-        error: false,
-        message: null,
-      };
-    });
+    setTimeout(() => {
+      setFetchingStatus((prev) => {
+        return {
+          ...prev,
+          status: false,
+          loading: false,
+          error: false,
+          message: null,
+        };
+      });
+    }, 1000);
   };
   const sendUpdateRequest = async (token) => {
     const headers = { Authorization: token };
@@ -109,7 +110,7 @@ export default function OrderPage() {
       return { ...prev, status: true, loading: true, error: false };
     });
     const { data } = await Api.patch(
-      `/Bids/`,
+      `/bids/`,
       {
         _id: selectedBid._id,
         isApproved: false,
@@ -146,8 +147,8 @@ export default function OrderPage() {
     setFetchingStatus((prev) => {
       return { ...prev, status: true, loading: true };
     });
-    let { data: myBids } = await Api.get("/Bids", { headers });
-    let { data: myInventoryData } = await Api.get("/Inventory", {
+    let { data: myBids } = await Api.get("/bids", { headers });
+    let { data: myInventoryData } = await Api.get("/inventories", {
       headers,
     });
     setFetchingStatus((prev) => {
@@ -402,10 +403,30 @@ export default function OrderPage() {
     if (foundItem) return false;
     return true;
   };
+  const customStyles = {
+    control: (base) => ({
+      ...base,
+      textAlign: "right",
+    }),
+    placeholder: (provided) => ({
+      ...provided,
+      color: "black",
+    }),
+    menu: (base) => ({
+      ...base,
+      textAlign: "center",
+    }),
+    option: (provided, state) => ({
+      ...provided,
+    }),
+  };
   return (
     <div className="order-container">
       <div id="pdfOrder">
-        <header className="orderheader">
+        <div className="header-logo-of-bid" style={{ display: showLogo }}>
+          <img id="logo" src="./logo.jpg" alt="" />
+        </div>
+        <header className="orderheader" data-html2canvas-ignore="true">
           <div className="approve-cancel-bid">
             {selectedBid && !isApproved && (
               <button
@@ -413,7 +434,11 @@ export default function OrderPage() {
                   approveBid(e);
                 }}
                 className="approving"
-                disabled={selectedOption && !askToDeleteBid ? false : true}
+                disabled={
+                  selectedOption && !askToDeleteBid && !isAnEmptyData()
+                    ? false
+                    : true
+                }
                 style={{
                   backgroundColor:
                     selectedOption && !askToDeleteBid && !isAnEmptyData()
@@ -454,15 +479,17 @@ export default function OrderPage() {
           </div>
           {selectedBid && (
             <img
-              onClick={() =>
-                exportToPdf(
+              onClick={async () => {
+                await setShowLogo("flex");
+                const resault = exportToPdf(
                   "pdfOrder",
                   selectedBid.clientName + "-" + selectedBid.date
-                )
-              }
-              src="/savePdf.png"
+                );
+                if (resault) setShowLogo("none");
+              }}
+              src="/downloadPdf.png"
               alt=""
-              style={{ width: "5%", cursor: "pointer" }}
+              style={{ width: "4%", cursor: "pointer" }}
             />
           )}
           <img
@@ -481,9 +508,9 @@ export default function OrderPage() {
                 fontWeight: "bold",
               }}
             >
-              {selectedBid?.color}
+              {selectedBid?.rarget}
               {" : "}
-              <label htmlFor=""> צבע</label>
+              <label htmlFor=""> עבור</label>
             </div>
           )}
 
@@ -498,6 +525,7 @@ export default function OrderPage() {
               setAskToDeleteBid(false);
               findBid(e.value);
             }}
+            styles={customStyles}
           ></Select>
           {!askToDeleteBid && !isApproved && selectedBid?._id && (
             <i
@@ -511,6 +539,7 @@ export default function OrderPage() {
               }}
             ></i>
           )}
+
           {askToDeleteBid && selectedOption && (
             <div
               style={{
@@ -569,13 +598,13 @@ export default function OrderPage() {
             />{" "}
             <input
               className="name"
-              placeholder="צבע"
+              placeholder="עבור"
               style={{ width: "13%" }}
-              value={selectedBid.color}
+              value={selectedBid.target}
               required
               onChange={(e) => {
                 setSelectedBid((prev) => {
-                  return { ...prev, color: e.target.value };
+                  return { ...prev, target: e.target.value };
                 });
               }}
               disabled={isApproved ? true : false}
@@ -585,13 +614,8 @@ export default function OrderPage() {
                 placeholder="סכום"
                 className="name"
                 required
-                value={selectedBid ? +selectedBid?.totalAmount : ""}
-                onChange={(e) => {
-                  setSelectedBid((prev) => {
-                    return { ...prev, totalAmount: e.target.value };
-                  });
-                }}
-                disabled={isApproved ? true : false}
+                value={selectedBid.clientName ? selectedBid?.totalAmount : null}
+                disabled
               />
               <input disabled value={'ש"ח'} className="currency" />
             </div>
@@ -601,8 +625,8 @@ export default function OrderPage() {
           <form
             className="row"
             style={{
-              borderBottom: "1px solid #55555533",
-              backgroundColor: "rgb(255, 253, 126)",
+              borderBottom: "2px solid rgb(96, 228, 124)",
+              color: "rgb(30, 46, 75)",
             }}
           >
             <input
@@ -613,70 +637,17 @@ export default function OrderPage() {
             />
             <input
               disabled
-              name="number"
+              name="name"
               className="input_box"
-              placeholder="מספר"
               style={{
+                width: "40%",
                 backgroundColor: "transparent",
-                textDecoration: "underline",
                 fontSize: "1rem",
                 border: "none",
                 textAlign: "center",
-              }}
-            ></input>
-            <input
-              disabled
-              name="desc"
-              className="input_box"
-              style={{
-                width: "25%",
-                backgroundColor: "transparent",
-                textDecoration: "underline",
-                fontSize: "1rem",
-                border: "none",
-                textAlign: "center",
+                fontWeight: "bold",
               }}
               placeholder="מוצר"
-            ></input>
-            <input
-              disabled
-              name="category"
-              className="input_box"
-              placeholder="סוג"
-              style={{
-                backgroundColor: "transparent",
-                textDecoration: "underline",
-                fontSize: "1rem",
-                border: "none",
-                textAlign: "center",
-              }}
-            ></input>
-
-            <img
-              className="imgOfItem"
-              style={{
-                width: "8%",
-                padding: "0.5% 2.5%",
-                backgroundColor: "transparent",
-                border: "none",
-                textAlign: "center",
-              }}
-              alt=""
-              src="/jpgImage.png"
-            ></img>
-
-            <input
-              disabled
-              name="length"
-              className="input_box"
-              placeholder="אורך"
-              style={{
-                backgroundColor: "transparent",
-                textDecoration: "underline",
-                fontSize: "1rem",
-                border: "none",
-                textAlign: "center",
-              }}
             ></input>
 
             <input
@@ -686,37 +657,37 @@ export default function OrderPage() {
               disabled
               style={{
                 backgroundColor: "transparent",
-                textDecoration: "underline",
                 fontSize: "1rem",
                 border: "none",
                 textAlign: "center",
+                fontWeight: "bold",
               }}
             ></input>
             <input
               disabled
-              name="weight"
+              name="number"
               className="input_box"
-              placeholder="משקל"
+              placeholder="סכום"
               style={{
                 backgroundColor: "transparent",
-                textDecoration: "underline",
                 fontSize: "1rem",
                 border: "none",
                 textAlign: "center",
+                fontWeight: "bold",
               }}
             ></input>
 
             <input
-              name="totalWeight"
+              name="totalAmount"
               disabled
-              placeholder="משקל טוטלי"
+              placeholder={`סה"כ`}
               className="input_box total"
               style={{
                 backgroundColor: "transparent",
-                textDecoration: "underline",
                 fontSize: "1rem",
                 border: "none",
                 textAlign: "center",
+                fontWeight: "bold",
               }}
             ></input>
             {!selectedBid.isApproved && (

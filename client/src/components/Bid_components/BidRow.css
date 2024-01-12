@@ -1,19 +1,17 @@
 .row {
-  width: 60%;
+  width: 80%;
   display: flex;
   flex-direction: row-reverse;
   justify-content: space-around;
   margin: 0.5rem auto;
-  /* min-height: 2rem;
-  max-height: 3rem; */
 }
 .input_box {
   width: 15%;
-  /* padding: 0 0.5rem; */
   font-size: 0.9rem;
   border: 1px rgb(202, 196, 196) dotted;
   text-align: right;
   height: 46px;
+  text-decoration: none ;
 }
 .imgOfItem {
   display: flex;
