@@ -71,6 +71,7 @@ function App() {
           ></Route>
           <Route path="/sales" element={<Sales></Sales>}></Route>
           <Route path="/bids" element={<BidPage></BidPage>}></Route>
+
           <Route
             path="/freeBidPage"
             element={<FreeBidPage></FreeBidPage>}

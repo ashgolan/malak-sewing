@@ -9,6 +9,7 @@ const bidSchema = new Schema({
   isApproved: { type: Boolean, default: false },
   target: { type: String, default: "-" },
   totalAmount: { type: Number, default: 0 },
+  freeBid: { type: Boolean, required: true },
   data: { type: Array },
 });
 

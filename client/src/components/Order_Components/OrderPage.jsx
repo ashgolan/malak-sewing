@@ -1,16 +1,15 @@
-import React, { useContext, useEffect } from "react";
-import { useState } from "react";
+import React, { useState, useRef, useMemo, useEffect, useContext } from "react";
+import JoditEditor from "jodit-react";
 import { FetchingStatus } from "../../utils/context";
 import "./OrderPage.css";
 import { Api } from "../../utils/Api";
 import { exportToPdf } from "../../utils/export-to-pdf";
-import { useRef } from "react";
 import BidRow from "../Bid_components/BidRow";
 import Select from "react-select";
 import { useNavigate } from "react-router-dom";
 import { clearTokens, getAccessToken } from "../../utils/tokensStorage";
 import { refreshMyToken } from "../../utils/setNewAccessToken";
-export default function OrderPage() {
+export default function OrderPage({ customOnChange, placeholder }) {
   const selectOptionRef = useRef();
   const [isApproved, setIsApproved] = useState(false);
   const [numOfRows, setNumOfRows] = useState(null);
@@ -24,6 +23,58 @@ export default function OrderPage() {
   const [bidIsUpdated, setBidIsUpdated] = useState(false);
   const [showLogo, setShowLogo] = useState("none");
   const navigate = useNavigate();
+
+  const editor = useRef(null);
+  const [content, setContent] = useState("");
+  const config = useMemo(
+    () => ({
+      readonly: selectedBid?.isApproved,
+      placeholder: placeholder || " תחילת כתיבה כאן ...",
+      direction: "rtl", // Set the text direction to right-to-left (you can use 'ltr' for left-to-right)
+      style: {
+        textAlign: "right", // Set the default text alignment to right (you can use 'left', 'center', 'justify', etc.)
+        height: "30vh",
+      },
+      buttons: [
+        "bold",
+        "italic",
+        "underline",
+        "strikethrough",
+        "ol",
+        "ul",
+        "|",
+        "outdent",
+        "indent",
+        "|",
+        "font",
+        "fontsize",
+        "brush",
+        "paragraph",
+        "|",
+        "image",
+        "table",
+        "link",
+        "|",
+        "align",
+        "undo",
+        "redo",
+        "|",
+        "hr",
+        "eraser",
+        "copyformat",
+        "symbol",
+        "|",
+        "fullsize",
+        "print",
+        "about",
+        "|",
+        "fontcolor",
+      ],
+    }),
+
+    [placeholder, selectedBid?.isApproved]
+  );
+
   const sendApprovedRequest = async (token) => {
     const headers = { Authorization: token };
     setFetchingStatus((prev) => {
@@ -41,7 +92,7 @@ export default function OrderPage() {
         totalAmount: selectedBid.totalAmount,
         target: selectedBid.target,
         date: selectedBid.date,
-        data: filteredDataByChecked,
+        data: selectedBid.freeBid === true ? content : filteredDataByChecked,
       },
       { headers }
     );
@@ -67,7 +118,7 @@ export default function OrderPage() {
     setSelectedBid({});
     setSelectedOption(null);
     setBidIsUpdated((prev) => !prev);
-    exportToPdf("pdfOrder", selectedBid.clientName + "-" + selectedBid.date);
+    // exportToPdf("pdfOrder", selectedBid.clientName + "-" + selectedBid.date);
   };
   const sendDeleteRequest = async (token) => {
     const filteredBids = bids?.map((bid) => bid._id !== selectedBid._id);
@@ -228,26 +279,43 @@ export default function OrderPage() {
   const findBid = (e) => {
     const myBid = bids?.find((bid) => bid._id === e);
     setSelectedBid(myBid);
+    myBid.freeBid && setContent(myBid.data[0]);
     setNumOfRows(myBid.data.length);
   };
   const customBid =
     selectedBid &&
     selectedBid.isApproved === isApproved &&
-    [...new Array(numOfRows)].map((bidRow, index) => {
-      return (
-        <>
-          <BidRow
-            id={index}
-            key={`bidRow${index}`}
-            numOfRow={index}
-            bid={selectedBid}
-            setBid={setSelectedBid}
-            myData={inventoryData}
-            itemInBid={selectedBid.data[index]}
-          ></BidRow>
-        </>
-      );
-    });
+    !selectedBid.freeBid ? (
+      [...new Array(numOfRows)].map((bidRow, index) => {
+        return (
+          <>
+            <BidRow
+              id={index}
+              key={`bidRow${index}`}
+              numOfRow={index}
+              bid={selectedBid}
+              setBid={setSelectedBid}
+              myData={inventoryData}
+              itemInBid={selectedBid.data[index]}
+            ></BidRow>
+          </>
+        );
+      })
+    ) : selectedBid &&
+      selectedBid.isApproved === isApproved &&
+      selectedBid.freeBid ? (
+      <JoditEditor
+        ref={editor}
+        value={selectedBid?.data && selectedBid?.data[0]}
+        config={config}
+        tabIndex={1}
+        onBlur={(newContent) => setContent(newContent)}
+        onChange={(newContent) => {
+          setContent(newContent);
+          customOnChange && customOnChange(newContent);
+        }}
+      />
+    ) : null;
 
   const convertToNotApproved = async () => {
     try {
@@ -400,7 +468,14 @@ export default function OrderPage() {
   };
   const isAnEmptyData = () => {
     const foundItem = selectedBid.data.find((item) => item.checked === true);
-    if (foundItem) return false;
+    if (
+      foundItem ||
+      (selectedBid.freeBid &&
+        content !== "<p><br></p>" &&
+        content !== undefined &&
+        content !== "")
+    )
+      return false;
     return true;
   };
   const customStyles = {
@@ -462,11 +537,17 @@ export default function OrderPage() {
                 disabled={selectedOption ? false : true}
                 style={{
                   backgroundColor:
-                    selectedOption && !isAnEmptyData() ? "brown" : "#cccccc",
+                    selectedOption && !isAnEmptyData() && selectedBid.freeBid
+                      ? "brown"
+                      : "#cccccc",
                   cursor:
-                    selectedOption && !isAnEmptyData() ? "pointer" : "auto",
+                    selectedOption && !isAnEmptyData() && selectedBid.freeBid
+                      ? "pointer"
+                      : "auto",
                   color:
-                    selectedOption && !isAnEmptyData() ? "white" : "#666666",
+                    selectedOption && !isAnEmptyData() && selectedBid.freeBid
+                      ? "white"
+                      : "#666666",
                 }}
                 onClick={(e) => {
                   convertToNotApproved();
@@ -610,18 +691,35 @@ export default function OrderPage() {
               disabled={isApproved ? true : false}
             />
             <div className="totalAmount-container">
-              <input
-                placeholder="סכום"
-                className="name"
-                required
-                value={selectedBid.clientName ? selectedBid?.totalAmount : null}
-                disabled
-              />
+              {!selectedBid.freeBid && (
+                <input
+                  placeholder="סכום"
+                  className="name"
+                  required
+                  value={
+                    selectedBid.clientName ? selectedBid?.totalAmount : null
+                  }
+                  disabled
+                />
+              )}
+              {selectedBid.freeBid && (
+                <input
+                  placeholder="סכום"
+                  className="name"
+                  required
+                  value={selectedBid.clientName && selectedBid?.totalAmount}
+                  onChange={(e) => {
+                    setSelectedBid((prev) => {
+                      return { ...prev, totalAmount: e.target.value };
+                    });
+                  }}
+                />
+              )}
               <input disabled value={'ש"ח'} className="currency" />
             </div>
           </form>
         )}
-        {selectedOption && (
+        {selectedOption && !selectedBid.freeBid && (
           <form
             className="row"
             style={{

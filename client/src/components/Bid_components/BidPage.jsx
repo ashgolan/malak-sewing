@@ -9,7 +9,7 @@ import { Api } from "../../utils/Api";
 import { clearTokens, getAccessToken } from "../../utils/tokensStorage";
 import { refreshMyToken } from "../../utils/setNewAccessToken";
 
-export default function BidPage() {
+export default function BidPage({ freeBid, freeTextContent }) {
   const date = new Date();
   const year = date.getFullYear();
   const month =
@@ -19,7 +19,7 @@ export default function BidPage() {
   const day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
   const navigate = useNavigate();
   const [fetchingStatus, setFetchingStatus] = useContext(FetchingStatus);
-  const [numOfRows, setNumOfRows] = useState(5);
+  const [numOfRows, setNumOfRows] = useState(freeBid === true ? 0 : 5);
   const [inventoryData, setInventoryData] = useState([]);
   const [bid, setBid] = useState({
     clientName: "",
@@ -40,11 +40,16 @@ export default function BidPage() {
       };
     });
     const IndextheData = bid.data
-      .filter((item) => item.checked === true)
+      ?.filter((item) => item.checked === true)
       .map((item, index) => ({ ...item, id: index }));
+
     const { data } = await Api.post(
       "/bids",
-      { ...bid, data: IndextheData },
+      {
+        ...bid,
+        data: freeBid ? freeTextContent : IndextheData,
+        freeBid: freeBid ? true : false,
+      },
       { headers }
     );
     setFetchingStatus((prev) => {
@@ -230,24 +235,39 @@ export default function BidPage() {
             }}
           />
           <div className="totalAmount-container">
-            <input
-              placeholder="סכום"
-              className="name"
-              required
-              disabled
-              defaultValue={bid.clientName ? bid?.totalAmount : null}
-            />
+            {!freeBid && (
+              <input
+                placeholder="סכום"
+                className="name"
+                required
+                disabled={freeBid ? false : true}
+                defaultValue={bid.clientName ? bid?.totalAmount : null}
+              />
+            )}
+            {freeBid && (
+              <input
+                placeholder="סכום"
+                className="name"
+                required
+                value={bid?.totalAmount}
+                onChange={(e) => {
+                  setBid((prev) => {
+                    return { ...prev, totalAmount: e.target.value };
+                  });
+                }}
+              />
+            )}
             <input disabled value={'ש"ח'} className="currency" />
           </div>
           <input
             type="submit"
             className="save"
             value={"שמירה"}
-            disabled={!bid.data.length}
+            disabled={!bid.data.length && !freeBid}
             style={{
-              backgroundColor: bid.data.length ? "brown" : "#cccccc",
-              cursor: bid.data.length ? "pointer" : "auto",
-              color: bid.data.length ? "white" : "#666666",
+              backgroundColor: bid.data.length || freeBid ? "brown" : "#cccccc",
+              cursor: bid.data.length || freeBid ? "pointer" : "auto",
+              color: bid.data.length || freeBid ? "white" : "#666666",
             }}
           />
         </form>
@@ -265,7 +285,7 @@ export default function BidPage() {
           );
         })}
 
-      {!fetchingStatus.loading && (
+      {!fetchingStatus.loading && !freeBid && (
         <img
           src="/addItem.png"
           alt=""

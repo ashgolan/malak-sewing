@@ -49,6 +49,14 @@ export default function Navbar() {
             className="bid-img"
             src="./bid.png"
             onClick={() => {
+              navigate("/freeBidPage");
+            }}
+            alt=""
+          />
+          <img
+            className="bid-img"
+            src="./pcbid.png"
+            onClick={() => {
               navigate("/bids");
             }}
             alt=""
@@ -85,7 +93,8 @@ export default function Navbar() {
           <img
             className="logout-img"
             style={{
-              width: "70%",
+              width: "80%",
+              cursor: "pointer",
             }}
             alt={""}
             onClick={() => {
