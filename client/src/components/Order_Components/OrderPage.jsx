@@ -33,7 +33,6 @@ export default function OrderPage({ customOnChange, placeholder }) {
       direction: "rtl", // Set the text direction to right-to-left (you can use 'ltr' for left-to-right)
       style: {
         textAlign: "right", // Set the default text alignment to right (you can use 'left', 'center', 'justify', etc.)
-        height: "30vh",
       },
       buttons: [
         "bold",
