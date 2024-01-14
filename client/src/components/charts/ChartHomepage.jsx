@@ -11,12 +11,18 @@ import { refreshMyToken } from "../../utils/setNewAccessToken";
 import { useNavigate } from "react-router-dom";
 
 function ChartHomepage() {
-  const [report, setReport] = useState({ type: "", month: "", year: "" });
+  const [report, setReport] = useState({
+    typeName: "",
+    type: "",
+    month: "",
+    year: "",
+  });
   const [updatedReport, setUpdatedReport] = useState(false);
   const [updateChart, setUpdateChart] = useState(false);
   const [showChart, setShowChart] = useState(false);
   const [fetchingStatus, setFetchingStatus] = useContext(FetchingStatus);
   const [fetchingData, setFetchingData] = useState({});
+  const [showLogo, setShowLogo] = useState("none");
   const navigate = useNavigate();
   const months = [
     { value: null, label: null },
@@ -81,11 +87,14 @@ function ChartHomepage() {
       };
     },
   };
-  const downloadToPdf = () => {
-    exportToPdf(
+  const downloadToPdf = async () => {
+    await setShowLogo("flex");
+    const month = report.month ? report.month : "";
+    const resault = exportToPdf(
       "pdfOrder",
-      report.type + "-" + report.month + "-" + report.year
+      report?.typeName + "-" + month + "-" + report.year
     );
+    if (resault) setShowLogo("none");
   };
 
   const sendRequest = async (token) => {
@@ -167,6 +176,9 @@ function ChartHomepage() {
   }, []);
   return (
     <div id={"pdfOrder"}>
+      <div className="header-logo-of-bid" style={{ display: showLogo }}>
+        <img id="logo" src="./logo.jpg" alt="" />
+      </div>
       <div className="charts-title">
         <Select
           className="select-chart"
@@ -175,7 +187,13 @@ function ChartHomepage() {
           onChange={(e) => {
             setUpdatedReport((prev) => !prev);
             setReport((prev) => {
-              return { ...prev, type: e.value, month: null, year: null };
+              return {
+                ...prev,
+                typeName: e.label,
+                type: e.value,
+                month: null,
+                year: null,
+              };
             });
             setUpdateChart((prev) => !prev);
             setShowChart(false);

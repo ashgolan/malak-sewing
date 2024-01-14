@@ -800,6 +800,7 @@ export default function OrderPage({ customOnChange, placeholder }) {
       </div>
       {!fetchingStatus.loading &&
         !selectedBid?.isApproved &&
+        !selectedBid.freeBid &&
         selectedOption && (
           <img
             src="/addItem.png"
