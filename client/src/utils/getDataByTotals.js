@@ -42,6 +42,5 @@ export const getDataByTotals = (data) => {
       }
     }
   }
-  console.log(dataByTotal);
   return dataByTotal;
 };

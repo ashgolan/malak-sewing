@@ -51,14 +51,17 @@ function App() {
       <FetchingStatus.Provider value={[fetchingStatus, setFetchingStatus]}>
         <Routes>
           <Route
+            exact
             path="/"
             element={<Login setLoggedIn={setLoggedIn}></Login>}
           ></Route>
           <Route
+            exact
             path="/inventories"
             element={<Inventories></Inventories>}
           ></Route>
           <Route path="/providers" element={<Providers></Providers>}></Route>
+
           <Route path="/contacts" element={<Contacts></Contacts>}></Route>
           <Route
             path="/sleevesBids"

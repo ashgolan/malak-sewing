@@ -423,7 +423,7 @@ export default function ItemsTable({
             style={{
               width:
                 collReq === "/expenses"
-                  ? "17%"
+                  ? "10%"
                   : collReq === "/sales"
                   ? "7%"
                   : "6%",

@@ -1,3 +1,8 @@
+@media screen and (max-width: 1000px) {
+  .Item_form {
+    width: 95% !important;
+  }
+}
 .Item_form {
   width: 90%;
   padding: 0.3% 0;
@@ -32,7 +37,7 @@
   padding: 0.3% 0;
 }
 .select-product-head {
-  width: 15%;
+  width: 22%;
   padding: 0.3% 0;
 }
 .desc-style {

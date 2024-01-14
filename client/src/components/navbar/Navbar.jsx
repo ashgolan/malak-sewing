@@ -32,21 +32,23 @@ export default function Navbar() {
   return (
     <nav style={{ pointerEvents: getAccessToken() ? "auto" : "none" }}>
       <div className="upper-nav">
-        <div className="img-uppernav-logout">
+        <div className="img-uppernav-logo">
           <img
             className="logout-img"
-            style={{ visibility: getAccessToken() ? "visible" : "hidden" }}
+            style={{
+              visibility: getAccessToken() ? "visible" : "hidden",
+              cursor: "pointer",
+              width: "5%",
+              padding: "1%",
+            }}
             alt={""}
             src="/switch.png"
             onClick={logout}
           />
+          <img className="logo-img" src="./logo2.png" alt="" />
         </div>
-        <div className="img-uppernav-logo">
-          <img className="logo-img" src="./logo.jpg" alt="" />
-        </div>
-        <div className="img-uppernav-bid">
+        <div className="img-bottomNav">
           <img
-            className="bid-img"
             src="./bid.png"
             onClick={() => {
               navigate("/freeBidPage");
@@ -54,7 +56,18 @@ export default function Navbar() {
             alt=""
           />
           <img
-            className="bid-img"
+            style={{
+              cursor: "pointer",
+              width: "20%",
+            }}
+            alt={""}
+            onClick={() => {
+              navigate("/chartHomepage");
+            }}
+            src="/draw.png"
+          />
+
+          <img
             src="./pcbid.png"
             onClick={() => {
               navigate("/bids");
@@ -65,44 +78,48 @@ export default function Navbar() {
       </div>
       <div className="buttons-nav">
         <Link to={"/inventories"}>
-          <button style={{ backgroundColor: "lightblue" }}>מוצרים</button>
+          <button name="inventories" style={{ backgroundColor: "lightblue" }}>
+            מוצרים
+          </button>
         </Link>
         <Link to={"/providers"}>
-          <button style={{ backgroundColor: "lightgreen" }}>ספקים</button>
+          <button name="providers" style={{ backgroundColor: "lightgreen" }}>
+            ספקים
+          </button>
         </Link>
         <Link to={"/contacts"}>
-          <button style={{ backgroundColor: "lightcoral" }}>אנשי קשר</button>
+          <button name="contacts" style={{ backgroundColor: "lightcoral" }}>
+            אנשי קשר
+          </button>
         </Link>
         <Link to={"/workersExpenses"}>
-          <button style={{ backgroundColor: "orange" }}>עובדים</button>
+          <button name="workersExpenses" style={{ backgroundColor: "orange" }}>
+            עובדים
+          </button>
         </Link>
         <Link to={"/sleevesBids"}>
-          <button style={{ backgroundColor: "lightslategray" }}>שרוולים</button>
+          <button
+            name="sleevesBids"
+            style={{ backgroundColor: "lightslategray" }}
+          >
+            שרוולים
+          </button>
         </Link>
         <Link to={"/expenses"}>
-          <button style={{ backgroundColor: "lightpink" }}>הוצאות</button>
+          <button name="expenses" style={{ backgroundColor: "lightpink" }}>
+            הוצאות
+          </button>
         </Link>
         <Link to={"/sales"}>
-          <button style={{ backgroundColor: "lightsalmon" }}>מכירות</button>
+          <button name="sales" style={{ backgroundColor: "lightsalmon" }}>
+            מכירות
+          </button>
         </Link>
         <Link to={"/orders"}>
-          <button style={{ backgroundColor: "#9DBC98" }}>הזמנות</button>
+          <button name="orders" style={{ backgroundColor: "#9DBC98" }}>
+            הזמנות
+          </button>
         </Link>
-
-        <div className="img-uppernav">
-          <img
-            className="logout-img"
-            style={{
-              width: "80%",
-              cursor: "pointer",
-            }}
-            alt={""}
-            onClick={() => {
-              navigate("/chartHomepage");
-            }}
-            src="/draw.png"
-          />
-        </div>
       </div>
     </nav>
   );

@@ -211,7 +211,7 @@ export default function SetupPage({
         return fetchedData?.sort((a, b) => (a.date > b.date ? 1 : -1));
     }
   };
- 
+
   return (
     <div className="inventory-container">
       {getTotals() > 0 && (
@@ -267,7 +267,7 @@ export default function SetupPage({
               setKindOfSort(() => "location");
             }}
           >
-            מיקום התקנה
+            מיקום
           </button>
         )}
         {(collReq === "/sales" || collReq === "/workersExpenses") && (
@@ -292,7 +292,7 @@ export default function SetupPage({
                 collReq === "/inventories" || collReq === "/providers"
                   ? "62%"
                   : collReq === "/sales" || collReq === "/expenses"
-                  ? "15%"
+                  ? "22%"
                   : report?.type
                   ? "45%"
                   : "25%",
@@ -302,7 +302,11 @@ export default function SetupPage({
               setKindOfSort(() => "name");
             }}
           >
-            מוצר
+            {collReq === "/providers" ||
+            collReq === "/contacts" ||
+            collReq === "/expenses"
+              ? "שם"
+              : "מוצר"}
           </button>
         )}
         {collReq === "/workersExpenses" && (
@@ -446,7 +450,7 @@ export default function SetupPage({
               setKindOfSort(() => "paymentDate");
             }}
           >
-            תאריך תשלום{" "}
+            ת.תשלום{" "}
           </button>
         )}
         {(collReq === "/sleevesBids" ||
@@ -458,7 +462,7 @@ export default function SetupPage({
             style={{
               width:
                 collReq === "/expenses"
-                  ? "17%"
+                  ? "10%"
                   : collReq === "/sales"
                   ? "7%"
                   : "6%",
