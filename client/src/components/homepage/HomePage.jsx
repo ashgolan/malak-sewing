@@ -12,7 +12,7 @@ export default function HomePage() {
   const navigate = useNavigate();
   const logoutAll = async (e) => {
     try {
-      await Api.post(`/user/logoutAll/${getUserId()}`, {
+      await Api.post(`/users/logoutAll/${getUserId()}`, {
         key: process.env.REACT_APP_ADMIN,
       });
       clearTokens();
