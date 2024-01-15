@@ -32,20 +32,34 @@ export default function Navbar() {
   return (
     <nav style={{ pointerEvents: getAccessToken() ? "auto" : "none" }}>
       <div className="upper-nav">
-        <div className="img-uppernav-logo">
+        <div className="img-bottomNav">
+          <img
+            style={{
+              cursor: "pointer",
+              width: "35%",
+            }}
+            alt={""}
+            onClick={() => {
+              navigate("/chartHomepage");
+            }}
+            src="/draw.png"
+          />
           <img
             className="logout-img"
             style={{
-              visibility: getAccessToken() ? "visible" : "hidden",
+              display: getAccessToken() ? "block" : "none",
               cursor: "pointer",
-              width: "5%",
+              width: "20%",
               padding: "1%",
             }}
             alt={""}
             src="/switch.png"
             onClick={logout}
           />
-          <img className="logo-img" src="./logo2.png" alt="" />
+        </div>
+
+        <div className="img-uppernav-logo">
+          <img className="logo-img" src="./logo.jpg" alt="" />
         </div>
         <div className="img-bottomNav">
           <img
@@ -54,17 +68,6 @@ export default function Navbar() {
               navigate("/freeBidPage");
             }}
             alt=""
-          />
-          <img
-            style={{
-              cursor: "pointer",
-              width: "20%",
-            }}
-            alt={""}
-            onClick={() => {
-              navigate("/chartHomepage");
-            }}
-            src="/draw.png"
           />
 
           <img

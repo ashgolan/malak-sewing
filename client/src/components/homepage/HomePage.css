@@ -1,8 +1,19 @@
+@media screen and (max-width: 1000px) {
+  .title-homepage > h1 {
+    font-size: 3rem !important;
+  }
+  .title-homepage > .welcome {
+    font-size: 2rem !important;
+  }
+  .welcome > p {
+    font-size: 2rem !important;
+  }
+}
 .home-container {
   height: 85vh;
-  /* background-image: url("/public/background.png"); */
+  background-image: url("/public/home-background2.png");
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: cover;
   background-position: bottom;
 }
 
@@ -21,22 +32,19 @@
   text-align: center;
   display: flex;
   flex-wrap: wrap;
-  width: 70%;
+  width: 40%;
+  border-radius: 3rem 0 3rem 0;
   font-weight: bold;
   flex-direction: row-reverse;
   justify-content: center;
   align-items: center;
-  font-size: 2rem;
+  background-color: rgb(248, 232, 232);
+  border: none;
+  /* padding: 0.5%; */
 }
 .welcome > p {
   margin: 1%;
-}
-@media only screen and (max-width: 500px) {
-  .title-homepage > .welcome {
-    width: 60%;
-    justify-content: space-between;
-    font-size: 1rem;
-  }
+  font-size: 3rem;
 }
 
 a > .home-log-btn {

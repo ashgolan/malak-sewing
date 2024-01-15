@@ -26,7 +26,7 @@ export default function HomePage() {
   return (
     <div className="home-container">
       <div className="title-homepage">
-        <h1 style={{ fontSize: "3rem", fontWeight: "bold" }}>מערכת לניהול</h1>
+        <h1 style={{ fontSize: "5rem", fontWeight: "bold" }}>מערכת לניהול</h1>
         <div className="welcome">
           <p style={{ color: "#f36710" }}>מתפרת</p>
           <p style={{ color: "#98ca3b" }}>פרטית</p>
