@@ -123,7 +123,7 @@ export default function ItemsTable({
             id="date"
             type="date"
             className="input_show_item"
-            style={{ width: collReq === "/sales" ? "10%" : "13%" }}
+            style={{ width: collReq === "/sales" ? "11%" : "13%" }}
             disabled={changeStatus.disabled}
             value={itemsValues.date}
             onChange={(e) => {

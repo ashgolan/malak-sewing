@@ -32,29 +32,37 @@ export default function Navbar() {
   return (
     <nav style={{ pointerEvents: getAccessToken() ? "auto" : "none" }}>
       <div className="upper-nav">
-        <div className="img-bottomNav">
+        <div className="img-bottomNav-left">
           <img
             style={{
               cursor: "pointer",
-              width: "35%",
+              width: "5%",
+              visibility: "hidden",
             }}
             alt={""}
-            onClick={() => {
-              navigate("/chartHomepage");
-            }}
             src="/draw.png"
           />
+          <label
+            style={{
+              fontWeight: "bold",
+              color: "rgb(97, 152, 184)",
+              fontSize: "1rem",
+              textDecoration: "underline",
+            }}
+            htmlFor=""
+          >
+            תכנות ועיצוב : עלא שעלאן
+          </label>
           <img
             className="logout-img"
             style={{
-              display: getAccessToken() ? "block" : "none",
+              visibility: "hidden",
               cursor: "pointer",
-              width: "25%",
+              width: "5%",
               padding: "1%",
             }}
             alt={""}
             src="/switch2.png"
-            onClick={logout}
           />
         </div>
 
@@ -62,6 +70,18 @@ export default function Navbar() {
           <img className="logo-img" src="./logo.jpg" alt="" />
         </div>
         <div className="img-bottomNav">
+          <img
+            style={{
+              cursor: "pointer",
+              // width: "20%",
+            }}
+            alt={""}
+            onClick={() => {
+              navigate("/chartHomepage");
+            }}
+            src="/draw.png"
+          />
+
           <img
             src="./bid.png"
             onClick={() => {
@@ -76,6 +96,18 @@ export default function Navbar() {
               navigate("/bids");
             }}
             alt=""
+          />
+          <img
+            className="logout-img"
+            style={{
+              display: getAccessToken() ? "block" : "none",
+              cursor: "pointer",
+              // width: "20%",
+              padding: "1%",
+            }}
+            alt={""}
+            src="/switch2.png"
+            onClick={logout}
           />
         </div>
       </div>

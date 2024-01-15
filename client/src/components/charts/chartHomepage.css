@@ -2,6 +2,9 @@
   .charts-title {
     width: 80% !important;
   }
+  .chart-container {
+    width: 70% !important;
+  }
 }
 .charts-title {
   display: flex;

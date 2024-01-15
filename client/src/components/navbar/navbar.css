@@ -55,14 +55,18 @@ nav {
   align-items: center;
 }
 @media screen and (max-width: 1000px) {
-  .img-uppernav-logo {
-    border-top: 2px solid brown;
+  .img-bottomNav-left {
+    display: none !important;
   }
   .upper-nav {
     flex-direction: column;
   }
   .img-bottomNav {
-    width: 20% !important;
+    width: 30% !important;
+  }
+  .img-bottomNav > img {
+    width: 25% !important;
+    padding: 2%;
   }
   nav > .buttons-nav {
     flex-wrap: wrap;
@@ -103,7 +107,8 @@ nav > .buttons-nav {
   border-radius: 2rem;
   border-bottom: 2px solid transparent;
 }
-.img-bottomNav {
+.img-bottomNav,
+.img-bottomNav-left {
   display: flex;
   flex: 1 1 25%;
   flex-direction: row-reverse;

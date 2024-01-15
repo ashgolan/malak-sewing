@@ -248,7 +248,7 @@ export default function SetupPage({
           <button
             id="date"
             className="input_show_item head"
-            style={{ width: collReq === "/sales" ? "10%" : "13%" }}
+            style={{ width: collReq === "/sales" ? "11%" : "13%" }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "date");

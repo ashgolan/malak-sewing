@@ -40,7 +40,7 @@
   align-items: center;
   background-color: rgb(248, 232, 232);
   border: none;
-  /* padding: 0.5%; */
+  margin-bottom: 1%;
 }
 .welcome > p {
   margin: 1%;
