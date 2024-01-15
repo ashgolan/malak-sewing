@@ -4,6 +4,7 @@ nav {
   justify-content: space-between;
   border-bottom: 2px solid rgb(95, 34, 34);
   align-items: center;
+  background: white !important;
 }
 .upper-nav {
   display: flex;

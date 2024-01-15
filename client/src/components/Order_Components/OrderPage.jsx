@@ -557,7 +557,7 @@ export default function OrderPage({ customOnChange, placeholder }) {
                 await setShowLogo("flex");
                 const resault = exportToPdf(
                   "pdfOrder",
-                  selectedBid.clientName + "-" + selectedBid.date
+                  `הצעת מחיר עבור - ${selectedBid.clientName} - ${selectedBid.date}`
                 );
                 if (resault) setShowLogo("none");
               }}

@@ -387,7 +387,7 @@ export default function SetupPage({
           <button
             id="expenses"
             className="input_show_item head"
-            style={{ width: "5%" }}
+            style={{ width: "7%" }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "expenses");
@@ -431,7 +431,7 @@ export default function SetupPage({
           <button
             id="tax"
             className="input_show_item head"
-            style={{ width: "10%", textAlign: "center" }}
+            style={{ width: "9%", textAlign: "center" }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "tax");

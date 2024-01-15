@@ -3,3 +3,10 @@
     height: 20%;
   }
 }
+.vh-50 {
+  height: 85vh;
+  background-image: url("/public/home-background2.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: bottom;
+}

@@ -330,7 +330,7 @@ export default function ItemsTable({
           <input
             id="expenses"
             className="input_show_item"
-            style={{ width: "5%" }}
+            style={{ width: "7%" }}
             disabled={changeStatus.disabled}
             value={itemsValues.expenses}
             onChange={(e) => {
