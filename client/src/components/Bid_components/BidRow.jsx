@@ -196,9 +196,9 @@ export default function BidRow({ numOfRow, myData, itemInBid, setBid, bid }) {
       <input
         name="quantity"
         className="input_box"
-        placeholder={`כמות`}
-        // placeholder={!itemInBid ? `כמות` : itemInBid.quantity}
-        value={!bid.isApproved ? itemInRow.quantity : ""}
+        placeholder="כמות"
+        // placeholder={!itemInBid?.quantity ? `כמות` : itemInBid?.quantity}
+        value={itemInRow?.quantity}
         onChange={(e) => {
           setBySelectedValue(e);
         }}

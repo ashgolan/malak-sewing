@@ -536,17 +536,11 @@ export default function OrderPage({ customOnChange, placeholder }) {
                 disabled={selectedOption ? false : true}
                 style={{
                   backgroundColor:
-                    selectedOption && !isAnEmptyData() && selectedBid.freeBid
-                      ? "brown"
-                      : "#cccccc",
+                    selectedOption && !isAnEmptyData() ? "brown" : "#cccccc",
                   cursor:
-                    selectedOption && !isAnEmptyData() && selectedBid.freeBid
-                      ? "pointer"
-                      : "auto",
+                    selectedOption && !isAnEmptyData() ? "pointer" : "auto",
                   color:
-                    selectedOption && !isAnEmptyData() && selectedBid.freeBid
-                      ? "white"
-                      : "#666666",
+                    selectedOption && !isAnEmptyData() ? "white" : "#666666",
                 }}
                 onClick={(e) => {
                   convertToNotApproved();

@@ -49,11 +49,11 @@ export default function Navbar() {
             style={{
               display: getAccessToken() ? "block" : "none",
               cursor: "pointer",
-              width: "20%",
+              width: "25%",
               padding: "1%",
             }}
             alt={""}
-            src="/switch.png"
+            src="/switch2.png"
             onClick={logout}
           />
         </div>
