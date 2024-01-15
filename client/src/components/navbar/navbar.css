@@ -56,7 +56,6 @@ nav {
 }
 @media screen and (max-width: 1000px) {
   .img-bottomNav-left {
-    display: none !important;
   }
   .upper-nav {
     flex-direction: column;
