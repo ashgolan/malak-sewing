@@ -42,17 +42,16 @@ export default function Navbar() {
             alt={""}
             src="/draw.png"
           />
-          <label
-            style={{
-              fontWeight: "bold",
-              color: "rgb(97, 152, 184)",
-              fontSize: "1rem",
-              textDecoration: "underline",
-            }}
-            htmlFor=""
-          >
-            תכנות ועיצוב : עלא שעלאן
-          </label>
+          <div className="createdBy">
+            <img
+              style={{
+                cursor: "pointer",
+                width: "100%",
+              }}
+              alt={""}
+              src="/alaaLogo.png"
+            />
+          </div>
           <img
             className="logout-img"
             style={{

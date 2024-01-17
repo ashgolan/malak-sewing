@@ -60,6 +60,7 @@
 
 .head {
   background-color: transparent;
+  border-color: transparent;
   border-bottom: 2px solid rgb(96, 228, 124);
   color: rgb(30, 46, 75);
   font-weight: bold;

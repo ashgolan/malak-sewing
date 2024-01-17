@@ -90,13 +90,7 @@ function ChartPage({ report, setShowChart, showChart, fetchingData }) {
   return (
     <div className="chart-container">
       {report?.year && <button onClick={showChartHandler}>הצג מידע</button>}
-      {showChart && (
-        <Bar
-          data={chartData}
-          options={chartOptions}
-          // plugins={[ChartDataLabels]}
-        />
-      )}
+      {showChart && <Bar data={chartData} options={chartOptions} />}
     </div>
   );
 }

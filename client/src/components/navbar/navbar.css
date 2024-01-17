@@ -55,7 +55,12 @@ nav {
   align-items: center;
 }
 @media screen and (max-width: 1000px) {
-  .img-bottomNav-left {
+  .createdBy {
+    width: 20%;
+    border-bottom: 2px solid rgb(95, 34, 34);
+  }
+  .createdBy > img {
+    width: 30% !important;
   }
   .upper-nav {
     flex-direction: column;
@@ -114,6 +119,11 @@ nav > .buttons-nav {
   justify-content: center;
   align-items: center;
   cursor: pointer;
+}
+.createdBy {
+  display: flex;
+  justify-content: center;
+  width: 70%;
 }
 .img-bottomNav > img {
   width: 20%;
