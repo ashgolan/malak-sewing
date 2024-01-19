@@ -11,17 +11,7 @@ nav {
   justify-content: center;
   align-items: center;
 }
-.upper-nav > a {
-  text-decoration: none;
-  width: 20%;
-  display: flex;
-  justify-content: center;
-}
-.upper-nav > a > button {
-  border-radius: 1.5rem 0 1.5rem 0;
-  padding: 2% 20%;
-  border: none;
-}
+
 .img-uppernav-logout,
 .img-uppernav-bid {
   width: 20%;
@@ -36,13 +26,6 @@ nav {
   justify-content: center;
   align-items: center;
 }
-/* .img-uppernav-bid > .bid-img {
-  cursor: pointer;
-  width: 30%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-} */
 .img-uppernav-logo {
   display: flex;
   flex: 1 1 50%;
@@ -83,32 +66,26 @@ nav > .buttons-nav {
   justify-content: space-between;
   align-items: center;
 }
+.buttons-nav > a > button {
+  background-color: transparent;
+}
 .buttons-nav > a {
   display: flex;
   justify-content: center;
+  border-radius: 2rem;
   width: 20%;
   margin: 0.5%;
   text-decoration: none;
+  overflow: hidden;
 }
 .buttons-nav > div {
   width: 10%;
-}
-
-.buttons-nav > a > button:hover,
-.buttons-nav > a > button:active {
-  background-color: transparent !important;
-  color: brown;
-  font-weight: bold;
-  border-radius: 0;
-  border-bottom: 2px solid gold;
-  overflow: hidden;
 }
 
 .buttons-nav > a > button {
   width: 100%;
   padding: 1% 20%;
   border: none;
-  border-radius: 2rem;
   border-bottom: 2px solid transparent;
 }
 .img-bottomNav,
@@ -128,4 +105,16 @@ nav > .buttons-nav {
 .img-bottomNav > img {
   width: 20%;
   padding: 0.5%;
+}
+nav a :hover {
+  background-color: white;
+  color: brown;
+  font-weight: bold;
+  border-radius: 0;
+  border-bottom: 2px solid gold;
+}
+nav a.active {
+  background-color: transparent !important;
+  border-radius: 0;
+  border-bottom: 2px solid gold;
 }

@@ -9,6 +9,7 @@ export const exportToPdf = async (id, fileName) => {
     letterRendering: 1,
     useCORS: true,
   }).then((canvas) => {
+    canvas.getContext("2d");
     const imgWidth = 208;
     const imgHeight = (canvas.height * imgWidth) / canvas.width;
     const widthRatio = imgWidth / canvas.width;

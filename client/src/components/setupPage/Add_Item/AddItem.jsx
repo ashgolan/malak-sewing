@@ -32,7 +32,7 @@ export default function AddItem({
     bankProps: "",
     quantity: "",
     clientName: "",
-    discount: "",
+    discount: 0,
     expenses: "",
     location: "",
     equipment: "",
@@ -121,6 +121,19 @@ export default function AddItem({
         );
         break;
       case "/contacts":
+        await Api.post(
+          collReq,
+          {
+            name: itemsValues.name,
+            number: itemsValues.number,
+            mail: itemsValues.mail,
+            bankProps: itemsValues.bankProps,
+          },
+          {
+            headers: headers,
+          }
+        );
+        break;
       default:
         await Api.post(
           collReq,
@@ -288,7 +301,7 @@ export default function AddItem({
             autoFocus={true}
             className="add_item"
             style={{ width: "15%" }}
-            placeholder={"קליינט"}
+            placeholder={collReq === "/workersExpenses" ? "עובד" : "קליינט"}
             onChange={(e) =>
               setItemsValues((prev) => {
                 return { ...prev, clientName: e.target.value };
@@ -314,30 +327,29 @@ export default function AddItem({
             value={itemsValues.equipment}
           ></input>
         )}
-        {collReq === "/sales" ||
-          (collReq === "/expenses" && (
-            <Select
-              options={allSelectData}
-              className="add_item select-product "
-              placeholder="בחר מוצר"
-              styles={customStyles}
-              menuPlacement="auto"
-              required
-              onChange={(e) => {
-                const filteredItem = selectData.filter(
-                  (item) => item._id === e.value
-                )[0];
-                setItemsValues((prev) => {
-                  return {
-                    ...prev,
-                    name: e.label,
-                    number:
-                      collReq === "sales" ? filteredItem.number : prev.number,
-                  };
-                });
-              }}
-            ></Select>
-          ))}
+        {(collReq === "/sales" || collReq === "/expenses") && (
+          <Select
+            options={allSelectData}
+            className="add_item select-product "
+            placeholder="בחר מוצר"
+            styles={customStyles}
+            menuPlacement="auto"
+            required
+            onChange={(e) => {
+              const filteredItem = selectData.filter(
+                (item) => item._id === e.value
+              )[0];
+              setItemsValues((prev) => {
+                return {
+                  ...prev,
+                  name: e.label,
+                  number:
+                    collReq === "/sales" ? filteredItem.number : prev.number,
+                };
+              });
+            }}
+          ></Select>
+        )}
         {collReq !== "/sales" &&
           collReq !== "/workersExpenses" &&
           collReq !== "/expenses" && (
@@ -403,7 +415,7 @@ export default function AddItem({
             style={{ width: "7%" }}
             required
             className="add_item"
-            placeholder={"הנחה"}
+            placeholder={itemsValues.discount === 0 && "הנחה"}
             onChange={(e) => {
               setItemsValues((prev) => {
                 return {
@@ -452,7 +464,7 @@ export default function AddItem({
             style={{ width: "7%" }}
             required
             className="add_item"
-            placeholder={"התקנה"}
+            placeholder={"הוצאות"}
             onChange={(e) => {
               setItemsValues((prev) => {
                 return {

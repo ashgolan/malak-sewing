@@ -1,6 +1,6 @@
 import React from "react";
 import "./navbar.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import {
   clearTokens,
   getAccessToken,
@@ -111,49 +111,41 @@ export default function Navbar() {
         </div>
       </div>
       <div className="buttons-nav">
-        <Link to={"/inventories"}>
-          <button name="inventories" style={{ backgroundColor: "lightblue" }}>
-            מוצרים
-          </button>
-        </Link>
-        <Link to={"/providers"}>
-          <button name="providers" style={{ backgroundColor: "lightgreen" }}>
-            ספקים
-          </button>
-        </Link>
-        <Link to={"/contacts"}>
-          <button name="contacts" style={{ backgroundColor: "lightcoral" }}>
-            אנשי קשר
-          </button>
-        </Link>
-        <Link to={"/workersExpenses"}>
-          <button name="workersExpenses" style={{ backgroundColor: "orange" }}>
-            עובדים
-          </button>
-        </Link>
-        <Link to={"/sleevesBids"}>
-          <button
-            name="sleevesBids"
-            style={{ backgroundColor: "lightslategray" }}
-          >
-            שרוולים
-          </button>
-        </Link>
-        <Link to={"/expenses"}>
-          <button name="expenses" style={{ backgroundColor: "lightpink" }}>
-            הוצאות
-          </button>
-        </Link>
-        <Link to={"/sales"}>
-          <button name="sales" style={{ backgroundColor: "lightsalmon" }}>
-            מכירות
-          </button>
-        </Link>
-        <Link to={"/orders"}>
-          <button name="orders" style={{ backgroundColor: "#9DBC98" }}>
-            הזמנות
-          </button>
-        </Link>
+        <NavLink
+          to={"/inventories"}
+          style={{ backgroundColor: "lightblue" }}
+          className={({ isActive }) => (isActive ? "active" : "")}
+        >
+          <button name="inventories">מוצרים</button>
+        </NavLink>
+        <NavLink
+          to={"/providers"}
+          style={{ backgroundColor: "lightgreen" }}
+          className={({ isActive }) => (isActive ? "active" : "")}
+        >
+          <button name="providers">ספקים</button>
+        </NavLink>
+        <NavLink to={"/contacts"} style={{ backgroundColor: "lightcoral" }}>
+          <button name="contacts">אנשי קשר</button>
+        </NavLink>
+        <NavLink to={"/workersExpenses"} style={{ backgroundColor: "orange" }}>
+          <button name="workersExpenses">עובדים</button>
+        </NavLink>
+        <NavLink
+          to={"/sleevesBids"}
+          style={{ backgroundColor: "lightslategray" }}
+        >
+          <button name="sleevesBids">שרוולים</button>
+        </NavLink>
+        <NavLink to={"/expenses"} style={{ backgroundColor: "lightpink" }}>
+          <button name="expenses">הוצאות</button>
+        </NavLink>
+        <NavLink to={"/sales"} style={{ backgroundColor: "lightsalmon" }}>
+          <button name="sales">מכירות</button>
+        </NavLink>
+        <NavLink to={"/orders"} style={{ backgroundColor: "#9DBC98" }}>
+          <button name="orders">הזמנות</button>
+        </NavLink>
       </div>
     </nav>
   );
