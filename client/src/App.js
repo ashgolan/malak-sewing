@@ -7,7 +7,7 @@ import { useState } from "react";
 import Login from "./components/login/Login";
 import HomePage from "./components/homepage/HomePage";
 import IdleTimer from "./utils/IdleTimer";
-import { clearTokens } from "./utils/tokensStorage";
+import { clearTokens, getAccessToken } from "./utils/tokensStorage";
 import Providers from "./components/providers/Providers";
 import Inventories from "./components/inventories/Inventories";
 import Contacts from "./components/contacts/Contacts";
@@ -30,6 +30,8 @@ function App() {
     message: null,
   });
   const handleIdle = () => {
+    console.log(loggedIn);
+    console.log(getAccessToken());
     if (!loggedIn) return;
     clearTokens();
     setLoggedIn(false);

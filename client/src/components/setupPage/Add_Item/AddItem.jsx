@@ -378,7 +378,11 @@ export default function AddItem({
         <input
           name="number"
           id="number"
-          style={{ width: collReq === "/sales" ? "10%" : "15%" }}
+          type="number"
+          min={0}
+          style={{
+            width: collReq === "/sales" ? "10%" : "15%",
+          }}
           required
           className="add_item"
           placeholder={
@@ -412,6 +416,8 @@ export default function AddItem({
           <input
             name="discount"
             id="discount"
+            type="number"
+            min={0}
             style={{ width: "7%" }}
             required
             className="add_item"
@@ -463,6 +469,8 @@ export default function AddItem({
             id="expenses"
             style={{ width: "7%" }}
             required
+            type="number"
+            min={0}
             className="add_item"
             placeholder={"הוצאות"}
             onChange={(e) => {
@@ -484,6 +492,7 @@ export default function AddItem({
           <input
             name="mail"
             id="mail"
+            type="email"
             style={{ width: "25%" }}
             required
             className="add_item"
@@ -516,6 +525,8 @@ export default function AddItem({
           <input
             name="quantity"
             id="quantity"
+            type="number"
+            min={0}
             style={{ width: collReq === "/sales" ? "5%" : "10%" }}
             required
             className="add_item"

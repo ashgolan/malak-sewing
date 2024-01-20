@@ -244,6 +244,8 @@ export default function ItemsTable({
           )}
         <input
           id="number"
+          type="number"
+          min={0}
           className="input_show_item"
           style={{
             width:
@@ -275,6 +277,8 @@ export default function ItemsTable({
         {collReq === "/sales" && (
           <input
             id="discount"
+            type="number"
+            min={0}
             className="input_show_item"
             style={{ width: "7%" }}
             disabled={changeStatus.disabled}
@@ -306,6 +310,8 @@ export default function ItemsTable({
         {(collReq === "/sleevesBids" || collReq === "/sales") && (
           <input
             id="quantity"
+            type="number"
+            min={0}
             className="input_show_item"
             style={{ width: collReq === "/sales" ? "5%" : "7%" }}
             disabled={changeStatus.disabled}
@@ -329,6 +335,8 @@ export default function ItemsTable({
         {collReq === "/sales" && (
           <input
             id="expenses"
+            type="number"
+            min={0}
             className="input_show_item"
             style={{ width: "7%" }}
             disabled={changeStatus.disabled}
