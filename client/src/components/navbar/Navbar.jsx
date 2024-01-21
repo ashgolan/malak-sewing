@@ -144,7 +144,7 @@ export default function Navbar() {
           <button name="sales">מכירות</button>
         </NavLink>
         <NavLink to={"/orders"} style={{ backgroundColor: "#9DBC98" }}>
-          <button name="orders">הזמנות</button>
+          <button name="orders">הזמנוות</button>
         </NavLink>
       </div>
     </nav>
