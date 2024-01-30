@@ -70,6 +70,7 @@ export default function BidPage({ freeBid, freeTextContent }) {
         };
       });
     }, 1000);
+    if (freeBid) localStorage.setItem("freebid", "");
     navigate("/orders");
   };
 
@@ -248,6 +249,7 @@ export default function BidPage({ freeBid, freeTextContent }) {
               <input
                 placeholder="סכום"
                 className="name"
+                type="number"
                 required
                 value={bid?.totalAmount}
                 onChange={(e) => {

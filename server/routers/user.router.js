@@ -6,7 +6,7 @@ export const userRouter = Router();
 
 userRouter.post("/login", userControllers.login);
 userRouter.post("/refresh", userControllers.refreshAccessToken);
-userRouter.post("/register", userControllers.createUser);
+userRouter.post("/register", verifyAccessToken, userControllers.createUser);
 userRouter.delete("/", verifyAccessToken, userControllers.deleteUser);
 userRouter.get("/", verifyAccessToken, userControllers.getAllUsers);
 userRouter.post("/logout", userControllers.logout);

@@ -1,4 +1,4 @@
-export const getDataByTotals = (data) => {
+export const getDataByTotals = (data,isWorkers=false) => {
   const fetchingData = data?.sort((a, b) => (a.date > b.date ? 1 : -1));
   const dataByTotal = {};
   for (let i = 0; i < fetchingData.length; i++) {

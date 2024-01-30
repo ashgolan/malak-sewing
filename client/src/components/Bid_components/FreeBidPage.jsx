@@ -4,7 +4,9 @@ import BidPage from "./BidPage";
 
 export default function FreeBidPage({ placeholder, customOnChange }) {
   const editor = useRef(null);
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState(
+    localStorage.getItem("freebid") ? localStorage.getItem("freebid", "") : ""
+  );
   const config = useMemo(
     () => ({
       readonly: false,
@@ -64,6 +66,7 @@ export default function FreeBidPage({ placeholder, customOnChange }) {
         tabIndex={1}
         onBlur={(newContent) => setContent(newContent)}
         onChange={(newContent) => {
+          localStorage.setItem("freebid", newContent);
           customOnChange && customOnChange(newContent);
         }}
       />

@@ -38,7 +38,7 @@ export default function EditItem({
       case "/sleevesBids":
         return (
           itemsValues.number !== item.number ||
-          itemsValues.name !== item.name ||
+          itemsValues.clientName !== item.clientName ||
           itemsValues.date !== item.date ||
           itemsValues.tax !== item.tax ||
           itemsValues.quantity !== item.quantity ||
@@ -51,6 +51,7 @@ export default function EditItem({
           itemsValues.clientName !== item.clientName ||
           itemsValues.equipment !== item.equipment ||
           itemsValues.number !== item.number ||
+          +itemsValues.totalAmount !== item.number ||
           itemsValues.tax !== item.tax
         );
       case "/sales":
@@ -60,9 +61,10 @@ export default function EditItem({
           itemsValues.clientName !== item.clientName ||
           itemsValues.sale !== item.sale ||
           itemsValues.discount !== item.discount ||
-          itemsValues.setupPrice !== item.setupPrice ||
+          itemsValues.expenses !== item.expenses ||
           itemsValues.date !== item.date ||
           itemsValues.tax !== item.tax ||
+          itemsValues.colored !== item.colored ||
           itemsValues.quantity !== item.quantity ||
           itemsValues.totalAmount !== item.totalAmount
         );
@@ -97,7 +99,7 @@ export default function EditItem({
         await Api.patch(
           `${collReq}/${item._id}`,
           {
-            name: itemsValues.name,
+            clientName: itemsValues.clientName,
             number: itemsValues.number,
             date: itemsValues.date,
             tax: itemsValues.tax,
@@ -118,6 +120,7 @@ export default function EditItem({
             clientName: itemsValues.clientName,
             equipment: itemsValues.equipment,
             number: itemsValues.number,
+            totalAmount: itemsValues.number,
             tax: itemsValues.tax,
           },
           {
@@ -135,7 +138,8 @@ export default function EditItem({
             number: itemsValues.number,
             discount: itemsValues.discount,
             sale: itemsValues.sale,
-            setupPrice: itemsValues.setupPrice,
+            expenses: itemsValues.expenses,
+            colored: itemsValues.colored,
             tax: itemsValues.tax,
             quantity: itemsValues.quantity,
             totalAmount: itemsValues.totalAmount,

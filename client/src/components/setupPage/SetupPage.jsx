@@ -19,6 +19,9 @@ export default function SetupPage({
   isFetching,
   fetchingData,
 }) {
+  const date = new Date();
+  const year = date.getFullYear();
+
   const navigate = useNavigate();
   // eslint-disable-next-line
   const [fetchedData, setFetchingData] = useState([]);
@@ -34,9 +37,15 @@ export default function SetupPage({
   const [providers, setProviders] = useState([]);
   const getTotals = () => {
     let total = 0;
-    filterByReport(sortedInventory(kindOfSort)).forEach((element) => {
-      total += element.totalAmount;
-    });
+    if (collReq === "/workersExpenses") {
+      filterByReport(sortedInventory(kindOfSort)).forEach((element) => {
+        total += element.number;
+      });
+    } else {
+      filterByReport(sortedInventory(kindOfSort)).forEach((element) => {
+        total += element.totalAmount;
+      });
+    }
     return total;
   };
   const sendRequest = async (token) => {
@@ -50,6 +59,8 @@ export default function SetupPage({
         setFetchingData(fetchingData.salesData);
       } else if (collReq === "/expenses") {
         setFetchingData(fetchingData.expensesData);
+      } else if (collReq === "/workersExpenses") {
+        setFetchingData(fetchingData.workersExpensesData);
       } else {
         setFetchingData(fetchingData.sleevesBidsData);
       }
@@ -65,7 +76,26 @@ export default function SetupPage({
         const { data: providers } = await Api.get("/providers", { headers });
         setProviders(providers);
       }
+      // if (report === undefined) {
+      //   if (
+      //     collReq === "/sales" ||
+      //     collReq === "/sleevesBids" ||
+      //     collReq === "/workersExpenses" ||
+      //     collReq === "/expenses"
+      //   ) {
+      //     setFetchingData(
+      //       data.filter(
+      //         (item) =>
+      //           new Date(item.date).getFullYear() === year ||
+      //           item.colored === true
+      //       )
+      //     );
+      //   } else {
+      //     setFetchingData(data);
+      //   }
+      // } else {
       setFetchingData(data);
+      // }
     }
     setFetchingStatus((prev) => {
       return {
@@ -228,7 +258,7 @@ export default function SetupPage({
         >
           {"  "}
           {`סכום כל התנועות : `}
-          {getTotals()}
+          {getTotals().toFixed(2)}
           {` ש"ח `}
         </label>
       )}
@@ -238,7 +268,7 @@ export default function SetupPage({
           width:
             collReq === "/inventories" || collReq === "/providers"
               ? "60%"
-              : "90%",
+              : "95%",
         }}
       >
         {(collReq === "/sleevesBids" ||
@@ -270,7 +300,9 @@ export default function SetupPage({
             מיקום
           </button>
         )}
-        {(collReq === "/sales" || collReq === "/workersExpenses") && (
+        {(collReq === "/sales" ||
+          collReq === "/workersExpenses" ||
+          collReq === "/sleevesBids") && (
           <button
             id="clientName"
             className="input_show_item head"
@@ -280,15 +312,23 @@ export default function SetupPage({
               setKindOfSort(() => "clientName");
             }}
           >
-            קליינט
+            {collReq === "/workersExpenses" ? "עובד" : "קליינט"}
           </button>
         )}
-        {collReq !== "/workersExpenses" && (
+        {collReq !== "/workersExpenses" && collReq !== "/sleevesBids" && (
           <button
             id="name"
             className="input_show_item head"
             style={{
-              width:
+              maxWidth:
+                collReq === "/inventories" || collReq === "/providers"
+                  ? "62%"
+                  : collReq === "/sales" || collReq === "/expenses"
+                  ? "22%"
+                  : report?.type
+                  ? "45%"
+                  : "25%",
+              minWidth:
                 collReq === "/inventories" || collReq === "/providers"
                   ? "62%"
                   : collReq === "/sales" || collReq === "/expenses"
@@ -302,10 +342,10 @@ export default function SetupPage({
               setKindOfSort(() => "name");
             }}
           >
-            {collReq === "/providers" ||
-            collReq === "/contacts" ||
-            collReq === "/expenses"
+            {collReq === "/providers" || collReq === "/expenses"
               ? "שם"
+              : collReq === "/contacts"
+              ? "שם חברה"
               : "מוצר"}
           </button>
         )}

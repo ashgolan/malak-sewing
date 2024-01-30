@@ -7,7 +7,7 @@ const day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
 
 const sleevesBidSchema = new Schema({
   date: { type: String, default: year + "-" + month + "-" + day },
-  name: { type: String, required: true },
+  clientName: { type: String, required: true },
   number: { type: Number, default: "0" },
   quantity: { type: Number, required: true },
   tax: { type: Boolean, default: false },

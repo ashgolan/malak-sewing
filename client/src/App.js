@@ -19,6 +19,7 @@ import WorkersExpenses from "./components/workersExpenses/WorkersExpenses";
 import BidPage from "./components/Bid_components/BidPage";
 import OrderPage from "./components/Order_Components/OrderPage";
 import FreeBidPage from "./components/Bid_components/FreeBidPage";
+import Calender from "./components/calender/Calender";
 
 function App() {
   const navigate = useNavigate();
@@ -30,8 +31,6 @@ function App() {
     message: null,
   });
   const handleIdle = () => {
-    console.log(loggedIn);
-    console.log(getAccessToken());
     if (!loggedIn) return;
     clearTokens();
     setLoggedIn(false);
@@ -87,6 +86,7 @@ function App() {
             element={<ChartHomepage></ChartHomepage>}
           ></Route>
           <Route path="/homePage" element={<HomePage></HomePage>}></Route>
+          <Route path="/calender" element={<Calender></Calender>}></Route>
         </Routes>
       </FetchingStatus.Provider>
     </div>

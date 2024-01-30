@@ -117,7 +117,6 @@ export default function OrderPage({ customOnChange, placeholder }) {
     setSelectedBid({});
     setSelectedOption(null);
     setBidIsUpdated((prev) => !prev);
-    // exportToPdf("pdfOrder", selectedBid.clientName + "-" + selectedBid.date);
   };
   const sendDeleteRequest = async (token) => {
     const filteredBids = bids?.map((bid) => bid._id !== selectedBid._id);
@@ -494,6 +493,20 @@ export default function OrderPage({ customOnChange, placeholder }) {
       ...provided,
     }),
   };
+  const downloadToPdf = async () => {
+    setFetchingStatus((prev) => {
+      return { ...prev, status: true, loading: true };
+    });
+    await setShowLogo("flex");
+    const resault = exportToPdf(
+      "pdfOrder",
+      `הצעת מחיר עבור - ${selectedBid.clientName} - ${selectedBid.date}`
+    );
+    if (resault) setShowLogo("none");
+    setFetchingStatus((prev) => {
+      return { ...prev, status: false, loading: false };
+    });
+  };
   return (
     <div className="order-container">
       <div id="pdfOrder">
@@ -553,14 +566,7 @@ export default function OrderPage({ customOnChange, placeholder }) {
           </div>
           {selectedBid && (
             <img
-              onClick={async () => {
-                await setShowLogo("flex");
-                const resault = exportToPdf(
-                  "pdfOrder",
-                  `הצעת מחיר עבור - ${selectedBid.clientName} - ${selectedBid.date}`
-                );
-                if (resault) setShowLogo("none");
-              }}
+              onClick={downloadToPdf}
               src="/downloadPdf.png"
               alt=""
               style={{ width: "4%", cursor: "pointer" }}
@@ -791,7 +797,30 @@ export default function OrderPage({ customOnChange, placeholder }) {
           </form>
         )}
         {customBid}
+        <div className="bottom-logo-of-bid" style={{ display: "flex" }}>
+          <label htmlFor="">
+            {" "}
+            הערה : יש להוסיף לסכום מע"מ 17% כחוק - הספקה תוך 15 ימים מתאריך
+            אישור ההזמנה
+          </label>
+          <label
+            htmlFor=""
+            style={{ borderBottom: "1px solid rgb(185, 49, 67)" }}
+          >
+            חשבון בנק להעברה : מתפרת מלאק - חמד זאהר. בנק לאומי 10 . סניף 976 .
+            חשבון 59748/38{" "}
+          </label>
+          <label
+            htmlFor=""
+            style={{
+              borderBottom: "1px solid rgb(34, 168, 7)",
+            }}
+          >
+            בכבוד רב : מתפרת מלאק
+          </label>
+        </div>
       </div>
+
       {!fetchingStatus.loading &&
         !selectedBid?.isApproved &&
         !selectedBid.freeBid &&

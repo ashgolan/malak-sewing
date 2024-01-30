@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useRef } from "react";
 import { useEffect } from "react";
 import DeleteItem from "../Delete_Item/DeleteItem";
 import EditItem from "../Edit_Item/EditItem";
@@ -31,9 +30,10 @@ export default function ItemsTable({
     expenses: "",
     mail: "",
     bankProps: "",
-    quantity: 0,
+    quantity: "",
     location: 0,
     equipment: "",
+    colored: false,
     date: "",
     tax: false,
     paymentDate: "",
@@ -55,6 +55,7 @@ export default function ItemsTable({
           location: thisItem.location ? thisItem.location : "",
           quantity: thisItem.quantity ? thisItem.quantity : "",
           equipment: thisItem.equipment ? thisItem.equipment : "",
+          colored: thisItem.colored ? thisItem.colored : false,
           date: thisItem.date ? thisItem.date : "",
           tax: thisItem.tax ? thisItem.tax : false,
           paymentDate: thisItem.paymentDate ? thisItem.paymentDate : "",
@@ -77,6 +78,9 @@ export default function ItemsTable({
       textAlign: "right",
       backgroundColor: "rgb(48, 45, 45)",
       border: "none",
+      whiteSpace: "nowrap",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
     }),
     placeholder: (provided) => ({
       ...provided,
@@ -102,6 +106,18 @@ export default function ItemsTable({
   const allSelectData = selectData?.map((item) => {
     return { value: item._id, label: item.name };
   });
+  const changeColorOfClientName = (e) => {
+    if (e.key === "PageDown") {
+      setItemsValues((prev) => {
+        return { ...prev, colored: true };
+      });
+    }
+    if (e.key === "PageUp") {
+      setItemsValues((prev) => {
+        return { ...prev, colored: false };
+      });
+    }
+  };
 
   return (
     <>
@@ -112,7 +128,7 @@ export default function ItemsTable({
           width:
             collReq === "/inventories" || collReq === "/providers"
               ? "60%"
-              : "90%",
+              : "95%",
         }}
       >
         {(collReq === "/sleevesBids" ||
@@ -148,12 +164,15 @@ export default function ItemsTable({
             }}
           ></input>
         )}
-        {(collReq === "/sales" || collReq === "/workersExpenses") && (
+        {(collReq === "/sales" ||
+          collReq === "/workersExpenses" ||
+          collReq === "/sleevesBids") && (
           <input
             id="clientName"
             className="input_show_item"
             style={{
               width: report?.type ? "25%" : "12%",
+              color: itemsValues.colored ? "rgb(255, 71, 46)" : "whitesmoke",
             }}
             disabled={changeStatus.disabled}
             value={itemsValues.clientName}
@@ -162,12 +181,13 @@ export default function ItemsTable({
                 return { ...prev, clientName: e.target.value };
               });
             }}
+            onKeyUp={changeColorOfClientName}
           ></input>
         )}
         {collReq === "/workersExpenses" && (
           <input
             id="equipment"
-            type="equipment"
+            name="equipment"
             className="input_show_item"
             style={{ width: "22%" }}
             disabled={changeStatus.disabled}
@@ -219,7 +239,8 @@ export default function ItemsTable({
         )}
         {collReq !== "/sales" &&
           collReq !== "/workersExpenses" &&
-          collReq !== "/expenses" && (
+          collReq !== "/expenses" &&
+          collReq !== "/sleevesBids" && (
             <input
               id="name"
               className="input_show_item"
@@ -227,8 +248,6 @@ export default function ItemsTable({
                 width:
                   collReq === "/inventories" || collReq === "/providers"
                     ? "62%"
-                    : collReq === "/sales"
-                    ? "15%"
                     : report?.type
                     ? "45%"
                     : "25%",
@@ -244,8 +263,6 @@ export default function ItemsTable({
           )}
         <input
           id="number"
-          type="number"
-          min={0}
           className="input_show_item"
           style={{
             width:
@@ -277,8 +294,6 @@ export default function ItemsTable({
         {collReq === "/sales" && (
           <input
             id="discount"
-            type="number"
-            min={0}
             className="input_show_item"
             style={{ width: "7%" }}
             disabled={changeStatus.disabled}
@@ -287,7 +302,7 @@ export default function ItemsTable({
               setItemsValues((prev) => {
                 return {
                   ...prev,
-                  discount: +e.target.value,
+                  discount: e.target.value,
                   sale: +prev.number - (+prev.number * +e.target.value) / 100,
                   totalAmount:
                     (+prev.number - (+prev.number * +e.target.value) / 100) *
@@ -310,8 +325,6 @@ export default function ItemsTable({
         {(collReq === "/sleevesBids" || collReq === "/sales") && (
           <input
             id="quantity"
-            type="number"
-            min={0}
             className="input_show_item"
             style={{ width: collReq === "/sales" ? "5%" : "7%" }}
             disabled={changeStatus.disabled}
@@ -335,8 +348,6 @@ export default function ItemsTable({
         {collReq === "/sales" && (
           <input
             id="expenses"
-            type="number"
-            min={0}
             className="input_show_item"
             style={{ width: "7%" }}
             disabled={changeStatus.disabled}

@@ -16,6 +16,7 @@ const saleSchema = new Schema({
   expenses: { type: Number, default: 0 },
   totalAmount: { type: Number, default: 0 },
   tax: { type: Boolean, default: false },
+  colored: { type: Boolean, default: false },
 });
 
 export const Sale = model("Sale", saleSchema);

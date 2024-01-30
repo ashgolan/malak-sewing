@@ -29,15 +29,19 @@
   direction: rtl;
 }
 .select-category {
-  width: 9%;
+  max-width: 9%;
+  min-width: 9%;
   padding: 0.3% 0;
 }
 .select-product {
-  width: 20%;
+  max-width: 9%;
+  min-width: 9%;
   padding: 0.3% 0;
 }
+
 .select-product-head {
-  width: 22%;
+  max-width: 22%;
+  min-width: 22%;
   padding: 0.3% 0;
 }
 .desc-style {
@@ -51,10 +55,12 @@
     width: 20%;
   }
   .select-category {
-    width: 9%;
+    max-width: 9%;
+    min-width: 9%;
   }
   .select-product {
-    width: 17%;
+    max-width: 17%;
+    min-width: 17%;
   }
 }
 

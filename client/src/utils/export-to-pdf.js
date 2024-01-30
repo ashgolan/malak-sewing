@@ -1,26 +1,24 @@
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
-export const exportToPdf = async (id, fileName) => {
-  const input = document.getElementById(id);
+import html2pdf from "html2pdf.js";
 
-  html2canvas(input, {
-    scale: 2,
-    logging: true,
-    letterRendering: 1,
-    useCORS: true,
-  }).then((canvas) => {
-    canvas.getContext("2d");
-    const imgWidth = 208;
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-    const widthRatio = imgWidth / canvas.width;
-    const heightRatio = imgHeight / canvas.height;
-    const ratio = widthRatio > heightRatio ? heightRatio : widthRatio;
-    const canvasWidth = canvas.width * ratio;
-    const marginX = (imgWidth - canvasWidth) / 2;
-    const imgData = canvas.toDataURL("img/png");
-    const pdf = new jsPDF("p", "mm", "a4");
-    pdf.addImage(imgData, "JPG", marginX, 0, imgWidth, imgHeight);
-    pdf.save(`${fileName}.pdf`);
-  });
+export const exportToPdf = async (id, fileName) => {
+  const input = document.getElementById(id); // Replace with your HTML element ID
+  input.style.width = "100%";
+  const options = {
+    margin: [10, 10],
+    filename: `${fileName}.pdf`,
+    image: { type: "jpeg", quality: 0.98 },
+    html2canvas: { scale: 2, letterRendering: true },
+    // html2canvas: { scale: 2, letterRendering: true },
+    // jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+    jsPDF: {
+      unit: "mm",
+      format: "a4",
+      orientation: "landscape",
+    },
+    pagebreak: { mode: ["avoid-all", "css", "legacy"] },
+  };
+
+  html2pdf().from(input).set(options).save();
+  html2pdf(input, options);
   return true;
 };

@@ -5,7 +5,10 @@
   flex-direction: column;
   justify-content: space-between;
 }
-
+.select-product-in-add {
+  width: 22%;
+  padding: 0.3% 0;
+}
 .add-row {
   display: flex;
   flex-direction: row-reverse;

@@ -14,7 +14,18 @@
   border: 1px rgb(202, 196, 196) dotted;
   text-align: right;
 }
-
+.bottom-logo-of-bid {
+  width: 60%;
+  flex-direction: column;
+  margin: auto;
+}
+.bottom-logo-of-bid > label {
+  /* padding: 0.1%; */
+  text-align: center;
+  border-bottom: 1px solid rgb(179, 23, 158);
+  margin: 0.2% 1%;
+  font-size: 0.8rem;
+}
 .orderRow:last-child {
   margin-bottom: 6%;
 }
@@ -28,7 +39,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: auto;
+  margin: 2% auto;
 }
 .order-selection {
   width: 30%;

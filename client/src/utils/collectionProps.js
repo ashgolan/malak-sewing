@@ -7,7 +7,7 @@ export const getCollectionProps = (collReq) => {
     case "/contacts":
       return ["name", "number", "bankProps", "mail"];
     case "/sleevesBids":
-      return ["name", "number", "date", "tax", "quantity", "totalAmount"];
+      return ["clientName", "number", "date", "tax", "quantity", "totalAmount"];
     case "/workersExpenses":
       return ["clientName", "number", "date", "tax", "equipment", "location"];
     case "/expenses":

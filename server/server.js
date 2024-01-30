@@ -12,6 +12,7 @@ import { sleevesBidRouter } from "./routers/sleevesBid.router.js";
 import { expenseRouter } from "./routers/expense.router.js";
 import { workersExpensesRouter } from "./routers/workersExpenses.router.js";
 import { bidRouter } from "./routers/bid.router.js";
+import { eventsRouter } from "./routers/events.router.js";
 
 const app = Express();
 const __dirname = url.fileURLToPath(new URL("./", import.meta.url));
@@ -32,6 +33,7 @@ app.use("/contacts", contactRouter);
 app.use("/sleevesBids", sleevesBidRouter);
 app.use("/expenses", expenseRouter);
 app.use("/workersExpenses", workersExpensesRouter);
+app.use("/events", eventsRouter);
 app.listen(PORT, () => {
   console.log("connecting to port", PORT);
 });

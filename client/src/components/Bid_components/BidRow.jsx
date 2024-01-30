@@ -179,62 +179,67 @@ export default function BidRow({ numOfRow, myData, itemInBid, setBid, bid }) {
   };
 
   return (
-    <form ref={bidForm} className="row">
-      <input disabled className="row_number" value={numOfRow + 1} />
-      <Select
-        options={allItems}
-        isDisabled={bid.isApproved}
-        placeholder={!itemInBid ? `בחר מוצר` : itemInBid.name}
-        className="select-item"
-        defaultValue={!bid.isApproved ? itemInRow.name : ""}
-        onChange={(e) => {
-          setBySelectedValue(e);
-        }}
-        menuPlacement="auto"
-        styles={customStyles}
-      ></Select>
-      <input
-        name="quantity"
-        className="input_box"
-        placeholder="כמות"
-        // placeholder={!itemInBid?.quantity ? `כמות` : itemInBid?.quantity}
-        value={itemInRow?.quantity}
-        onChange={(e) => {
-          setBySelectedValue(e);
-        }}
-        disabled={bid.isApproved}
-      ></input>
-      <input
-        name="number"
-        className="input_box"
-        placeholder={!itemInBid ? `מחיר` : itemInBid.number}
-        onChange={(e) => {
-          setBySelectedValue(e);
-        }}
-        value={!bid.isApproved ? itemInRow.number : ""}
-      ></input>
-
-      <input
-        name="totalAmount"
-        disabled
-        placeholder={!itemInBid ? `סה"כ` : itemInBid.totalAmount}
-        className="input_box total"
-        value={!bid.isApproved ? itemInRow.totalAmount : ""}
-      ></input>
-      {!bid.isApproved && (
+    <>
+      {" "}
+      <form ref={bidForm} className="row">
+        <input disabled className="row_number" value={numOfRow + 1} />
+        <Select
+          options={allItems}
+          isDisabled={bid.isApproved}
+          placeholder={!itemInBid ? `בחר מוצר` : itemInBid.name}
+          className="select-item"
+          defaultValue={!bid.isApproved ? itemInRow.name : ""}
+          onChange={(e) => {
+            setBySelectedValue(e);
+          }}
+          menuPlacement="auto"
+          styles={customStyles}
+        ></Select>
         <input
-          className="checkBoxStyle"
-          type="checkbox"
-          checked={itemInRow.checked}
-          onChange={(e) =>
-            validation() &&
-            setItemInRow((prev) => {
-              return { ...prev, checked: !prev.checked };
-            })
-          }
-          onClick={(e) => validation() && checkHandler(e)}
-        />
-      )}
-    </form>
+          name="quantity"
+          className="input_box"
+          placeholder="כמות"
+          type="number"
+          // placeholder={!itemInBid?.quantity ? `כמות` : itemInBid?.quantity}
+          value={itemInRow?.quantity}
+          onChange={(e) => {
+            setBySelectedValue(e);
+          }}
+          disabled={bid.isApproved}
+        ></input>
+        <input
+          name="number"
+          className="input_box"
+          type="number"
+          placeholder={!itemInBid ? `מחיר` : itemInBid.number}
+          onChange={(e) => {
+            setBySelectedValue(e);
+          }}
+          value={!bid.isApproved ? itemInRow.number : ""}
+        ></input>
+
+        <input
+          name="totalAmount"
+          disabled
+          placeholder={!itemInBid ? `סה"כ` : itemInBid.totalAmount}
+          className="input_box total"
+          value={!bid.isApproved ? itemInRow.totalAmount : ""}
+        ></input>
+        {!bid.isApproved && (
+          <input
+            className="checkBoxStyle"
+            type="checkbox"
+            checked={itemInRow.checked}
+            onChange={(e) =>
+              validation() &&
+              setItemInRow((prev) => {
+                return { ...prev, checked: !prev.checked };
+              })
+            }
+            onClick={(e) => validation() && checkHandler(e)}
+          />
+        )}
+      </form>
+    </>
   );
 }

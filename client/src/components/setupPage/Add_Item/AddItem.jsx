@@ -11,7 +11,6 @@ export default function AddItem({
   setaddItemToggle,
   setItemIsUpdated,
   collReq,
-  inventories,
   selectData,
 }) {
   const date = new Date();
@@ -24,6 +23,7 @@ export default function AddItem({
   const navigate = useNavigate();
   const productFormData = useRef();
   // eslint-disable-next-line
+  const [clientNameColor, setClientNameColor] = useState("black");
   const [fetchingStatus, setFetchingStatus] = useContext(FetchingStatus);
   const [itemsValues, setItemsValues] = useState({
     number: "",
@@ -32,12 +32,13 @@ export default function AddItem({
     bankProps: "",
     quantity: "",
     clientName: "",
-    discount: 0,
+    discount: "",
     expenses: "",
     location: "",
     equipment: "",
     tax: "",
-    sale: "",
+    sale: 0,
+    colored: false,
     paymentDate: year + "-" + month + "-" + day,
     date: year + "-" + month + "-" + day,
     totalAmount: 0,
@@ -52,15 +53,11 @@ export default function AddItem({
         await Api.post(
           collReq,
           {
-            name: itemsValues.name,
+            date: itemsValues.date,
             clientName: itemsValues.clientName,
             number: itemsValues.number,
-            date: itemsValues.date,
-            tax: itemsValues.tax,
-            sale: itemsValues.tax,
-            discount: itemsValues.discount,
-            expenses: itemsValues.expenses,
             quantity: itemsValues.quantity,
+            tax: itemsValues.tax,
             totalAmount: itemsValues.totalAmount,
           },
           {
@@ -77,6 +74,7 @@ export default function AddItem({
             clientName: itemsValues.clientName,
             equipment: itemsValues.equipment,
             number: itemsValues.number,
+            totalAmount: itemsValues.number,
             tax: itemsValues.tax,
           },
           {
@@ -112,6 +110,7 @@ export default function AddItem({
             sale: itemsValues.sale,
             expenses: itemsValues.expenses,
             tax: itemsValues.tax,
+            colored: itemsValues.colored,
             quantity: itemsValues.quantity,
             totalAmount: itemsValues.totalAmount,
           },
@@ -248,6 +247,20 @@ export default function AddItem({
   const allSelectData = selectData?.map((item) => {
     return { value: item._id, label: item.name };
   });
+  const changeColorOfClientName = (e) => {
+    if (e.key === "PageDown") {
+      setClientNameColor("rgb(255, 71, 46)");
+      setItemsValues((prev) => {
+        return { ...prev, colored: true };
+      });
+    }
+    if (e.key === "PageUp") {
+      setClientNameColor("black");
+      setItemsValues((prev) => {
+        return { ...prev, colored: false };
+      });
+    }
+  };
   return (
     <form
       ref={productFormData}
@@ -293,20 +306,26 @@ export default function AddItem({
             value={itemsValues.location}
           ></input>
         )}
-        {(collReq === "/sales" || collReq === "/workersExpenses") && (
+        {(collReq === "/sales" ||
+          collReq === "/workersExpenses" ||
+          collReq === "/sleevesBids") && (
           <input
             name="clientName"
             id="clientName"
             required
             autoFocus={true}
             className="add_item"
-            style={{ width: "15%" }}
+            style={{
+              width: collReq === "/sales" ? "10%" : "15%",
+              color: clientNameColor,
+            }}
             placeholder={collReq === "/workersExpenses" ? "עובד" : "קליינט"}
             onChange={(e) =>
               setItemsValues((prev) => {
                 return { ...prev, clientName: e.target.value };
               })
             }
+            onKeyUp={changeColorOfClientName}
             value={itemsValues.clientName}
           ></input>
         )}
@@ -330,7 +349,7 @@ export default function AddItem({
         {(collReq === "/sales" || collReq === "/expenses") && (
           <Select
             options={allSelectData}
-            className="add_item select-product "
+            className="add_item select-product-in-add "
             placeholder="בחר מוצר"
             styles={customStyles}
             menuPlacement="auto"
@@ -345,6 +364,12 @@ export default function AddItem({
                   name: e.label,
                   number:
                     collReq === "/sales" ? filteredItem.number : prev.number,
+                  sale:
+                    collReq === "/sales" ? +filteredItem.number : +prev.number,
+                  totalAmount:
+                    (+prev.number - (+prev.number * +prev.discount) / 100) *
+                      +prev.quantity -
+                    +prev.expenses,
                 };
               });
             }}
@@ -352,7 +377,8 @@ export default function AddItem({
         )}
         {collReq !== "/sales" &&
           collReq !== "/workersExpenses" &&
-          collReq !== "/expenses" && (
+          collReq !== "/expenses" &&
+          collReq !== "/sleevesBids" && (
             <input
               name="name"
               id="name"
@@ -361,11 +387,11 @@ export default function AddItem({
               className="add_item"
               style={{ width: "35%" }}
               placeholder={
-                collReq === "/inventories" ||
-                collReq === "/expenses" ||
-                collReq === "/sales"
-                  ? "מוצר"
-                  : "שם"
+                collReq === "/providers" || collReq === "/expenses"
+                  ? "שם"
+                  : collReq === "/contacts"
+                  ? "שם חברה"
+                  : "מוצר"
               }
               onChange={(e) =>
                 setItemsValues((prev) => {
@@ -378,17 +404,15 @@ export default function AddItem({
         <input
           name="number"
           id="number"
-          type="number"
-          min={0}
           style={{
-            width: collReq === "/sales" ? "10%" : "15%",
+            width: collReq === "/sales" ? "6%" : "15%",
           }}
           required
           className="add_item"
           placeholder={
             collReq === "/contacts" || collReq === "/providers"
               ? "מספר"
-              : collReq === "/workersExpenses"
+              : collReq === "/workersExpenses" || collReq === "/sleevesBids"
               ? "סכום"
               : "מחיר"
           }
@@ -396,7 +420,7 @@ export default function AddItem({
             setItemsValues((prev) => {
               return {
                 ...prev,
-                number: +e.target.value,
+                number: e.target.value,
                 sale:
                   +e.target.value - (+prev.discount * +e.target.value) / 100,
                 totalAmount: !(collReq === "/sales")
@@ -416,12 +440,10 @@ export default function AddItem({
           <input
             name="discount"
             id="discount"
-            type="number"
-            min={0}
             style={{ width: "7%" }}
             required
             className="add_item"
-            placeholder={itemsValues.discount === 0 && "הנחה"}
+            placeholder="הנחה"
             onChange={(e) => {
               setItemsValues((prev) => {
                 return {
@@ -469,15 +491,13 @@ export default function AddItem({
             id="expenses"
             style={{ width: "7%" }}
             required
-            type="number"
-            min={0}
             className="add_item"
             placeholder={"הוצאות"}
             onChange={(e) => {
               setItemsValues((prev) => {
                 return {
                   ...prev,
-                  expenses: e.target.value,
+                  expenses: +e.target.value,
                   totalAmount:
                     (+prev.number - (+prev.number * +prev.discount) / 100) *
                       +prev.quantity -
@@ -525,8 +545,6 @@ export default function AddItem({
           <input
             name="quantity"
             id="quantity"
-            type="number"
-            min={0}
             style={{ width: collReq === "/sales" ? "5%" : "10%" }}
             required
             className="add_item"
@@ -541,7 +559,7 @@ export default function AddItem({
                       ? (+prev.number - (+prev.number * +prev.discount) / 100) *
                           +e.target.value -
                         +prev.expenses
-                      : e.target.value * prev.number,
+                      : +e.target.value * prev.number,
                 };
               });
             }}

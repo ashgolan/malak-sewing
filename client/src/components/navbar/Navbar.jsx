@@ -72,13 +72,19 @@ export default function Navbar() {
           <img
             style={{
               cursor: "pointer",
-              // width: "20%",
             }}
             alt={""}
             onClick={() => {
               navigate("/chartHomepage");
             }}
             src="/draw.png"
+          />
+          <img
+            src="./calender.png"
+            onClick={() => {
+              navigate("/calender");
+            }}
+            alt=""
           />
 
           <img
@@ -123,10 +129,10 @@ export default function Navbar() {
           style={{ backgroundColor: "lightgreen" }}
           className={({ isActive }) => (isActive ? "active" : "")}
         >
-          <button name="providers">ספקים</button>
+          <button name="providers">אנשי קשר</button>
         </NavLink>
         <NavLink to={"/contacts"} style={{ backgroundColor: "lightcoral" }}>
-          <button name="contacts">אנשי קשר</button>
+          <button name="contacts">ספקים</button>
         </NavLink>
         <NavLink to={"/workersExpenses"} style={{ backgroundColor: "orange" }}>
           <button name="workersExpenses">עובדים</button>
