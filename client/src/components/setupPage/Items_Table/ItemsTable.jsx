@@ -154,7 +154,7 @@ export default function ItemsTable({
             id="location"
             type="location"
             className="input_show_item"
-            style={{ width: "12%" }}
+            style={{ width: "23%" }}
             disabled={changeStatus.disabled}
             value={itemsValues.location}
             onChange={(e) => {
@@ -171,7 +171,7 @@ export default function ItemsTable({
             id="clientName"
             className="input_show_item"
             style={{
-              width: report?.type ? "25%" : "12%",
+              width: report?.type || collReq === "/sleevesBids" ? "25%" : "12%",
               color: itemsValues.colored ? "rgb(255, 71, 46)" : "whitesmoke",
             }}
             disabled={changeStatus.disabled}
@@ -189,7 +189,7 @@ export default function ItemsTable({
             id="equipment"
             name="equipment"
             className="input_show_item"
-            style={{ width: "22%" }}
+            style={{ width: "15%" }}
             disabled={changeStatus.disabled}
             value={itemsValues.equipment}
             onChange={(e) => {
@@ -248,6 +248,10 @@ export default function ItemsTable({
                 width:
                   collReq === "/inventories" || collReq === "/providers"
                     ? "62%"
+                    : collReq === "/sales" ||
+                      collReq === "/expenses" ||
+                      collReq === "/contacts"
+                    ? "22%"
                     : report?.type
                     ? "45%"
                     : "25%",
@@ -267,7 +271,9 @@ export default function ItemsTable({
           style={{
             width:
               collReq === "/sales" || collReq === "/workersExpenses"
-                ? "7%"
+                ? "5%"
+                : collReq === "/contacts" || collReq === "/expenses"
+                ? "10%"
                 : "15%",
           }}
           disabled={changeStatus.disabled}
@@ -349,7 +355,7 @@ export default function ItemsTable({
           <input
             id="expenses"
             className="input_show_item"
-            style={{ width: "7%" }}
+            style={{ width: "5%" }}
             disabled={changeStatus.disabled}
             value={itemsValues.expenses}
             onChange={(e) => {
@@ -386,7 +392,7 @@ export default function ItemsTable({
           <input
             id="bankProps"
             className="input_show_item"
-            style={{ width: "17%" }}
+            style={{ width: "25%" }}
             disabled={changeStatus.disabled}
             value={itemsValues.bankProps}
             onChange={(e) => {

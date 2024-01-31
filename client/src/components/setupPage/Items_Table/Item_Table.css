@@ -29,13 +29,13 @@
   direction: rtl;
 }
 .select-category {
-  max-width: 9%;
-  min-width: 9%;
+  max-width: 7%;
+  min-width: 7%;
   padding: 0.3% 0;
 }
 .select-product {
-  max-width: 9%;
-  min-width: 9%;
+  max-width: 7%;
+  min-width: 7%;
   padding: 0.3% 0;
 }
 

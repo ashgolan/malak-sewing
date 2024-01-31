@@ -291,7 +291,7 @@ export default function SetupPage({
           <button
             id="location"
             className="input_show_item head"
-            style={{ width: "12%" }}
+            style={{ width: "23%" }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "location");
@@ -306,7 +306,9 @@ export default function SetupPage({
           <button
             id="clientName"
             className="input_show_item head"
-            style={{ width: report?.type ? "25%" : "12%" }}
+            style={{
+              width: report?.type || collReq === "/sleevesBids" ? "25%" : "12%",
+            }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "clientName");
@@ -323,7 +325,9 @@ export default function SetupPage({
               maxWidth:
                 collReq === "/inventories" || collReq === "/providers"
                   ? "62%"
-                  : collReq === "/sales" || collReq === "/expenses"
+                  : collReq === "/sales" ||
+                    collReq === "/expenses" ||
+                    collReq === "/contacts"
                   ? "22%"
                   : report?.type
                   ? "45%"
@@ -331,7 +335,9 @@ export default function SetupPage({
               minWidth:
                 collReq === "/inventories" || collReq === "/providers"
                   ? "62%"
-                  : collReq === "/sales" || collReq === "/expenses"
+                  : collReq === "/sales" ||
+                    collReq === "/expenses" ||
+                    collReq === "/contacts"
                   ? "22%"
                   : report?.type
                   ? "45%"
@@ -353,7 +359,7 @@ export default function SetupPage({
           <button
             id="equipment"
             className="input_show_item head"
-            style={{ width: "22%" }}
+            style={{ width: "15%" }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "equipment");
@@ -368,7 +374,9 @@ export default function SetupPage({
           style={{
             width:
               collReq === "/sales" || collReq === "/workersExpenses"
-                ? "7%"
+                ? "5%"
+                : collReq === "/contacts" || collReq === "/expenses"
+                ? "10%"
                 : "15%",
           }}
           onClick={(e) => {
@@ -427,7 +435,7 @@ export default function SetupPage({
           <button
             id="expenses"
             className="input_show_item head"
-            style={{ width: "7%" }}
+            style={{ width: "5%" }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "expenses");
@@ -455,7 +463,7 @@ export default function SetupPage({
           <button
             id="bankProps"
             className="input_show_item head"
-            style={{ width: "17%" }}
+            style={{ width: "25%" }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "bankProps");
@@ -471,7 +479,7 @@ export default function SetupPage({
           <button
             id="tax"
             className="input_show_item head"
-            style={{ width: "9%", textAlign: "center" }}
+            style={{ width: "7%", textAlign: "center" }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "tax");
