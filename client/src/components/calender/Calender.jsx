@@ -22,7 +22,9 @@ function Calender() {
   const localizer = momentLocalizer(moment);
   const [events, setEvents] = useState([]);
   const [showLogo, setShowLogo] = useState("none");
-
+  const [calenderTitle, setCalenderTitle] = useState(
+    "יומן סידור העבודה החודשי"
+  );
   const navigate = useNavigate();
   const [fetchingStatus, setFetchingStatus] = useContext(FetchingStatus);
 
@@ -251,8 +253,10 @@ function Calender() {
             color: "brown",
             fontSize: "1.5rem",
             textDecoration: "underline",
+            direction: "rtl",
           }}
-          defaultValue={"יומן סידור העבודה החודשי"}
+          onChange={(e) => setCalenderTitle(e.target.value)}
+          value={calenderTitle}
         />
 
         <img
@@ -260,7 +264,7 @@ function Calender() {
             await setShowLogo("flex");
             const resault = exportToPdf(
               "pdfOrder",
-              `סידור עבודה עדכון - ${year + "-" + month + "-" + day}`
+              `${calenderTitle} - ${year + "-" + month + "-" + day}`
             );
             if (resault) setShowLogo("none");
           }}
