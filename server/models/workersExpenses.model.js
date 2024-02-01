@@ -11,6 +11,7 @@ const workerExpensesSchema = new Schema({
   clientName: { type: String, required: true },
   equipment: { type: String, required: true },
   number: { type: Number, required: true },
+  colored: { type: Boolean, default: false },
   totalAmount: { type: Number },
   tax: { type: Boolean, default: false },
 });

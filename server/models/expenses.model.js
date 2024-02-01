@@ -10,6 +10,7 @@ const expenseSchema = new Schema({
   name: { type: String, required: true },
   number: { type: Number, default: "0" },
   paymentDate: { type: String, default: year + "-" + month + "-" + day },
+  colored: { type: Boolean, default: false },
   totalAmount: { type: Number },
 });
 

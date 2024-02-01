@@ -84,7 +84,11 @@ export default function ItemsTable({
     }),
     placeholder: (provided) => ({
       ...provided,
-      color: "whitesmoke",
+      // color: "whitesmoke",
+      color:
+        collReq === "/expenses" && itemsValues.colored
+          ? "rgb(255, 71, 46)"
+          : "whitesmoke",
     }),
     menu: (base) => ({
       ...base,
@@ -276,6 +280,7 @@ export default function ItemsTable({
                 ? "10%"
                 : "15%",
           }}
+          onKeyUp={collReq === "/expenses" && changeColorOfClientName}
           disabled={changeStatus.disabled}
           value={itemsValues.number}
           onChange={(e) => {
