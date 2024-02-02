@@ -36,9 +36,11 @@ export default function ItemsTable({
     colored: false,
     date: "",
     tax: false,
+    taxNumber: "",
     paymentDate: "",
     totalAmount: 0,
   });
+  const [isChangedColor, setIsChangedColor] = useState(false);
   useEffect(() => {
     const getData = async () => {
       const thisItem = myData?.find((t) => t._id === item._id);
@@ -58,6 +60,7 @@ export default function ItemsTable({
           colored: thisItem.colored ? thisItem.colored : false,
           date: thisItem.date ? thisItem.date : "",
           tax: thisItem.tax ? thisItem.tax : false,
+          taxNumber: thisItem.taxNumber ? thisItem.taxNumber : "",
           paymentDate: thisItem.paymentDate ? thisItem.paymentDate : "",
           totalAmount: thisItem.totalAmount ? thisItem.totalAmount : "",
         };
@@ -84,7 +87,6 @@ export default function ItemsTable({
     }),
     placeholder: (provided) => ({
       ...provided,
-      // color: "whitesmoke",
       color:
         collReq === "/expenses" && itemsValues.colored
           ? "rgb(255, 71, 46)"
@@ -111,16 +113,9 @@ export default function ItemsTable({
     return { value: item._id, label: item.name };
   });
   const changeColorOfClientName = (e) => {
-    if (e.key === "PageDown") {
-      setItemsValues((prev) => {
-        return { ...prev, colored: true };
-      });
-    }
-    if (e.key === "PageUp") {
-      setItemsValues((prev) => {
-        return { ...prev, colored: false };
-      });
-    }
+    setItemsValues((prev) => {
+      return { ...prev, colored: !prev.colored };
+    });
   };
 
   return (
@@ -185,7 +180,6 @@ export default function ItemsTable({
                 return { ...prev, clientName: e.target.value };
               });
             }}
-            onKeyUp={changeColorOfClientName}
           ></input>
         )}
         {collReq === "/workersExpenses" && (
@@ -252,9 +246,7 @@ export default function ItemsTable({
                 width:
                   collReq === "/inventories" || collReq === "/providers"
                     ? "62%"
-                    : collReq === "/sales" ||
-                      collReq === "/expenses" ||
-                      collReq === "/contacts"
+                    : collReq === "/sales" || collReq === "/contacts"
                     ? "22%"
                     : report?.type
                     ? "45%"
@@ -280,7 +272,7 @@ export default function ItemsTable({
                 ? "10%"
                 : "15%",
           }}
-          onKeyUp={collReq === "/expenses" && changeColorOfClientName}
+          onDoubleClick={changeColorOfClientName}
           disabled={changeStatus.disabled}
           value={itemsValues.number}
           onChange={(e) => {
@@ -407,9 +399,24 @@ export default function ItemsTable({
             }}
           ></input>
         )}
+        {collReq === "/expenses" && (
+          <input
+            id="taxNumber"
+            className="input_show_item"
+            style={{ width: "10%" }}
+            disabled={changeStatus.disabled}
+            value={itemsValues.taxNumber}
+            onChange={(e) => {
+              setItemsValues((prev) => {
+                return { ...prev, taxNumber: e.target.value };
+              });
+            }}
+          ></input>
+        )}
 
         {(collReq === "/sleevesBids" ||
           collReq === "/sales" ||
+          collReq === "/expenses" ||
           collReq === "/workersExpenses") && (
           <Select
             id="tax"
@@ -433,7 +440,7 @@ export default function ItemsTable({
             id="date"
             type="date"
             className="input_show_item"
-            style={{ width: collReq === "/sales" ? "10%" : "13%" }}
+            style={{ width: "10%" }}
             disabled={changeStatus.disabled}
             value={itemsValues.paymentDate}
             onChange={(e) => {

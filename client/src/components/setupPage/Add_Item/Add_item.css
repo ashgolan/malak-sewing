@@ -9,6 +9,10 @@
   width: 22%;
   padding: 0.3% 0;
 }
+.select-category-add {
+  width: 9%;
+  padding: 0.3% 0;
+}
 .add-row {
   display: flex;
   flex-direction: row-reverse;

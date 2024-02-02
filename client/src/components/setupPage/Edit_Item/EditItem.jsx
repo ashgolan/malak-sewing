@@ -49,6 +49,7 @@ export default function EditItem({
           itemsValues.date !== item.date ||
           itemsValues.location !== item.location ||
           itemsValues.clientName !== item.clientName ||
+          itemsValues.colored !== item.colored ||
           itemsValues.equipment !== item.equipment ||
           itemsValues.number !== item.number ||
           +itemsValues.totalAmount !== item.number ||
@@ -72,7 +73,10 @@ export default function EditItem({
         return (
           itemsValues.number !== item.number ||
           itemsValues.name !== item.name ||
+          itemsValues.tax !== item.tax ||
+          itemsValues.taxNumber !== item.taxNumber ||
           itemsValues.date !== item.date ||
+          itemsValues.colored !== item.colored ||
           itemsValues.paymentDate !== item.paymentDate ||
           itemsValues.totalAmount !== item.totalAmount
         );
@@ -120,6 +124,7 @@ export default function EditItem({
             clientName: itemsValues.clientName,
             equipment: itemsValues.equipment,
             number: itemsValues.number,
+            colored: itemsValues.colored,
             totalAmount: itemsValues.number,
             tax: itemsValues.tax,
           },
@@ -179,6 +184,9 @@ export default function EditItem({
             name: itemsValues.name,
             number: itemsValues.number,
             date: itemsValues.date,
+            tax: itemsValues.tax,
+            taxNumber: itemsValues.taxNumber,
+            colored: itemsValues.colored,
             paymentDate: itemsValues.paymentDate,
             totalAmount: itemsValues.totalAmount,
           },

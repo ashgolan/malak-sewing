@@ -37,6 +37,7 @@ export default function AddItem({
     location: "",
     equipment: "",
     tax: "",
+    taxNumber: "",
     sale: 0,
     colored: false,
     paymentDate: year + "-" + month + "-" + day,
@@ -74,6 +75,7 @@ export default function AddItem({
             clientName: itemsValues.clientName,
             equipment: itemsValues.equipment,
             number: itemsValues.number,
+            colored: itemsValues.colored,
             totalAmount: itemsValues.number,
             tax: itemsValues.tax,
           },
@@ -90,6 +92,9 @@ export default function AddItem({
             number: itemsValues.number,
             discount: itemsValues.discount,
             date: itemsValues.date,
+            colored: itemsValues.colored,
+            tax: itemsValues.tax,
+            taxNumber: itemsValues.taxNumber,
             paymentDate: itemsValues.paymentDate,
             totalAmount: itemsValues.totalAmount,
           },
@@ -248,18 +253,9 @@ export default function AddItem({
     return { value: item._id, label: item.name };
   });
   const changeColorOfClientName = (e) => {
-    if (e.key === "PageDown") {
-      setClientNameColor("rgb(255, 71, 46)");
-      setItemsValues((prev) => {
-        return { ...prev, colored: true };
-      });
-    }
-    if (e.key === "PageUp") {
-      setClientNameColor("black");
-      setItemsValues((prev) => {
-        return { ...prev, colored: false };
-      });
-    }
+    setItemsValues((prev) => {
+      return { ...prev, colored: !prev.colored };
+    });
   };
   return (
     <form
@@ -317,7 +313,7 @@ export default function AddItem({
             className="add_item"
             style={{
               width: collReq === "/sales" ? "10%" : "15%",
-              color: clientNameColor,
+              color: itemsValues.colored ? "rgb(255, 71, 46)" : "black",
             }}
             placeholder={collReq === "/workersExpenses" ? "עובד" : "קליינט"}
             onChange={(e) =>
@@ -325,7 +321,6 @@ export default function AddItem({
                 return { ...prev, clientName: e.target.value };
               })
             }
-            onKeyUp={changeColorOfClientName}
             value={itemsValues.clientName}
           ></input>
         )}
@@ -350,7 +345,7 @@ export default function AddItem({
           <Select
             options={allSelectData}
             className="add_item select-product-in-add "
-            placeholder="בחר מוצר"
+            placeholder={collReq === "/expenses" ? "בחר ספק" : "בחר מוצר"}
             styles={customStyles}
             menuPlacement="auto"
             required
@@ -412,10 +407,13 @@ export default function AddItem({
           placeholder={
             collReq === "/contacts" || collReq === "/providers"
               ? "מספר"
-              : collReq === "/workersExpenses" || collReq === "/sleevesBids"
+              : collReq === "/workersExpenses" ||
+                collReq === "/sleevesBids" ||
+                collReq === "/expenses"
               ? "סכום"
               : "מחיר"
           }
+          onDoubleClick={changeColorOfClientName}
           onChange={(e) =>
             setItemsValues((prev) => {
               return {
@@ -566,14 +564,38 @@ export default function AddItem({
             value={itemsValues.quantity}
           ></input>
         )}
+        {collReq === "/expenses" && (
+          <input
+            name="taxNumber"
+            id="taxNumber"
+            style={{ width: collReq === "/sales" ? "5%" : "10%" }}
+            required
+            className="add_item"
+            placeholder={`מס חשבונית`}
+            onChange={(e) => {
+              setItemsValues((prev) => {
+                return {
+                  ...prev,
+                  taxNumber: e.target.value,
+                };
+              });
+            }}
+            value={itemsValues.taxNumber}
+          ></input>
+        )}
         {(collReq === "/sleevesBids" ||
           collReq === "/sales" ||
+          collReq === "/expenses" ||
           collReq === "/workersExpenses") && (
           <Select
             id="tax"
             options={allTaxSelect}
-            className="add_item select-category"
-            placeholder="חשבונית"
+            className="add_item select-category-add"
+            placeholder={
+              collReq === "/workersExpenses" || collReq === "/expenses"
+                ? "שולם"
+                : "חשבונית"
+            }
             defaultValue={itemsValues.tax}
             onChange={(e) => {
               setItemsValues((prev) => {
@@ -590,7 +612,10 @@ export default function AddItem({
             name="paymentDate"
             type="date"
             id="paymentDate"
-            style={{ width: collReq === "/sales" ? "11%" : "25%" }}
+            style={{
+              width:
+                collReq === "/sales" || collReq === "/expenses" ? "11%" : "25%",
+            }}
             required
             className="add_item"
             placeholder="בחר תאריך"

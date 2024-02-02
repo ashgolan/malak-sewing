@@ -219,6 +219,10 @@ export default function SetupPage({
         return fetchedData?.sort((a, b) => (a.name > b.name ? 1 : -1));
       case "tax":
         return fetchedData?.sort((a, b) => (a.tax > b.tax ? 1 : -1));
+      case "taxNumber":
+        return fetchedData?.sort((a, b) =>
+          a.taxNumber > b.taxNumber ? 1 : -1
+        );
       case "location":
         return fetchedData?.sort((a, b) => (a.location > b.location ? 1 : -1));
       case "equipment":
@@ -473,7 +477,21 @@ export default function SetupPage({
           </button>
         )}
 
+        {collReq === "/expenses" && (
+          <button
+            id="taxNumber"
+            className="input_show_item head"
+            style={{ width: "10%", textAlign: "center" }}
+            onClick={(e) => {
+              e.preventDefault();
+              setKindOfSort(() => "taxNumber");
+            }}
+          >
+            {`מס חשבונית`}
+          </button>
+        )}
         {(collReq === "/sleevesBids" ||
+          collReq === "/expenses" ||
           collReq === "/sales" ||
           collReq === "/workersExpenses") && (
           <button
@@ -485,14 +503,16 @@ export default function SetupPage({
               setKindOfSort(() => "tax");
             }}
           >
-            {collReq === "/workersExpenses" ? "שולם" : "חשבונית"}
+            {collReq === "/workersExpenses" || collReq === "/expenses"
+              ? "שולם"
+              : "חשבונית"}
           </button>
         )}
         {collReq === "/expenses" && (
           <button
             id="paymentDate"
             className="input_show_item head"
-            style={{ width: collReq === "/sales" ? "10%" : "13%" }}
+            style={{ width: "10%" }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "paymentDate");

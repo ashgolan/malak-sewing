@@ -11,6 +11,8 @@ const expenseSchema = new Schema({
   number: { type: Number, default: "0" },
   paymentDate: { type: String, default: year + "-" + month + "-" + day },
   colored: { type: Boolean, default: false },
+  taxNumber: { type: String, default: 0 },
+  tax: { type: Boolean, default: false },
   totalAmount: { type: Number },
 });
 
