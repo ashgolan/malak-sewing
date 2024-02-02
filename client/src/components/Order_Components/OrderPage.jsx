@@ -499,7 +499,6 @@ export default function OrderPage({ customOnChange, placeholder }) {
   return (
     <div className="order-container">
       <div id="pdfOrder">
-
         <header className="orderheader" data-html2canvas-ignore="true">
           <div className="approve-cancel-bid">
             {selectedBid && !isApproved && (

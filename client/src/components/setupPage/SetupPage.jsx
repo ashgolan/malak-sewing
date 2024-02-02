@@ -282,7 +282,7 @@ export default function SetupPage({
           <button
             id="date"
             className="input_show_item head"
-            style={{ width: collReq === "/sales" ? "11%" : "13%" }}
+            style={{ width: report?.type ? "15%" : "13%" }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "date");
@@ -311,7 +311,7 @@ export default function SetupPage({
             id="clientName"
             className="input_show_item head"
             style={{
-              width: report?.type || collReq === "/sleevesBids" ? "25%" : "12%",
+              width: report?.type || collReq === "/sleevesBids" ? "20%" : "10%",
             }}
             onClick={(e) => {
               e.preventDefault();
@@ -445,7 +445,7 @@ export default function SetupPage({
               setKindOfSort(() => "expenses");
             }}
           >
-            הוצאות
+            {report?.type ? "הוצ." : "הוצאות"}
           </button>
         )}
         {collReq === "/contacts" && (
@@ -481,13 +481,13 @@ export default function SetupPage({
           <button
             id="taxNumber"
             className="input_show_item head"
-            style={{ width: "10%", textAlign: "center" }}
+            style={{ width: "7%", textAlign: "center" }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "taxNumber");
             }}
           >
-            {`מס חשבונית`}
+            {`מס.חשב`}
           </button>
         )}
         {(collReq === "/sleevesBids" ||
@@ -505,6 +505,8 @@ export default function SetupPage({
           >
             {collReq === "/workersExpenses" || collReq === "/expenses"
               ? "שולם"
+              : report?.type
+              ? "חשב."
               : "חשבונית"}
           </button>
         )}
@@ -512,7 +514,7 @@ export default function SetupPage({
           <button
             id="paymentDate"
             className="input_show_item head"
-            style={{ width: "10%" }}
+            style={{ width: report?.type ? "15%" : "13%" }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "paymentDate");

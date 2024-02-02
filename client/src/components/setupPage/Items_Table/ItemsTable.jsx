@@ -75,8 +75,9 @@ export default function ItemsTable({
   ].map((item) => {
     return { value: item.value, label: item.label };
   });
+
   const customStyles = {
-    control: (base) => ({
+    control: (base, state) => ({
       ...base,
       textAlign: "right",
       backgroundColor: "rgb(48, 45, 45)",
@@ -84,6 +85,10 @@ export default function ItemsTable({
       whiteSpace: "nowrap",
       overflow: "hidden",
       textOverflow: "ellipsis",
+    }),
+    dropdownIndicator: (base) => ({
+      ...base,
+      display: report?.type !== undefined && "none",
     }),
     placeholder: (provided) => ({
       ...provided,
@@ -138,7 +143,7 @@ export default function ItemsTable({
             id="date"
             type="date"
             className="input_show_item"
-            style={{ width: collReq === "/sales" ? "11%" : "13%" }}
+            style={{ width: report?.type ? "15%" : "13%" }}
             disabled={changeStatus.disabled}
             value={itemsValues.date}
             onChange={(e) => {
@@ -170,7 +175,7 @@ export default function ItemsTable({
             id="clientName"
             className="input_show_item"
             style={{
-              width: report?.type || collReq === "/sleevesBids" ? "25%" : "12%",
+              width: report?.type || collReq === "/sleevesBids" ? "20%" : "10%",
               color: itemsValues.colored ? "rgb(255, 71, 46)" : "whitesmoke",
             }}
             disabled={changeStatus.disabled}
@@ -403,7 +408,7 @@ export default function ItemsTable({
           <input
             id="taxNumber"
             className="input_show_item"
-            style={{ width: "10%" }}
+            style={{ width: "7%" }}
             disabled={changeStatus.disabled}
             value={itemsValues.taxNumber}
             onChange={(e) => {
@@ -440,7 +445,7 @@ export default function ItemsTable({
             id="date"
             type="date"
             className="input_show_item"
-            style={{ width: "10%" }}
+            style={{ width: report?.type ? "15%" : "13%" }}
             disabled={changeStatus.disabled}
             value={itemsValues.paymentDate}
             onChange={(e) => {

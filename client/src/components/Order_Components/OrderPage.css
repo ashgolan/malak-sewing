@@ -21,6 +21,10 @@
   .orderheader {
     display: none !important;
   }
+
+  @page {
+    margin: 10mm;
+  }
 }
 
 .bottom-logo-of-bid {
