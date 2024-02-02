@@ -118,3 +118,16 @@ nav a.active {
   border-radius: 0;
   border-bottom: 2px solid gold;
 }
+@media screen and (max-width: 1000px) {
+  .img-bottomNav-left {
+    width: 90%;
+  }
+}
+
+@media print {
+  .img-bottomNav,
+  .buttons-nav,
+  .img-bottomNav-left {
+    display: none !important;
+  }
+}

@@ -3,7 +3,6 @@ import JoditEditor from "jodit-react";
 import { FetchingStatus } from "../../utils/context";
 import "./OrderPage.css";
 import { Api } from "../../utils/Api";
-import { exportToPdf } from "../../utils/export-to-pdf";
 import BidRow from "../Bid_components/BidRow";
 import Select from "react-select";
 import { useNavigate } from "react-router-dom";
@@ -21,7 +20,7 @@ export default function OrderPage({ customOnChange, placeholder }) {
   const [selectedOption, setSelectedOption] = useState(null);
   const [bidIsDeleted, setBidIsDeleted] = useState(false);
   const [bidIsUpdated, setBidIsUpdated] = useState(false);
-  const [showLogo, setShowLogo] = useState("none");
+  const [showLogo, setShowLogo] = useState("flex");
   const navigate = useNavigate();
 
   const editor = useRef(null);
@@ -494,25 +493,13 @@ export default function OrderPage({ customOnChange, placeholder }) {
     }),
   };
   const downloadToPdf = async () => {
-    setFetchingStatus((prev) => {
-      return { ...prev, status: true, loading: true };
-    });
-    await setShowLogo("flex");
-    const resault = exportToPdf(
-      "pdfOrder",
-      `הצעת מחיר עבור - ${selectedBid.clientName} - ${selectedBid.date}`
-    );
-    if (resault) setShowLogo("none");
-    setFetchingStatus((prev) => {
-      return { ...prev, status: false, loading: false };
-    });
+    document.title = `הצעת מחיר עבור - ${selectedBid.clientName} - ${selectedBid.date}`;
+    window.print();
   };
   return (
     <div className="order-container">
       <div id="pdfOrder">
-        <div className="header-logo-of-bid" style={{ display: showLogo }}>
-          <img id="logo" src="./logo.jpg" alt="" />
-        </div>
+
         <header className="orderheader" data-html2canvas-ignore="true">
           <div className="approve-cancel-bid">
             {selectedBid && !isApproved && (
@@ -679,7 +666,7 @@ export default function OrderPage({ customOnChange, placeholder }) {
             <input
               className="name"
               placeholder="עבור"
-              style={{ width: "13%" }}
+              style={{ width: "20%" }}
               value={selectedBid.target}
               required
               onChange={(e) => {

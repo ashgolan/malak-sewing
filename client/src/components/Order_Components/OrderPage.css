@@ -1,3 +1,6 @@
+* {
+  box-sizing: border-box;
+}
 .orderRow {
   display: flex;
   flex-direction: row-reverse;
@@ -14,6 +17,12 @@
   border: 1px rgb(202, 196, 196) dotted;
   text-align: right;
 }
+@media print {
+  .orderheader {
+    display: none !important;
+  }
+}
+
 .bottom-logo-of-bid {
   width: 60%;
   flex-direction: column;

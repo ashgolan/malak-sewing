@@ -3,7 +3,6 @@ import "./chartHomepage.css";
 import Select from "react-select";
 import SetupPage from "../setupPage/SetupPage";
 import ChartPage from "./ChartPage";
-import { exportToPdf } from "../../utils/export-to-pdf";
 import { FetchingStatus } from "../../utils/context";
 import { Api } from "../../utils/Api";
 import { clearTokens, getAccessToken } from "../../utils/tokensStorage";
@@ -22,7 +21,7 @@ function ChartHomepage() {
   const [showChart, setShowChart] = useState(false);
   const [fetchingStatus, setFetchingStatus] = useContext(FetchingStatus);
   const [fetchingData, setFetchingData] = useState({});
-  const [showLogo, setShowLogo] = useState("none");
+  const [showLogo, setShowLogo] = useState("flex");
   const navigate = useNavigate();
   const months = [
     { value: null, label: null },
@@ -90,19 +89,9 @@ function ChartHomepage() {
     },
   };
   const downloadToPdf = async () => {
-    setFetchingStatus((prev) => {
-      return { ...prev, status: true, loading: true };
-    });
-    await setShowLogo("flex");
     const month = report.month ? report.month : "";
-    const resault = exportToPdf(
-      "pdfOrder",
-      report?.typeName + "-" + month + "-" + report.year
-    );
-    if (resault) setShowLogo("none");
-    setFetchingStatus((prev) => {
-      return { ...prev, status: false, loading: false };
-    });
+    document.title = report?.typeName + "-" + month + "-" + report.year;
+    window.print();
   };
 
   const sendRequest = async (token) => {
@@ -189,9 +178,6 @@ function ChartHomepage() {
   return (
     <>
       <div id={"pdfOrder"}>
-        <div className="header-logo-of-bid" style={{ display: showLogo }}>
-          <img id="logo" src="./logo.jpg" alt="" />
-        </div>
         <div className="charts-title">
           <Select
             className="select-chart"

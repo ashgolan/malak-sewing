@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 import { FetchingStatus } from "../../utils/context";
 import { clearTokens, getAccessToken } from "../../utils/tokensStorage";
 import { refreshMyToken } from "../../utils/setNewAccessToken";
-import { exportToPdf } from "../../utils/export-to-pdf";
 import "moment/locale/he"; // Import the Hebrew locale
 
 function Calender() {
@@ -235,12 +234,12 @@ function Calender() {
       console.error("Error deleting event:", e);
     }
   };
-
+  const printCalender = () => {
+    document.title = `${calenderTitle} - ${year + "-" + month + "-" + day}`;
+    window.print();
+  };
   return (
     <div id="pdfOrder">
-      <div className="header-logo-of-bid" style={{ display: showLogo }}>
-        <img id="logo" src="./logo.jpg" alt="" />
-      </div>
       <div style={{ display: "flex", alignItems: "center" }}>
         <input
           htmlFor=""
@@ -260,14 +259,7 @@ function Calender() {
         />
 
         <img
-          onClick={async () => {
-            await setShowLogo("flex");
-            const resault = exportToPdf(
-              "pdfOrder",
-              `${calenderTitle} - ${year + "-" + month + "-" + day}`
-            );
-            if (resault) setShowLogo("none");
-          }}
+          onClick={printCalender}
           src="/downloadPdf.png"
           alt=""
           style={{ width: "3%", cursor: "pointer" }}

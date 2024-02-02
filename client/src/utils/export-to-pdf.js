@@ -8,8 +8,6 @@ export const exportToPdf = async (id, fileName) => {
     filename: `${fileName}.pdf`,
     image: { type: "jpeg", quality: 0.98 },
     html2canvas: { scale: 2, letterRendering: true },
-    // html2canvas: { scale: 2, letterRendering: true },
-    // jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
     jsPDF: {
       unit: "mm",
       format: "a4",
@@ -18,7 +16,6 @@ export const exportToPdf = async (id, fileName) => {
     pagebreak: { mode: ["avoid-all", "css", "legacy"] },
   };
 
-  html2pdf().from(input).set(options).save();
+  html2pdf().from(input).set(options);
   html2pdf(input, options);
-  return true;
 };
