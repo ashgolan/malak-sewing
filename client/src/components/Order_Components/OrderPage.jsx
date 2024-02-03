@@ -269,7 +269,7 @@ export default function OrderPage({ customOnChange, placeholder }) {
   const filteredBids = filterTheData()?.map((bid, index) => {
     return {
       value: bid._id,
-      label: bid.clientName + " " + bid.date,
+      label: bid.clientName + " " + bid.date + " ( " + bid.target + " )",
     };
   });
 
@@ -568,17 +568,6 @@ export default function OrderPage({ customOnChange, placeholder }) {
             style={{ width: "4%" }}
             alt=""
           />
-          {selectedBid && (
-            <div
-              style={{
-                fontWeight: "bold",
-              }}
-            >
-              {selectedBid?.rarget}
-              {" : "}
-              <label htmlFor=""> עבור</label>
-            </div>
-          )}
 
           <Select
             ref={selectOptionRef}
@@ -662,19 +651,6 @@ export default function OrderPage({ customOnChange, placeholder }) {
               }}
               disabled={isApproved ? true : false}
             />{" "}
-            <input
-              className="name"
-              placeholder="עבור"
-              style={{ width: "20%" }}
-              value={selectedBid.target}
-              required
-              onChange={(e) => {
-                setSelectedBid((prev) => {
-                  return { ...prev, target: e.target.value };
-                });
-              }}
-              disabled={isApproved ? true : false}
-            />
             <div className="totalAmount-container">
               {!selectedBid.freeBid && (
                 <input
@@ -703,6 +679,38 @@ export default function OrderPage({ customOnChange, placeholder }) {
               <input disabled value={'ש"ח'} className="currency" />
             </div>
           </form>
+        )}
+        {selectedOption && (
+          <div
+            style={{
+              width: "80%",
+              textAlign: "center",
+              margin: "0 auto",
+              border: "none",
+            }}
+          >
+            <input
+              className="name"
+              placeholder="עבור"
+              style={{
+                width: "90%",
+                textAlign: "center",
+                textDecoration: "underline",
+                fontWeight: "bold",
+                fontSize: "1.2rem",
+                color: "brown",
+                border: "none",
+              }}
+              value={selectedBid.target}
+              required
+              onChange={(e) => {
+                setSelectedBid((prev) => {
+                  return { ...prev, target: e.target.value };
+                });
+              }}
+              disabled={isApproved ? true : false}
+            />
+          </div>
         )}
         {selectedOption && !selectedBid.freeBid && (
           <form

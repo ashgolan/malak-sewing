@@ -40,7 +40,6 @@ export default function ItemsTable({
     paymentDate: "",
     totalAmount: 0,
   });
-  const [isChangedColor, setIsChangedColor] = useState(false);
   useEffect(() => {
     const getData = async () => {
       const thisItem = myData?.find((t) => t._id === item._id);
@@ -279,7 +278,11 @@ export default function ItemsTable({
           }}
           onDoubleClick={changeColorOfClientName}
           disabled={changeStatus.disabled}
-          value={itemsValues.number}
+          value={
+            collReq === "/contacts"
+              ? "0" + itemsValues.number
+              : itemsValues.number
+          }
           onChange={(e) => {
             setItemsValues((prev) => {
               return {
