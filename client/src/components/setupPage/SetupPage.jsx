@@ -76,26 +76,26 @@ export default function SetupPage({
         const { data: providers } = await Api.get("/providers", { headers });
         setProviders(providers);
       }
-      // if (report === undefined) {
-      //   if (
-      //     collReq === "/sales" ||
-      //     collReq === "/sleevesBids" ||
-      //     collReq === "/workersExpenses" ||
-      //     collReq === "/expenses"
-      //   ) {
-      //     setFetchingData(
-      //       data.filter(
-      //         (item) =>
-      //           new Date(item.date).getFullYear() === year ||
-      //           item.colored === true
-      //       )
-      //     );
-      //   } else {
-      //     setFetchingData(data);
-      //   }
-      // } else {
-      setFetchingData(data);
-      // }
+      if (report === undefined) {
+        if (
+          collReq === "/sales" ||
+          collReq === "/sleevesBids" ||
+          collReq === "/workersExpenses" ||
+          collReq === "/expenses"
+        ) {
+          setFetchingData(
+            data.filter(
+              (item) =>
+                new Date(item.date).getFullYear() === year ||
+                item.colored === true
+            )
+          );
+        } else {
+          setFetchingData(data);
+        }
+      } else {
+        setFetchingData(data);
+      }
     }
     setFetchingStatus((prev) => {
       return {
