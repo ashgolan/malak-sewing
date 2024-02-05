@@ -142,7 +142,7 @@ export default function ItemsTable({
             id="date"
             type="date"
             className="input_show_item"
-            style={{ width: report?.type ? "15%" : "13%" }}
+            style={{ width: report?.type ? "15%" : "9%" }}
             disabled={changeStatus.disabled}
             value={itemsValues.date}
             onChange={(e) => {

@@ -282,7 +282,7 @@ export default function SetupPage({
           <button
             id="date"
             className="input_show_item head"
-            style={{ width: report?.type ? "15%" : "13%" }}
+            style={{ width: report?.type ? "15%" : "9%" }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "date");
