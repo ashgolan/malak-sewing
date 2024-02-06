@@ -550,7 +550,7 @@ export default function OrderPage({ customOnChange, placeholder }) {
               </button>
             )}
           </div>
-          {selectedBid && (
+          {selectedOption && (
             <img
               onClick={downloadToPdf}
               src="/downloadPdf.png"
