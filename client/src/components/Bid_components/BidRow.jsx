@@ -17,6 +17,7 @@ export default function BidRow({ numOfRow, myData, itemInBid, setBid, bid }) {
   const allItems = myData?.map((item, index) => {
     return { value: item._id, label: item.name };
   });
+  console.log(itemInRow);
   const uncheckItem = () => {
     const myFilteredData = bid?.data?.map((item) => {
       if (item.id === numOfRow) {
@@ -198,10 +199,10 @@ export default function BidRow({ numOfRow, myData, itemInBid, setBid, bid }) {
         <input
           name="quantity"
           className="input_box"
-          placeholder="כמות"
+          // placeholder="כמות"
           type="number"
-          // placeholder={!itemInBid?.quantity ? `כמות` : itemInBid?.quantity}
-          value={itemInRow?.quantity}
+          placeholder={!itemInBid?.quantity ? `כמות` : itemInBid?.quantity}
+          value={!bid.isApproved ? itemInRow.number : ""}
           onChange={(e) => {
             setBySelectedValue(e);
           }}
