@@ -202,7 +202,7 @@ export default function BidRow({ numOfRow, myData, itemInBid, setBid, bid }) {
           // placeholder="כמות"
           type="number"
           placeholder={!itemInBid?.quantity ? `כמות` : itemInBid?.quantity}
-          value={!bid.isApproved ? itemInRow.number : ""}
+          value={!bid.isApproved ? itemInRow.quantity : ""}
           onChange={(e) => {
             setBySelectedValue(e);
           }}
