@@ -282,7 +282,7 @@ export default function SetupPage({
           <button
             id="date"
             className="input_show_item head"
-            style={{ width: report?.type ? "15%" : "9%" }}
+            style={{ width: report?.type ? "17%" : "11%" }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "date");
@@ -311,7 +311,7 @@ export default function SetupPage({
             id="clientName"
             className="input_show_item head"
             style={{
-              width: report?.type || collReq === "/sleevesBids" ? "20%" : "10%",
+              width: report?.type || collReq === "/sleevesBids" ? "23%" : "13%",
             }}
             onClick={(e) => {
               e.preventDefault();
@@ -332,20 +332,20 @@ export default function SetupPage({
                   : collReq === "/sales" ||
                     collReq === "/expenses" ||
                     collReq === "/contacts"
-                  ? "22%"
+                  ? "18%"
                   : report?.type
                   ? "45%"
-                  : "25%",
+                  : "18%",
               minWidth:
                 collReq === "/inventories" || collReq === "/providers"
                   ? "62%"
                   : collReq === "/sales" ||
                     collReq === "/expenses" ||
                     collReq === "/contacts"
-                  ? "22%"
+                  ? "18%"
                   : report?.type
                   ? "45%"
-                  : "25%",
+                  : "18%",
             }}
             onClick={(e) => {
               e.preventDefault();
@@ -400,7 +400,7 @@ export default function SetupPage({
           <button
             id="discount"
             className="input_show_item head"
-            style={{ width: "7%" }}
+            style={{ width: "4%" }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "discount");
@@ -413,7 +413,7 @@ export default function SetupPage({
           <button
             id="sale"
             className="input_show_item head"
-            style={{ width: "7%" }}
+            style={{ width: "4%" }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "sale");

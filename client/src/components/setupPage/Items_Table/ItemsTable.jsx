@@ -142,7 +142,7 @@ export default function ItemsTable({
             id="date"
             type="date"
             className="input_show_item"
-            style={{ width: report?.type ? "15%" : "9%" }}
+            style={{ width: report?.type ? "17%" : "11%" }}
             disabled={changeStatus.disabled}
             value={itemsValues.date}
             onChange={(e) => {
@@ -174,7 +174,7 @@ export default function ItemsTable({
             id="clientName"
             className="input_show_item"
             style={{
-              width: report?.type || collReq === "/sleevesBids" ? "20%" : "10%",
+              width: report?.type || collReq === "/sleevesBids" ? "23%" : "13%",
               color: itemsValues.colored ? "rgb(255, 71, 46)" : "whitesmoke",
             }}
             disabled={changeStatus.disabled}
@@ -306,7 +306,7 @@ export default function ItemsTable({
           <input
             id="discount"
             className="input_show_item"
-            style={{ width: "7%" }}
+            style={{ width: "4%" }}
             disabled={changeStatus.disabled}
             value={itemsValues.discount}
             onChange={(e) => {
@@ -328,7 +328,7 @@ export default function ItemsTable({
           <input
             id="sale"
             className="input_show_item"
-            style={{ width: "7%" }}
+            style={{ width: "4%" }}
             disabled
             defaultValue={itemsValues.sale}
           ></input>
