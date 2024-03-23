@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 function ChartHomepage() {
   const [report, setReport] = useState({
     typeName: "",
+    workerName: "",
     type: "",
     month: "",
     year: "",
@@ -25,18 +26,18 @@ function ChartHomepage() {
   const navigate = useNavigate();
   const months = [
     { value: null, label: null },
-    { value: "01", label: "January" },
-    { value: "02", label: "February" },
-    { value: "03", label: "March" },
-    { value: "04", label: "April" },
-    { value: "05", label: "May" },
-    { value: "06", label: "June" },
-    { value: "07", label: "July" },
-    { value: "08", label: "August" },
-    { value: "09", label: "September" },
-    { value: "10", label: "October" },
-    { value: "11", label: "November" },
-    { value: "12", label: "December" },
+    { value: "01", label: "ינואר" },
+    { value: "02", label: "פברואר" },
+    { value: "03", label: "מרץ" },
+    { value: "04", label: "אפריל" },
+    { value: "05", label: "מאי" },
+    { value: "06", label: "יוני" },
+    { value: "07", label: "יולי" },
+    { value: "08", label: "אוגוסט" },
+    { value: "09", label: "ספטמבר" },
+    { value: "10", label: "אוקטובר" },
+    { value: "11", label: "נובמבר" },
+    { value: "12", label: "דיצמבר" },
   ];
   const allMonths = months.map((item) => {
     return { value: item.value, label: item.label };
@@ -175,6 +176,18 @@ function ChartHomepage() {
     };
     fetchData();
   }, []);
+
+  const ids = fetchingData?.workersExpensesData?.map(
+    ({ clientName }) => clientName
+  );
+  const filtered = fetchingData?.workersExpensesData?.filter(
+    ({ clientName }, index) => !ids.includes(clientName, index + 1)
+  );
+
+  const allSelectData = filtered?.map((item) => {
+    return { value: item._id, label: item.clientName };
+  });
+  allSelectData?.unshift({ value: null, label: null });
   return (
     <>
       <div id={"pdfOrder"}>
@@ -199,6 +212,34 @@ function ChartHomepage() {
             }}
             styles={customStyles}
           ></Select>{" "}
+          {(report?.type === "/workersExpenses" ||
+            report?.type === "workersExpensesCharts") && (
+            <Select
+              options={allSelectData.filter((option) => option.value !== null)}
+              className="select-worker"
+              placeholder="בחר עובד"
+              onChange={(selectedOption) => {
+                setReport((prev) => {
+                  setUpdatedReport((prev) => !prev);
+                  return {
+                    ...prev,
+                    clientName: selectedOption ? selectedOption.label : null,
+                  };
+                });
+                setUpdateChart((prev) => !prev);
+                setShowChart(false);
+              }}
+              value={
+                report.clientName !== null
+                  ? allSelectData?.find(
+                      (option) => option.value === report.clientName
+                    )
+                  : null
+              }
+              isClearable={true}
+              styles={customStyles}
+            ></Select>
+          )}
           {report.type && (
             <Select
               options={allYears.filter((option) => option.value !== null)}

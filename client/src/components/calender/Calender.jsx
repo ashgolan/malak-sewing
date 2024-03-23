@@ -221,7 +221,12 @@ function Calender() {
       setFetchingStatus((prev) => {
         return { ...prev, status: true, loading: true };
       });
-      const { data } = await Api.delete(`/events/${eventId}`, { headers });
+
+      if (window.confirm("האם למחוק את ההערה ?") === true) {
+        await Api.delete(`/events/${eventId}`, { headers });
+      } else {
+        throw Error("מחיקה ההערה בוטלה");
+      }
       const updatedEvents = events.filter((event) => event._id !== eventId);
       setEvents(updatedEvents);
       setFetchingStatus((prev) => {

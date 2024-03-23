@@ -165,7 +165,12 @@ export default function SetupPage({
           new Date(item.date).getMonth() + 1 < 10
             ? `0${new Date(item.date).getMonth() + 1}`
             : new Date(item.date).getMonth() + 1;
-
+        if (report?.clientName)
+          return (
+            month == report?.month &&
+            new Date(item.date).getFullYear() === report?.year &&
+            item.clientName === report.clientName
+          );
         return (
           month == report?.month &&
           new Date(item.date).getFullYear() === report?.year
@@ -177,12 +182,23 @@ export default function SetupPage({
           new Date(item.date).getMonth() + 1 < 10
             ? `0${new Date(item.date).getMonth() + 1}`
             : new Date(item.date).getMonth() + 1;
+        if (report?.clientName)
+          return (
+            month == report?.month && item.clientName === report.clientName
+          );
         return month == report?.month;
       });
     } else {
-      return sortedData.filter(
-        (item) => new Date(item.date).getFullYear() === report?.year
-      );
+      if (report?.clientName)
+        return sortedData.filter(
+          (item) =>
+            new Date(item.date).getFullYear() === report?.year &&
+            report?.clientName === item.clientName
+        );
+      else
+        return sortedData.filter(
+          (item) => new Date(item.date).getFullYear() === report?.year
+        );
     }
   };
   const sortedInventory = (kindOfSort) => {
