@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 function ChartHomepage() {
   const [report, setReport] = useState({
     typeName: "",
-    workerName: "",
+    clientName: "",
     type: "",
     month: "",
     year: "",
@@ -22,7 +22,6 @@ function ChartHomepage() {
   const [showChart, setShowChart] = useState(false);
   const [fetchingStatus, setFetchingStatus] = useContext(FetchingStatus);
   const [fetchingData, setFetchingData] = useState({});
-  const [showLogo, setShowLogo] = useState("flex");
   const navigate = useNavigate();
   const months = [
     { value: null, label: null },
@@ -177,10 +176,13 @@ function ChartHomepage() {
     fetchData();
   }, []);
 
-  const ids = fetchingData?.workersExpensesData?.map(
-    ({ clientName }) => clientName
-  );
-  const filtered = fetchingData?.workersExpensesData?.filter(
+  const currentData =
+    report?.type === "/sales" || report?.type === "salesCharts"
+      ? "salesData"
+      : "workersExpensesData";
+  console.log(currentData);
+  const ids = fetchingData[currentData]?.map(({ clientName }) => clientName);
+  const filtered = fetchingData[currentData]?.filter(
     ({ clientName }, index) => !ids.includes(clientName, index + 1)
   );
 
@@ -202,6 +204,7 @@ function ChartHomepage() {
                 return {
                   ...prev,
                   typeName: e.label,
+                  clientName: null,
                   type: e.value,
                   month: null,
                   year: null,
@@ -213,11 +216,13 @@ function ChartHomepage() {
             styles={customStyles}
           ></Select>{" "}
           {(report?.type === "/workersExpenses" ||
-            report?.type === "workersExpensesCharts") && (
+            report?.type === "workersExpensesCharts" ||
+            report?.type === "/sales" ||
+            report?.type === "salesCharts") && (
             <Select
+              className="clientsInCharts"
               options={allSelectData.filter((option) => option.value !== null)}
-              className="select-worker"
-              placeholder="בחר עובד"
+              placeholder="בחר קליינט"
               onChange={(selectedOption) => {
                 setReport((prev) => {
                   setUpdatedReport((prev) => !prev);

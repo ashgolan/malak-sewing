@@ -51,6 +51,9 @@
 .downloadPdf {
   width: 5%;
 }
+.clientsInCharts {
+  width: 20%;
+}
 .downloadPdf > img {
   width: 100%;
   cursor: pointer;
