@@ -242,7 +242,7 @@ export default function BidPage({ freeBid, freeTextContent }) {
                 className="name"
                 required
                 disabled={freeBid ? false : true}
-                defaultValue={bid.data.length > 0 ? bid?.totalAmount : null}
+                value={bid?.totalAmount}
               />
             )}
             {freeBid && (
