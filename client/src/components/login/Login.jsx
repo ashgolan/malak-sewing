@@ -41,6 +41,8 @@ export default function Login({ setLoggedIn }) {
       });
       if (data === "user not found!!")
         throw Error("שם המשתמש או הסיסמא לא נכונים");
+      if (data?.adminUser?.isBlocked)
+        throw Error("תקופת הניסיון החינמית עבור משתמש זה הסתיימה");
       setTokens(data.accessToken, data.refreshToken);
       setLoggedIn(true);
       navigate("homepage/");
@@ -70,7 +72,7 @@ export default function Login({ setLoggedIn }) {
   };
 
   return (
-    <section className="vh-50">
+    <form onSubmit={checklogin} className="vh-50">
       {!fetchingStatus.loading && (
         <div className="container py-5 h-50">
           <div className="row d-flex justify-content-center align-items-center h-50">
@@ -118,14 +120,13 @@ export default function Login({ setLoggedIn }) {
                   </div>
                   <div>
                     <button
-                      onClick={checklogin}
+                      type="submit"
                       style={{
                         padding: "1.5% 40%",
                         border: "none",
                         borderRadius: "1rem",
                         backgroundColor: "gold",
                       }}
-                      type=""
                     >
                       כניסה
                     </button>
@@ -137,6 +138,6 @@ export default function Login({ setLoggedIn }) {
           </div>
         </div>
       )}
-    </section>
+    </form>
   );
 }
