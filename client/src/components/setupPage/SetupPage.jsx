@@ -396,7 +396,7 @@ export default function SetupPage({
               collReq === "/sales" || collReq === "/workersExpenses"
                 ? "5%"
                 : collReq === "/contacts" || collReq === "/expenses"
-                ? "10%"
+                ? "8%"
                 : "15%",
           }}
           onClick={(e) => {
@@ -497,7 +497,7 @@ export default function SetupPage({
           <button
             id="taxNumber"
             className="input_show_item head"
-            style={{ width: "7%", textAlign: "center" }}
+            style={{ width: "10%", textAlign: "center" }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "taxNumber");
@@ -546,12 +546,7 @@ export default function SetupPage({
             id="totalAmount"
             className="input_show_item head"
             style={{
-              width:
-                collReq === "/expenses"
-                  ? "10%"
-                  : collReq === "/sales"
-                  ? "7%"
-                  : "6%",
+              width: collReq === "/expenses" ? "10%" : "6%",
             }}
             onClick={(e) => {
               e.preventDefault();

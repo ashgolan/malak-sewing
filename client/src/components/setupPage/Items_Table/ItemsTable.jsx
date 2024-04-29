@@ -81,6 +81,7 @@ export default function ItemsTable({
       textAlign: "right",
       backgroundColor: "rgb(48, 45, 45)",
       border: "none",
+      boxShadow: "none",
       whiteSpace: "nowrap",
       overflow: "hidden",
       textOverflow: "ellipsis",
@@ -112,6 +113,11 @@ export default function ItemsTable({
         color: state.isSelected ? "red" : "whitesmoke",
       };
     },
+
+    indicatorSeparator: (provided) => ({
+      ...provided,
+      display: "none",
+    }),
   };
   const allSelectData = selectData?.map((item) => {
     return { value: item._id, label: item.name };
@@ -273,7 +279,7 @@ export default function ItemsTable({
               collReq === "/sales" || collReq === "/workersExpenses"
                 ? "5%"
                 : collReq === "/contacts" || collReq === "/expenses"
-                ? "10%"
+                ? "8%"
                 : "15%",
           }}
           onDoubleClick={changeColorOfClientName}
@@ -330,7 +336,7 @@ export default function ItemsTable({
             className="input_show_item"
             style={{ width: "4%" }}
             disabled
-            defaultValue={itemsValues.sale}
+            value={(+itemsValues?.sale).toFixed(0)}
           ></input>
         )}
         {(collReq === "/sleevesBids" || collReq === "/sales") && (
@@ -411,7 +417,7 @@ export default function ItemsTable({
           <input
             id="taxNumber"
             className="input_show_item"
-            style={{ width: "7%" }}
+            style={{ width: "10%" }}
             disabled={changeStatus.disabled}
             value={itemsValues.taxNumber}
             onChange={(e) => {
@@ -466,12 +472,7 @@ export default function ItemsTable({
             id="totalAmount"
             className="input_show_item"
             style={{
-              width:
-                collReq === "/expenses"
-                  ? "10%"
-                  : collReq === "/sales"
-                  ? "7%"
-                  : "6%",
+              width: collReq === "/expenses" ? "10%" : "6%",
             }}
             disabled
             value={+itemsValues.totalAmount.toFixed(2)}
