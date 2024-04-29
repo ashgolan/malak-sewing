@@ -192,146 +192,150 @@ function ChartHomepage() {
   allSelectData?.unshift({ value: null, label: null });
   return (
     <>
-      <div id={"pdfOrder"}>
-        <div className="charts-title">
-          <Select
-            className="select-chart"
-            options={allTypes}
-            placeholder="בחר סוג דוח"
-            onChange={(e) => {
-              setUpdatedReport((prev) => !prev);
-              setReport((prev) => {
-                return {
-                  ...prev,
-                  typeName: e.label,
-                  clientName: null,
-                  type: e.value,
-                  month: null,
-                  year: null,
-                };
-              });
-              setUpdateChart((prev) => !prev);
-              setShowChart(false);
-            }}
-            styles={customStyles}
-          ></Select>{" "}
-          {(report?.type === "/workersExpenses" ||
-            report?.type === "workersExpensesCharts" ||
-            report?.type === "/sales" ||
-            report?.type === "salesCharts") && (
+      {fetchingData?.salesData && (
+        <div id={"pdfOrder"}>
+          <div className="charts-title">
             <Select
-              className="clientsInCharts"
-              options={allSelectData.filter((option) => option.value !== null)}
-              placeholder="בחר קליינט"
-              onChange={(selectedOption) => {
+              className="select-chart"
+              options={allTypes}
+              placeholder="בחר סוג דוח"
+              onChange={(e) => {
+                setUpdatedReport((prev) => !prev);
                 setReport((prev) => {
-                  setUpdatedReport((prev) => !prev);
                   return {
                     ...prev,
-                    clientName: selectedOption ? selectedOption.label : null,
-                  };
-                });
-                setUpdateChart((prev) => !prev);
-                setShowChart(false);
-              }}
-              value={
-                report.clientName !== null
-                  ? allSelectData?.find(
-                      (option) => option.value === report.clientName
-                    )
-                  : null
-              }
-              isClearable={true}
-              styles={customStyles}
-            ></Select>
-          )}
-          {report.type && (
-            <Select
-              options={allYears.filter((option) => option.value !== null)}
-              placeholder="בחר שנה"
-              onChange={(selectedOption) => {
-                setReport((prev) => {
-                  setUpdatedReport((prev) => !prev);
-                  return {
-                    ...prev,
-                    year: selectedOption ? selectedOption.value : null,
-                  };
-                });
-                setUpdateChart((prev) => !prev);
-                setShowChart(false);
-              }}
-              value={
-                report.year !== null
-                  ? allYears?.find((option) => option.value === report.year)
-                  : null
-              }
-              isClearable={true}
-              styles={customStyles}
-            ></Select>
-          )}
-          {report.type && report.year && (
-            <Select
-              options={allMonths.filter((option) => option.value !== null)}
-              placeholder="בחר חודש"
-              onChange={(selectedOption) => {
-                setReport((prev) => {
-                  setUpdatedReport((prev) => !prev);
-                  return {
-                    ...prev,
-                    month: selectedOption ? selectedOption.value : null,
+                    typeName: e.label,
+                    clientName: null,
+                    type: e.value,
+                    month: null,
+                    year: null,
                   };
                 });
                 setUpdateChart((prev) => !prev);
                 setShowChart(false);
               }}
               styles={customStyles}
-              value={
-                report.month !== null
-                  ? allMonths?.find((option) => option.value === report.month)
-                  : null
-              }
-              isClearable={true}
-            ></Select>
-          )}
-          {report.type && report.year && (
-            <div className="downloadPdf">
-              <img
-                style={{ width: "70%" }}
-                src="/downloadPdf.png"
-                alt=""
-                onClick={downloadToPdf}
-              />
-            </div>
-          )}
+            ></Select>{" "}
+            {(report?.type === "/workersExpenses" ||
+              report?.type === "workersExpensesCharts" ||
+              report?.type === "/sales" ||
+              report?.type === "salesCharts") && (
+              <Select
+                className="clientsInCharts"
+                options={allSelectData.filter(
+                  (option) => option.value !== null
+                )}
+                placeholder="בחר קליינט"
+                onChange={(selectedOption) => {
+                  setReport((prev) => {
+                    setUpdatedReport((prev) => !prev);
+                    return {
+                      ...prev,
+                      clientName: selectedOption ? selectedOption.label : null,
+                    };
+                  });
+                  setUpdateChart((prev) => !prev);
+                  setShowChart(false);
+                }}
+                value={
+                  report.clientName !== null
+                    ? allSelectData?.find(
+                        (option) => option.value === report.clientName
+                      )
+                    : null
+                }
+                isClearable={true}
+                styles={customStyles}
+              ></Select>
+            )}
+            {report.type && (
+              <Select
+                options={allYears.filter((option) => option.value !== null)}
+                placeholder="בחר שנה"
+                onChange={(selectedOption) => {
+                  setReport((prev) => {
+                    setUpdatedReport((prev) => !prev);
+                    return {
+                      ...prev,
+                      year: selectedOption ? selectedOption.value : null,
+                    };
+                  });
+                  setUpdateChart((prev) => !prev);
+                  setShowChart(false);
+                }}
+                value={
+                  report.year !== null
+                    ? allYears?.find((option) => option.value === report.year)
+                    : null
+                }
+                isClearable={true}
+                styles={customStyles}
+              ></Select>
+            )}
+            {report.type && report.year && (
+              <Select
+                options={allMonths.filter((option) => option.value !== null)}
+                placeholder="בחר חודש"
+                onChange={(selectedOption) => {
+                  setReport((prev) => {
+                    setUpdatedReport((prev) => !prev);
+                    return {
+                      ...prev,
+                      month: selectedOption ? selectedOption.value : null,
+                    };
+                  });
+                  setUpdateChart((prev) => !prev);
+                  setShowChart(false);
+                }}
+                styles={customStyles}
+                value={
+                  report.month !== null
+                    ? allMonths?.find((option) => option.value === report.month)
+                    : null
+                }
+                isClearable={true}
+              ></Select>
+            )}
+            {report.type && report.year && (
+              <div className="downloadPdf">
+                <img
+                  style={{ width: "70%" }}
+                  src="/downloadPdf.png"
+                  alt=""
+                  onClick={downloadToPdf}
+                />
+              </div>
+            )}
+          </div>
+          {report.type &&
+            (report.type === "/expenses" ||
+              report.type === "/sales" ||
+              report.type === "/workersExpenses" ||
+              report.type === "/sleevesBids") && (
+              <SetupPage
+                updatedReport={updatedReport}
+                collReq={report.type}
+                fetchingData={fetchingData}
+                isFetching={true}
+                report={report}
+              ></SetupPage>
+            )}
+          {report.type &&
+            report.year &&
+            (report.type === "expensesCharts" ||
+              report.type === "salesCharts" ||
+              report.type === "workersExpensesCharts" ||
+              report.type === "sleevesBidsCharts") && (
+              <ChartPage
+                fetchingData={fetchingData}
+                showChart={showChart}
+                setShowChart={setShowChart}
+                updateChart={updateChart}
+                report={report}
+              ></ChartPage>
+            )}
         </div>
-        {report.type &&
-          (report.type === "/expenses" ||
-            report.type === "/sales" ||
-            report.type === "/workersExpenses" ||
-            report.type === "/sleevesBids") && (
-            <SetupPage
-              updatedReport={updatedReport}
-              collReq={report.type}
-              fetchingData={fetchingData}
-              isFetching={true}
-              report={report}
-            ></SetupPage>
-          )}
-        {report.type &&
-          report.year &&
-          (report.type === "expensesCharts" ||
-            report.type === "salesCharts" ||
-            report.type === "workersExpensesCharts" ||
-            report.type === "sleevesBidsCharts") && (
-            <ChartPage
-              fetchingData={fetchingData}
-              showChart={showChart}
-              setShowChart={setShowChart}
-              updateChart={updateChart}
-              report={report}
-            ></ChartPage>
-          )}
-      </div>
+      )}
     </>
   );
 }
