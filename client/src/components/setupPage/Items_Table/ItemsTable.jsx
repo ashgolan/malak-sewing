@@ -127,7 +127,6 @@ export default function ItemsTable({
       return { ...prev, colored: !prev.colored };
     });
   };
-
   return (
     <>
       <form
@@ -475,7 +474,11 @@ export default function ItemsTable({
               width: collReq === "/expenses" ? "10%" : "6%",
             }}
             disabled
-            value={+itemsValues.totalAmount.toFixed(2)}
+            value={
+              +itemsValues?.totalAmount == ""
+                ? 0
+                : +itemsValues?.totalAmount?.toFixed(2)
+            }
           ></input>
         )}
         {!report?.type && (
