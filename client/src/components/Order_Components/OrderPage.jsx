@@ -630,7 +630,7 @@ export default function OrderPage({ customOnChange, placeholder }) {
               required
               type="text"
               placeholder="שם"
-              value={selectedBid.clientName}
+              value={`לכבוד : ${selectedBid.clientName}`}
               onChange={(e) => {
                 setSelectedBid((prev) => {
                   return { ...prev, clientName: e.target.value };
