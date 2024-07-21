@@ -625,12 +625,13 @@ export default function OrderPage({ customOnChange, placeholder }) {
         </header>
         {selectedOption && (
           <form className="header_container">
+            <label htmlFor=""> : לכבוד</label>
             <input
               className="name"
               required
               type="text"
               placeholder="שם"
-              value={`לכבוד : ${selectedBid.clientName}`}
+              value={`${selectedBid.clientName}`}
               onChange={(e) => {
                 setSelectedBid((prev) => {
                   return { ...prev, clientName: e.target.value };
