@@ -158,8 +158,10 @@ export default function SetupPage({
     fetchData();
   }, [itemIsUpdated, updatedReport]);
   const filterByReport = (sortedData) => {
+    let monthNames = report?.month?.map((month) => month.value);
+
     if (!report?.type) return sortedData;
-    if (report?.month && report.year) {
+    if (report?.month?.length > 0 && report.year) {
       return sortedData.filter((item) => {
         const month =
           new Date(item.date).getMonth() + 1 < 10
@@ -167,16 +169,16 @@ export default function SetupPage({
             : new Date(item.date).getMonth() + 1;
         if (report?.clientName)
           return (
-            month == report?.month &&
+            monthNames.includes(month) &&
             new Date(item.date).getFullYear() === report?.year &&
             item.clientName === report.clientName
           );
         return (
-          month == report?.month &&
+          monthNames.includes(month) &&
           new Date(item.date).getFullYear() === report?.year
         );
       });
-    } else if (report?.month) {
+    } else if (report?.month?.length > 0) {
       return sortedData.filter((item) => {
         const month =
           new Date(item.date).getMonth() + 1 < 10
@@ -184,9 +186,9 @@ export default function SetupPage({
             : new Date(item.date).getMonth() + 1;
         if (report?.clientName)
           return (
-            month == report?.month && item.clientName === report.clientName
+            monthNames.includes(month) && item.clientName === report.clientName
           );
-        return month == report?.month;
+        return monthNames.includes(month);
       });
     } else {
       if (report?.clientName)

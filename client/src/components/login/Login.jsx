@@ -22,54 +22,6 @@ export default function Login({ setLoggedIn }) {
   });
 
   const [validEmail, setValidEmail] = useState(null);
-  // const checklogin = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     if (!validator.isEmail(login.email))
-  //       throw new Error("כתובת המייל או הסיסמא שהזנת אינן חוקיות");
-  //     setFetchingStatus((prev) => {
-  //       return { ...prev, status: true, loading: true };
-  //     });
-  //     const { data } = await Api.post("/users/login", login);
-  //     setUserId(data?.adminUser?._id);
-  //     setFetchingStatus((prev) => {
-  //       return {
-  //         ...prev,
-  //         status: false,
-  //         loading: false,
-  //       };
-  //     });
-  //     if (data === "user not found!!")
-  //       throw Error("שם המשתמש או הסיסמא לא נכונים");
-  //     if (data?.adminUser?.isBlocked)
-  //       throw Error("תקופת הניסיון החינמית עבור משתמש זה הסתיימה");
-  //     setTokens(data.accessToken, data.refreshToken);
-  //     setLoggedIn(true);
-  //     navigate("homepage/");
-  //   } catch (e) {
-  //     setFetchingStatus((prev) => {
-  //       return {
-  //         ...prev,
-  //         status: true,
-  //         loading: false,
-  //         error: true,
-  //         message: e.message,
-  //       };
-  //     });
-  //     setTimeout(() => {
-  //       setFetchingStatus((prev) => {
-  //         return {
-  //           ...prev,
-  //           status: false,
-  //           loading: false,
-  //           error: false,
-  //           message: null,
-  //         };
-  //       });
-  //     }, 1000);
-  //     setValidEmail(e.message);
-  //   }
-  // };
   const checklogin = async (e) => {
     e.preventDefault();
     try {

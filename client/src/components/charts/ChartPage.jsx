@@ -50,11 +50,11 @@ function ChartPage({ report, setShowChart, showChart, fetchingData }) {
     if (report?.clientName) {
       data = data.filter((item) => item.clientName === report?.clientName);
     }
-    if (report?.month && report?.year) {
+    if (report?.month?.value && report?.year) {
       setChartData({
         labels: Object?.keys(
           getDataByTotals(data)[report?.year]?.find(
-            (item) => item.month === report?.month
+            (item) => item.month === report?.month?.value
           )?.dayInTheMonth || []
         ),
         datasets: [
@@ -62,7 +62,7 @@ function ChartPage({ report, setShowChart, showChart, fetchingData }) {
             ...chartData.datasets[0],
             data: Object?.values(
               getDataByTotals(data)[report?.year]?.find(
-                (item) => item.month === report?.month
+                (item) => item.month === report?.month?.value
               )?.dayInTheMonth || []
             ),
           },
