@@ -13,6 +13,8 @@ import { expenseRouter } from "./routers/expense.router.js";
 import { workersExpensesRouter } from "./routers/workersExpenses.router.js";
 import { bidRouter } from "./routers/bid.router.js";
 import { eventsRouter } from "./routers/events.router.js";
+import { saleToCompanyRouter } from "./routers/saleToCompany.router.js";
+import { companyRouter } from "./routers/company.router.js";
 
 const app = Express();
 const __dirname = url.fileURLToPath(new URL("./", import.meta.url));
@@ -29,11 +31,13 @@ app.use("/inventories", inventoryRouter);
 app.use("/providers", providerRouter);
 app.use("/bids", bidRouter);
 app.use("/sales", saleRouter);
+app.use("/salesToCompanies", saleToCompanyRouter);
 app.use("/contacts", contactRouter);
 app.use("/sleevesBids", sleevesBidRouter);
 app.use("/expenses", expenseRouter);
 app.use("/workersExpenses", workersExpensesRouter);
 app.use("/events", eventsRouter);
+app.use("/companies", companyRouter);
 app.listen(PORT, () => {
   console.log("connecting to port", PORT);
 });

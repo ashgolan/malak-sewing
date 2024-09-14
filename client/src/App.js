@@ -20,6 +20,7 @@ import BidPage from "./components/Bid_components/BidPage";
 import OrderPage from "./components/Order_Components/OrderPage";
 import FreeBidPage from "./components/Bid_components/FreeBidPage";
 import Calender from "./components/calender/Calender";
+import SalesToCompanies from "./components/SalesToCompanies/SalesToCompanies";
 
 function App() {
   const navigate = useNavigate();
@@ -74,6 +75,10 @@ function App() {
             element={<WorkersExpenses></WorkersExpenses>}
           ></Route>
           <Route path="/sales" element={<Sales></Sales>}></Route>
+          <Route
+            path="/salesToCompanies"
+            element={<SalesToCompanies></SalesToCompanies>}
+          ></Route>
           <Route path="/bids" element={<BidPage></BidPage>}></Route>
 
           <Route

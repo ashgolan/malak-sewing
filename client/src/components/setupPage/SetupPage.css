@@ -18,6 +18,31 @@
     transform: rotate(360deg);
   }
 }
+.setup-select {
+  margin: 0 auto;
+  width: 90%;
+  text-align: center;
+}
+.setupCompanies-input {
+  margin: 1%;
+  width: 80%;
+  padding: 1%;
+  text-align: center;
+}
+.buttons-in-modal {
+  width: 20% auto;
+  display: flex;
+  justify-content: space-around;
+  border-top: 1px solid rgb(60, 85, 60);
+  border-bottom: 1px solid rgb(60, 85, 60);
+  padding: 2%;
+}
+.buttons-in-modal > button {
+  border: none;
+  border-radius: 2rem;
+  background-color: rgb(35, 196, 70);
+  padding: 1.5% 10%;
+}
 .inventory-container {
   display: flex;
   flex-direction: column;

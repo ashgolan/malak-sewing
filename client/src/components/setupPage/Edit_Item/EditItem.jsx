@@ -69,6 +69,15 @@ export default function EditItem({
           itemsValues.quantity !== item.quantity ||
           itemsValues.totalAmount !== item.totalAmount
         );
+      case "/salesToCompanies":
+        return (
+          itemsValues.date !== item.date ||
+          itemsValues.clientName !== item.clientName ||
+          itemsValues.name !== item.name ||
+          itemsValues.number !== item.number ||
+          itemsValues.colored !== item.colored ||
+          itemsValues.totalAmount !== item.totalAmount
+        );
       case "/expenses":
         return (
           itemsValues.number !== item.number ||
@@ -147,6 +156,22 @@ export default function EditItem({
             colored: itemsValues.colored,
             tax: itemsValues.tax,
             quantity: itemsValues.quantity,
+            totalAmount: itemsValues.totalAmount,
+          },
+          {
+            headers: headers,
+          }
+        );
+        break;
+      case "/salesToCompanies":
+        await Api.patch(
+          `${collReq}/${item._id}`,
+          {
+            date: itemsValues.date,
+            name: itemsValues.name,
+            clientName: itemsValues.clientName,
+            number: itemsValues.number,
+            colored: itemsValues.colored,
             totalAmount: itemsValues.totalAmount,
           },
           {

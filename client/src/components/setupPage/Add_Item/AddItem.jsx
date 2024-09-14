@@ -12,6 +12,7 @@ export default function AddItem({
   setItemIsUpdated,
   collReq,
   selectData,
+  companies,
 }) {
   const date = new Date();
   const year = date.getFullYear();
@@ -23,7 +24,6 @@ export default function AddItem({
   const navigate = useNavigate();
   const productFormData = useRef();
   // eslint-disable-next-line
-  const [clientNameColor, setClientNameColor] = useState("black");
   const [fetchingStatus, setFetchingStatus] = useContext(FetchingStatus);
   const [itemsValues, setItemsValues] = useState({
     number: "",
@@ -50,6 +50,21 @@ export default function AddItem({
     };
     setFetchingStatus({ loading: true, error: false });
     switch (collReq) {
+      case "/salesToCompanies":
+        await Api.post(
+          collReq,
+          {
+            date: itemsValues.date,
+            clientName: itemsValues.clientName,
+            name: itemsValues.name,
+            number: itemsValues.number,
+            totalAmount: itemsValues.totalAmount,
+          },
+          {
+            headers: headers,
+          }
+        );
+        break;
       case "/sleevesBids":
         await Api.post(
           collReq,
@@ -257,6 +272,20 @@ export default function AddItem({
       return { ...prev, colored: !prev.colored };
     });
   };
+  const getCompanyList = () => {
+    return companies?.map((item) => {
+      return { value: item._id, label: item.name };
+    });
+  };
+  const getTasksFromCompanyList = () => {
+    const companyNameObj = companies?.find(
+      (company) => company.name === itemsValues?.clientName
+    );
+
+    return companyNameObj?.tasks?.map((item) => {
+      return { value: item._id, label: item.description };
+    });
+  };
   return (
     <form
       ref={productFormData}
@@ -267,6 +296,7 @@ export default function AddItem({
       <div className="add-row">
         {(collReq === "/sleevesBids" ||
           collReq === "/expenses" ||
+          collReq === "/salesToCompanies" ||
           collReq === "/workersExpenses" ||
           collReq === "/sales") && (
           <input
@@ -301,6 +331,31 @@ export default function AddItem({
             }
             value={itemsValues.location}
           ></input>
+        )}
+        {collReq === "/salesToCompanies" && (
+          <Select
+            options={getCompanyList()}
+            className="add_item select-product-in-add "
+            placeholder={
+              itemsValues?.clientName ? itemsValues.clientName : "בחר חברה"
+            }
+            styles={customStyles}
+            menuPlacement="auto"
+            required
+            defaultValue={itemsValues.clientName}
+            onChange={(e) => {
+              const filteredItem = selectData.find(
+                (item) => item._id === e.value
+              );
+              setItemsValues((prev) => {
+                return {
+                  ...prev,
+                  clientName: e.label,
+                  name: filteredItem?.name || "",
+                };
+              });
+            }}
+          ></Select>
         )}
         {(collReq === "/sales" ||
           collReq === "/workersExpenses" ||
@@ -341,9 +396,15 @@ export default function AddItem({
             value={itemsValues.equipment}
           ></input>
         )}
-        {(collReq === "/sales" || collReq === "/expenses") && (
+        {(collReq === "/sales" ||
+          collReq === "/expenses" ||
+          collReq === "/salesToCompanies") && (
           <Select
-            options={allSelectData}
+            options={
+              collReq === "/salesToCompanies"
+                ? getTasksFromCompanyList()
+                : allSelectData
+            }
             className="add_item select-product-in-add "
             placeholder={collReq === "/expenses" ? "בחר ספק" : "בחר מוצר"}
             styles={customStyles}
@@ -372,6 +433,7 @@ export default function AddItem({
         )}
         {collReq !== "/sales" &&
           collReq !== "/workersExpenses" &&
+          collReq !== "/salesToCompanies" &&
           collReq !== "/expenses" &&
           collReq !== "/sleevesBids" && (
             <input

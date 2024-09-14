@@ -14,6 +14,7 @@ export default function ItemsTable({
   collReq,
   selectData,
   report,
+  companies,
 }) {
   const [changeStatus, setChangeStatus] = useState({
     editText: "עריכה",
@@ -122,9 +123,25 @@ export default function ItemsTable({
   const allSelectData = selectData?.map((item) => {
     return { value: item._id, label: item.name };
   });
+
   const changeColorOfClientName = (e) => {
     setItemsValues((prev) => {
       return { ...prev, colored: !prev.colored };
+    });
+  };
+
+  const getCompanyList = () => {
+    return companies?.map((item) => {
+      return { value: item._id, label: item.companyName };
+    });
+  };
+  const getTasksFromCompanyList = () => {
+    const companyNameObj = companies?.find(
+      (company) => company.companyName === itemsValues?.clientName
+    );
+
+    return companyNameObj?.tasks?.map((item) => {
+      return { value: item._id, label: item.taskName };
     });
   };
   return (
@@ -141,6 +158,7 @@ export default function ItemsTable({
       >
         {(collReq === "/sleevesBids" ||
           collReq === "/expenses" ||
+          collReq === "/salesToCompanies" ||
           collReq === "/workersExpenses" ||
           collReq === "/sales") && (
           <input
@@ -172,6 +190,33 @@ export default function ItemsTable({
             }}
           ></input>
         )}
+        {collReq === "/salesToCompanies" && (
+          <Select
+            options={getCompanyList()}
+            className="input_show_item select-product-head "
+            placeholder={
+              itemsValues?.clientName ? itemsValues.clientName : "בחר חברה"
+            }
+            isDisabled={changeStatus.disabled}
+            styles={customStyles}
+            menuPlacement="auto"
+            required
+            defaultValue={itemsValues.clientName}
+            onChange={(e) => {
+              const filteredItem = selectData.find(
+                (item) => item._id === e.value
+              );
+              setItemsValues((prev) => {
+                return {
+                  ...prev,
+                  clientName: e.label,
+                  name: filteredItem?.name || "",
+                };
+              });
+            }}
+          ></Select>
+        )}
+
         {(collReq === "/sales" ||
           collReq === "/workersExpenses" ||
           collReq === "/sleevesBids") && (
@@ -206,9 +251,15 @@ export default function ItemsTable({
             }}
           ></input>
         )}
-        {(collReq === "/sales" || collReq === "/expenses") && (
+        {(collReq === "/sales" ||
+          collReq === "/expenses" ||
+          collReq === "/salesToCompanies") && (
           <Select
-            options={allSelectData}
+            options={
+              collReq === "/salesToCompanies"
+                ? getTasksFromCompanyList()
+                : allSelectData
+            }
             className="input_show_item select-product-head "
             placeholder={itemsValues?.name ? itemsValues.name : "בחר מוצר"}
             isDisabled={changeStatus.disabled}
@@ -220,23 +271,28 @@ export default function ItemsTable({
               const filteredItem = selectData.find(
                 (item) => item._id === e.value
               );
+
               setItemsValues((prev) => {
                 return {
                   ...prev,
                   name: e.label,
                   number:
-                    collReq === "/expenses" ? prev.number : filteredItem.number,
+                    collReq === "/expenses" || collReq === "/salesToCompanies"
+                      ? prev.number
+                      : filteredItem?.number,
                   sale:
-                    +filteredItem.number -
-                    (+prev.discount * +filteredItem.number) / 100,
-                  totalAmount: !(collReq === "/sales")
+                    +filteredItem?.number -
+                    (+prev.discount * +filteredItem?.number) / 100,
+                  totalAmount: !(collReq === "/salesToCompanies")
+                    ? prev.number
+                    : !(collReq === "/sales")
                     ? +prev.quantity
-                      ? +filteredItem.number * +prev.quantity
+                      ? +filteredItem?.number * +prev.quantity
                       : collReq === "/inventories"
-                      ? +filteredItem.number
+                      ? +filteredItem?.number
                       : prev.number
-                    : (+filteredItem.number -
-                        (+filteredItem.number * +prev.discount) / 100) *
+                    : (+filteredItem?.number -
+                        (+filteredItem?.number * +prev.discount) / 100) *
                         +prev.quantity -
                       +prev.expenses,
                 };
@@ -246,6 +302,7 @@ export default function ItemsTable({
         )}
         {collReq !== "/sales" &&
           collReq !== "/workersExpenses" &&
+          collReq !== "/salesToCompanies" &&
           collReq !== "/expenses" &&
           collReq !== "/sleevesBids" && (
             <input
@@ -256,7 +313,7 @@ export default function ItemsTable({
                   collReq === "/inventories" || collReq === "/providers"
                     ? "62%"
                     : collReq === "/sales" || collReq === "/contacts"
-                    ? "22%"
+                    ? "18%"
                     : report?.type
                     ? "45%"
                     : "25%",
