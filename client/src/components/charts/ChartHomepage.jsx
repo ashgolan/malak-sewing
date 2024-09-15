@@ -56,10 +56,12 @@ function ChartHomepage() {
     { type: "/sleevesBids", name: "דוח שרוולים" },
     { type: "/expenses", name: "דוח הוצאות" },
     { type: "/sales", name: "דוח הכנסות" },
+    { type: "/salesToCompanies", name: "דוח הכנסות מחברות" },
     { type: "/workersExpenses", name: "דוח עובדים" },
     { type: "sleevesBidsCharts", name: "תרשים שרוולים" },
     { type: "expensesCharts", name: "תרשים הוצאות" },
     { type: "salesCharts", name: "תרשים הכנסות" },
+    { type: "salesToCompaniesCharts", name: "תרשים הכנסות מחברות" },
     { type: "workersExpensesCharts", name: "תרשים עובדים" },
   ].map((item) => {
     return { value: item.type, label: item.name };
@@ -101,6 +103,9 @@ function ChartHomepage() {
     });
     const { data: salesData } = await Api.get("/sales", { headers });
     const { data: expensesData } = await Api.get("/expenses", { headers });
+    const { data: salesToCompaniesData } = await Api.get("/salesToCompanies", {
+      headers,
+    });
     const { data: workersExpensesData } = await Api.get("/workersExpenses", {
       headers,
     });
@@ -117,6 +122,7 @@ function ChartHomepage() {
     });
     setFetchingData({
       salesData: salesData,
+      salesToCompaniesData: salesToCompaniesData,
       expensesData: expensesData,
       sleevesBidsData: sleevesBidsData,
       workersExpensesData: workersExpensesData,
@@ -179,8 +185,9 @@ function ChartHomepage() {
   const currentData =
     report?.type === "/sales" || report?.type === "salesCharts"
       ? "salesData"
+      : report?.type === "/salesToCompanies"
+      ? "salesToCompaniesData"
       : "workersExpensesData";
-  console.log(currentData);
   const ids = fetchingData[currentData]?.map(({ clientName }) => clientName);
   const filtered = fetchingData[currentData]?.filter(
     ({ clientName }, index) => !ids.includes(clientName, index + 1)
@@ -218,6 +225,8 @@ function ChartHomepage() {
             ></Select>{" "}
             {(report?.type === "/workersExpenses" ||
               report?.type === "workersExpensesCharts" ||
+              report?.type === "/salesToCompanies" ||
+              report?.type === "/salesToCompaniesCharts" ||
               report?.type === "/sales" ||
               report?.type === "salesCharts") && (
               <Select
@@ -225,7 +234,11 @@ function ChartHomepage() {
                 options={allSelectData.filter(
                   (option) => option.value !== null
                 )}
-                placeholder="בחר קליינט"
+                placeholder={
+                  report?.type === "/salesToCompanies"
+                    ? "בחר חברה"
+                    : "בחר קליינט"
+                }
                 onChange={(selectedOption) => {
                   setReport((prev) => {
                     setUpdatedReport((prev) => !prev);
@@ -309,9 +322,32 @@ function ChartHomepage() {
               </div>
             )}
           </div>
+          <div className="companyName-container">
+            <label htmlFor="">לכבוד :</label>
+            <label htmlFor="" style={{ marginLeft: "10%", width: "40%" }}>
+              {report?.clientName}
+            </label>
+            <label htmlFor="" style={{ marginRight: "10%" }}>
+              חודש :
+            </label>
+            {report?.month?.map((month, i) => {
+              return (
+                <>
+                  <label htmlFor="" style={{ textAlign: "center" }}>
+                    {" "}
+                    {report?.month[i]?.label}{" "}
+                  </label>
+                  {i !== report?.month.length - 1 && (
+                    <label style={{ width: "1%" }}> - </label>
+                  )}
+                </>
+              );
+            })}
+          </div>
           {report.type &&
             (report.type === "/expenses" ||
               report.type === "/sales" ||
+              report.type === "/salesToCompanies" ||
               report.type === "/workersExpenses" ||
               report.type === "/sleevesBids") && (
               <SetupPage
@@ -326,6 +362,7 @@ function ChartHomepage() {
             report.year &&
             (report.type === "expensesCharts" ||
               report.type === "salesCharts" ||
+              report.type === "salesToCompaniesCharts" ||
               report.type === "workersExpensesCharts" ||
               report.type === "sleevesBidsCharts") && (
               <ChartPage

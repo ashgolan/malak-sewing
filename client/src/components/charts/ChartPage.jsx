@@ -86,7 +86,10 @@ function ChartPage({ report, setShowChart, showChart, fetchingData }) {
     report?.type === "expensesCharts" || report?.type === "/expenses"
       ? getChart(fetchingData?.expensesData)
       : report?.type === "sleevesBidsCharts" || report?.type === "/sleevesBids"
-      ? getChart(fetchingData?.sleevesBidsData)
+      ? getChart(fetchingData?.expensesData)
+      : report?.type === "/salesToCompanies" ||
+        report?.type === "salesToCompaniesCharts"
+      ? getChart(fetchingData?.salesToCompaniesData)
       : report?.type === "workersExpensesCharts" ||
         report?.type === "/workersExpenses"
       ? getChart(fetchingData?.workersExpensesData)

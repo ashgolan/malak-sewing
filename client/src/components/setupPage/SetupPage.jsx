@@ -129,7 +129,7 @@ export default function SetupPage({
       if (collReq === "/sales") {
         setFetchingData(fetchingData.salesData);
       } else if (collReq === "/salesToCompanies") {
-        setFetchingData(fetchingData.salesToCompanies);
+        setFetchingData(fetchingData.salesToCompaniesData);
       } else if (collReq === "/expenses") {
         setFetchingData(fetchingData.expensesData);
       } else if (collReq === "/workersExpenses") {
@@ -448,13 +448,13 @@ export default function SetupPage({
       {(getTotals() > 0 || collReq === "/salesToCompanies") && (
         <div
           style={{
-            width: "50%",
+            width: "60%",
             margin: "auto",
             textAlign: "center",
             borderBottom: "2px solid orange",
           }}
         >
-          {collReq === "/salesToCompanies" && (
+          {collReq === "/salesToCompanies" && !report?.type && (
             <img
               src="/setupIcon.png"
               onClick={() => openModal()}
@@ -473,6 +473,17 @@ export default function SetupPage({
             {`סכום כל התנועות : `}
             {getTotals().toFixed(2)}
             {` ש"ח `}
+            {report?.type === "/salesToCompanies" && `  ש"ח כולל מע"מ [ `}
+            {report?.type === "/salesToCompanies" && (
+              <span style={{ fontSize: "0.8rem", color: "darkblue" }}>
+                {(getTotals() / (1 + 17 / 100)).toFixed(2)}
+                {`  ש"ח  `}
+                {` + מע"מ 17% ( `}
+                {(getTotals() - getTotals() / (1 + 17 / 100)).toFixed(2)}{" "}
+                {`  ש"ח )  `}
+              </span>
+            )}
+            {report?.type === "/salesToCompanies" && `] `}
           </label>
         </div>
       )}
@@ -690,33 +701,34 @@ export default function SetupPage({
             מיקום
           </button>
         )}
-        {(collReq === "/sales" ||
-          collReq === "/workersExpenses" ||
-          collReq === "/salesToCompanies" ||
-          collReq === "/sleevesBids") && (
-          <button
-            id="clientName"
-            className="input_show_item head"
-            style={{
-              width:
-                report?.type || collReq === "/sleevesBids"
-                  ? "23%"
-                  : collReq === "/salesToCompanies"
-                  ? "18%"
-                  : "13%",
-            }}
-            onClick={(e) => {
-              e.preventDefault();
-              setKindOfSort(() => "clientName");
-            }}
-          >
-            {collReq === "/workersExpenses"
-              ? "עובד"
-              : collReq === "/salesToCompanies"
-              ? "חברה"
-              : "קליינט"}
-          </button>
-        )}
+        {report?.type !== "/salesToCompanies" &&
+          (collReq === "/sales" ||
+            collReq === "/workersExpenses" ||
+            collReq === "/salesToCompanies" ||
+            collReq === "/sleevesBids") && (
+            <button
+              id="clientName"
+              className="input_show_item head"
+              style={{
+                width:
+                  report?.type || collReq === "/sleevesBids"
+                    ? "23%"
+                    : collReq === "/salesToCompanies"
+                    ? "18%"
+                    : "13%",
+              }}
+              onClick={(e) => {
+                e.preventDefault();
+                setKindOfSort(() => "clientName");
+              }}
+            >
+              {collReq === "/workersExpenses"
+                ? "עובד"
+                : collReq === "/salesToCompanies"
+                ? "חברה"
+                : "קליינט"}
+            </button>
+          )}
         {collReq !== "/workersExpenses" && collReq !== "/sleevesBids" && (
           <button
             id="name"

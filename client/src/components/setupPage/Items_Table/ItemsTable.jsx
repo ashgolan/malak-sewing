@@ -190,32 +190,33 @@ export default function ItemsTable({
             }}
           ></input>
         )}
-        {collReq === "/salesToCompanies" && (
-          <Select
-            options={getCompanyList()}
-            className="input_show_item select-product-head "
-            placeholder={
-              itemsValues?.clientName ? itemsValues.clientName : "בחר חברה"
-            }
-            isDisabled={changeStatus.disabled}
-            styles={customStyles}
-            menuPlacement="auto"
-            required
-            defaultValue={itemsValues.clientName}
-            onChange={(e) => {
-              const filteredItem = selectData.find(
-                (item) => item._id === e.value
-              );
-              setItemsValues((prev) => {
-                return {
-                  ...prev,
-                  clientName: e.label,
-                  name: filteredItem?.name || "",
-                };
-              });
-            }}
-          ></Select>
-        )}
+        {report?.type !== "/salesToCompanies" &&
+          collReq === "/salesToCompanies" && (
+            <Select
+              options={getCompanyList()}
+              className="input_show_item select-product-head "
+              placeholder={
+                itemsValues?.clientName ? itemsValues.clientName : "בחר חברה"
+              }
+              isDisabled={changeStatus.disabled}
+              styles={customStyles}
+              menuPlacement="auto"
+              required
+              defaultValue={itemsValues.clientName}
+              onChange={(e) => {
+                const filteredItem = selectData.find(
+                  (item) => item._id === e.value
+                );
+                setItemsValues((prev) => {
+                  return {
+                    ...prev,
+                    clientName: e.label,
+                    name: filteredItem?.name || "",
+                  };
+                });
+              }}
+            ></Select>
+          )}
 
         {(collReq === "/sales" ||
           collReq === "/workersExpenses" ||

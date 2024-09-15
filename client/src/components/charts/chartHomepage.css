@@ -11,7 +11,19 @@
     display: none !important;
   }
 }
-
+.companyName-container {
+  direction: rtl;
+  display: flex;
+  width: 50% auto;
+  justify-content: space-around;
+  font-size: 1.5rem;
+  color: brown;
+  font-weight: bold;
+  border-bottom: 2px gold solid;
+}
+.companyName-container > label {
+  width: 10%;
+}
 .charts-title {
   display: flex;
   justify-content: space-around;
@@ -43,7 +55,7 @@
   padding: 1% 20%;
 }
 .select-chart {
-  width: 45%;
+  width: 30%;
 }
 .select-worker {
   width: 20%;
