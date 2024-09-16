@@ -12,10 +12,13 @@ export const getCollectionProps = (collReq) => {
       return ["clientName", "number", "date", "tax", "equipment", "location"];
     case "/expenses":
       return ["name", "number", "date", "taxPercent", "totalAmount"];
+    case "/salesToCompanies":
+      return ["name", "number", "date", "totalAmount"];
     case "/sales":
       return [
         "date",
         "clientName",
+        "remark",
         "number",
         "tax",
         "name",

@@ -25,6 +25,7 @@ export default function ItemsTable({
   const [itemsValues, setItemsValues] = useState({
     name: "",
     clientName: "",
+    remark: "",
     number: "",
     discount: "",
     sale: "",
@@ -48,6 +49,7 @@ export default function ItemsTable({
         return {
           name: thisItem.name ? thisItem.name : "",
           clientName: thisItem.clientName ? thisItem.clientName : "",
+          remark: thisItem.remark ? thisItem.remark : "-",
           number: thisItem.number ? thisItem.number : "",
           discount: thisItem.discount ? thisItem.discount : "",
           sale: thisItem.sale ? thisItem.sale : "",
@@ -76,7 +78,7 @@ export default function ItemsTable({
     return { value: item.value, label: item.label };
   });
 
-  const customStyles = {
+  const globalCustomStyles = {
     control: (base, state) => ({
       ...base,
       textAlign: "right",
@@ -116,6 +118,13 @@ export default function ItemsTable({
     },
 
     indicatorSeparator: (provided) => ({
+      ...provided,
+      display: "none",
+    }),
+  };
+  const specificCustomStyles = {
+    ...globalCustomStyles,
+    dropdownIndicator: (provided) => ({
       ...provided,
       display: "none",
     }),
@@ -199,7 +208,7 @@ export default function ItemsTable({
                 itemsValues?.clientName ? itemsValues.clientName : "בחר חברה"
               }
               isDisabled={changeStatus.disabled}
-              styles={customStyles}
+              styles={globalCustomStyles}
               menuPlacement="auto"
               required
               defaultValue={itemsValues.clientName}
@@ -237,6 +246,25 @@ export default function ItemsTable({
             }}
           ></input>
         )}
+        {collReq === "/sales" && (
+          <input
+            id="remark"
+            className="input_show_item"
+            style={{
+              width: report?.type ? "10%" : "7%",
+              color: itemsValues.colored ? "rgb(255, 71, 46)" : "whitesmoke",
+              textAlign: "center",
+            }}
+            disabled={changeStatus.disabled}
+            value={itemsValues.remark}
+            onChange={(e) => {
+              setItemsValues((prev) => {
+                return { ...prev, remark: e.target.value };
+              });
+            }}
+          ></input>
+        )}
+
         {collReq === "/workersExpenses" && (
           <input
             id="equipment"
@@ -264,7 +292,7 @@ export default function ItemsTable({
             className="input_show_item select-product-head "
             placeholder={itemsValues?.name ? itemsValues.name : "עבודה מוצר"}
             isDisabled={changeStatus.disabled}
-            styles={customStyles}
+            styles={globalCustomStyles}
             menuPlacement="auto"
             required
             defaultValue={itemsValues.name}
@@ -502,7 +530,7 @@ export default function ItemsTable({
               });
             }}
             menuPlacement="auto"
-            styles={customStyles}
+            styles={specificCustomStyles}
             required
           />
         )}

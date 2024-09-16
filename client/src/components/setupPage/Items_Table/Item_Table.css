@@ -29,8 +29,8 @@
   direction: rtl;
 }
 .select-category {
-  max-width: 7%;
-  min-width: 7%;
+  max-width: 4%;
+  min-width: 4%;
   padding: 0.3% 0;
 }
 .select-product {

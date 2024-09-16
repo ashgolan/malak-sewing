@@ -731,6 +731,21 @@ export default function SetupPage({
                 : "קליינט"}
             </button>
           )}
+        {(collReq === "/sales" || report?.type === "/sales") && (
+          <button
+            id="remark"
+            className="input_show_item head"
+            style={{
+              width: report?.type ? "10%" : "7%",
+            }}
+            onClick={(e) => {
+              e.preventDefault();
+              setKindOfSort(() => "remark");
+            }}
+          >
+            {"הערה"}
+          </button>
+        )}
         {collReq !== "/workersExpenses" && collReq !== "/sleevesBids" && (
           <button
             id="name"
@@ -913,7 +928,7 @@ export default function SetupPage({
           <button
             id="tax"
             className="input_show_item head"
-            style={{ width: "7%", textAlign: "center" }}
+            style={{ width: "4%", textAlign: "center" }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "tax");
@@ -923,7 +938,7 @@ export default function SetupPage({
               ? "שולם"
               : report?.type
               ? "חשב."
-              : "חשבונית"}
+              : "חשב."}
           </button>
         )}
         {collReq === "/expenses" && (

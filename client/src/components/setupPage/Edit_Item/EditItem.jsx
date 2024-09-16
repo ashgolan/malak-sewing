@@ -60,6 +60,7 @@ export default function EditItem({
           itemsValues.number !== item.number ||
           itemsValues.name !== item.name ||
           itemsValues.clientName !== item.clientName ||
+          itemsValues.remark !== item.remark ||
           itemsValues.sale !== item.sale ||
           itemsValues.discount !== item.discount ||
           itemsValues.expenses !== item.expenses ||
@@ -149,6 +150,7 @@ export default function EditItem({
             date: itemsValues.date,
             name: itemsValues.name,
             clientName: itemsValues.clientName,
+            remark: itemsValues.remark,
             number: itemsValues.number,
             discount: itemsValues.discount,
             sale: itemsValues.sale,

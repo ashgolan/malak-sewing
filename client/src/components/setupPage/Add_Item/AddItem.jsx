@@ -32,6 +32,7 @@ export default function AddItem({
     bankProps: "",
     quantity: "",
     clientName: "",
+    remark: "",
     discount: "",
     expenses: "",
     location: "",
@@ -124,6 +125,7 @@ export default function AddItem({
           {
             date: itemsValues.date,
             clientName: itemsValues.clientName,
+            remark: itemsValues.remark,
             name: itemsValues.name,
             number: itemsValues.number,
             discount: itemsValues.discount,
@@ -377,6 +379,26 @@ export default function AddItem({
               })
             }
             value={itemsValues.clientName}
+          ></input>
+        )}
+        {collReq === "/sales" && (
+          <input
+            name="remark"
+            id="remark"
+            required
+            autoFocus={true}
+            className="add_item"
+            style={{
+              width: "10%",
+              color: itemsValues.colored ? "rgb(255, 71, 46)" : "black",
+            }}
+            placeholder={"הערה"}
+            onChange={(e) =>
+              setItemsValues((prev) => {
+                return { ...prev, remark: e.target.value };
+              })
+            }
+            value={itemsValues.remark}
           ></input>
         )}
         {collReq === "/workersExpenses" && (

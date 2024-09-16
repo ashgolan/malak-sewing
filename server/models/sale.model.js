@@ -8,6 +8,7 @@ const day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
 const saleSchema = new Schema({
   date: { type: String, default: year + "-" + month + "-" + day },
   clientName: { type: String, required: true },
+  remark: { type: String, default:"-" },
   name: { type: String, required: true },
   quantity: { type: Number, required: true },
   number: { type: Number, required: true },
