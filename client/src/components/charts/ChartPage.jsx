@@ -50,6 +50,8 @@ function ChartPage({ report, setShowChart, showChart, fetchingData }) {
     if (report?.clientName) {
       data = data.filter((item) => item.clientName === report?.clientName);
     }
+    console.log(report);
+
     if (report?.month?.value && report?.year) {
       setChartData({
         labels: Object?.keys(
@@ -83,17 +85,34 @@ function ChartPage({ report, setShowChart, showChart, fetchingData }) {
     }
   };
   const showChartHandler = () => {
-    report?.type === "expensesCharts" || report?.type === "/expenses"
-      ? getChart(fetchingData?.expensesData)
-      : report?.type === "sleevesBidsCharts" || report?.type === "/sleevesBids"
-      ? getChart(fetchingData?.expensesData)
-      : report?.type === "/salesToCompanies" ||
-        report?.type === "salesToCompaniesCharts"
-      ? getChart(fetchingData?.salesToCompaniesData)
-      : report?.type === "workersExpensesCharts" ||
-        report?.type === "/workersExpenses"
-      ? getChart(fetchingData?.workersExpensesData)
-      : getChart(fetchingData?.salesData);
+    const selection = report?.type;
+
+    switch (selection) {
+      case "expensesCharts":
+      case "/expenses":
+        getChart(fetchingData?.expensesData);
+        break;
+
+      case "sleevesBidsCharts":
+      case "/sleevesBids":
+        getChart(fetchingData?.sleevesBidsData);
+        break;
+
+      case "/salesToCompanies":
+      case "salesToCompaniesCharts":
+        getChart(fetchingData?.salesToCompaniesData);
+        break;
+
+      case "workersExpensesCharts":
+      case "/workersExpenses":
+        getChart(fetchingData?.workersExpensesData);
+        break;
+
+      default:
+        getChart(fetchingData?.salesData);
+        break;
+    }
+
     setShowChart(true);
   };
   return (

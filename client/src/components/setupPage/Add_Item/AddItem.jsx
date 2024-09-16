@@ -406,7 +406,13 @@ export default function AddItem({
                 : allSelectData
             }
             className="add_item select-product-in-add "
-            placeholder={collReq === "/expenses" ? "בחר ספק" : "בחר מוצר"}
+            placeholder={
+              collReq === "/expenses"
+                ? "בחר ספק"
+                : collReq === "/salesToCompanies"
+                ? "בחר עבודה"
+                : "בחר מוצר"
+            }
             styles={customStyles}
             menuPlacement="auto"
             required

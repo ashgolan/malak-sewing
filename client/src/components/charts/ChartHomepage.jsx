@@ -185,7 +185,8 @@ function ChartHomepage() {
   const currentData =
     report?.type === "/sales" || report?.type === "salesCharts"
       ? "salesData"
-      : report?.type === "/salesToCompanies"
+      : report?.type === "/salesToCompanies" ||
+        report?.type === "salesToCompaniesCharts"
       ? "salesToCompaniesData"
       : "workersExpensesData";
   const ids = fetchingData[currentData]?.map(({ clientName }) => clientName);
@@ -226,16 +227,17 @@ function ChartHomepage() {
             {(report?.type === "/workersExpenses" ||
               report?.type === "workersExpensesCharts" ||
               report?.type === "/salesToCompanies" ||
-              report?.type === "/salesToCompaniesCharts" ||
+              report?.type === "salesToCompaniesCharts" ||
               report?.type === "/sales" ||
               report?.type === "salesCharts") && (
               <Select
                 className="clientsInCharts"
-                options={allSelectData.filter(
+                options={allSelectData?.filter(
                   (option) => option.value !== null
                 )}
                 placeholder={
-                  report?.type === "/salesToCompanies"
+                  report?.type === "/salesToCompanies" ||
+                  report?.type === "salesToCompaniesCharts"
                     ? "בחר חברה"
                     : "בחר קליינט"
                 }
@@ -303,7 +305,9 @@ function ChartHomepage() {
                 styles={customStyles}
                 isMulti={
                   report.type === "expensesCharts" ||
-                  report.type === "salesCharts"
+                  report.type === "salesCharts" ||
+                  report.type === "sleevesBidsCharts" ||
+                  report.type === "salesToCompaniesCharts"
                     ? false
                     : true
                 }
@@ -322,28 +326,30 @@ function ChartHomepage() {
               </div>
             )}
           </div>
-          <div className="companyName-container">
-            <label htmlFor="">לכבוד :</label>
-            <label htmlFor="" style={{ marginLeft: "10%", width: "40%" }}>
-              {report?.clientName}
-            </label>
-            <label htmlFor="" style={{ marginRight: "10%" }}>
-              חודש :
-            </label>
-            {report?.month?.map((month, i) => {
-              return (
-                <>
-                  <label htmlFor="" style={{ textAlign: "center" }}>
-                    {" "}
-                    {report?.month[i]?.label}{" "}
-                  </label>
-                  {i !== report?.month.length - 1 && (
-                    <label style={{ width: "1%" }}> - </label>
-                  )}
-                </>
-              );
-            })}
-          </div>
+          {report?.type === "/salesToCompanies" && report?.clientName && (
+            <div className="companyName-container">
+              <label htmlFor="">לכבוד :</label>
+              <label htmlFor="" style={{ marginLeft: "10%", width: "40%" }}>
+                {report?.clientName}
+              </label>
+              <label htmlFor="" style={{ marginRight: "10%" }}>
+                חודש :
+              </label>
+              {report?.month?.map((month, i) => {
+                return (
+                  <>
+                    <label htmlFor="" style={{ textAlign: "center" }}>
+                      {" "}
+                      {report?.month[i]?.label}{" "}
+                    </label>
+                    {i !== report?.month.length - 1 && (
+                      <label style={{ width: "1%" }}> + </label>
+                    )}
+                  </>
+                );
+              })}
+            </div>
+          )}
           {report.type &&
             (report.type === "/expenses" ||
               report.type === "/sales" ||

@@ -132,16 +132,16 @@ export default function ItemsTable({
 
   const getCompanyList = () => {
     return companies?.map((item) => {
-      return { value: item._id, label: item.companyName };
+      return { value: item._id, label: item.name };
     });
   };
   const getTasksFromCompanyList = () => {
     const companyNameObj = companies?.find(
-      (company) => company.companyName === itemsValues?.clientName
+      (company) => company.name === itemsValues?.clientName
     );
 
     return companyNameObj?.tasks?.map((item) => {
-      return { value: item._id, label: item.taskName };
+      return { value: item._id, label: item.description };
     });
   };
   return (
@@ -262,7 +262,7 @@ export default function ItemsTable({
                 : allSelectData
             }
             className="input_show_item select-product-head "
-            placeholder={itemsValues?.name ? itemsValues.name : "בחר מוצר"}
+            placeholder={itemsValues?.name ? itemsValues.name : "עבודה מוצר"}
             isDisabled={changeStatus.disabled}
             styles={customStyles}
             menuPlacement="auto"

@@ -459,7 +459,7 @@ export default function SetupPage({
               src="/setupIcon.png"
               onClick={() => openModal()}
               alt=""
-              style={{ width: "5%", margin: "0 2%", cursor: "pointer" }}
+              style={{ width: "4%", margin: "0 2%", cursor: "pointer" }}
             />
           )}
           <label
@@ -470,7 +470,7 @@ export default function SetupPage({
             }}
           >
             {"  "}
-            {`סכום כל התנועות : `}
+            {`סה"כ : `}
             {getTotals().toFixed(2)}
             {` ש"ח `}
             {report?.type === "/salesToCompanies" && `  ש"ח כולל מע"מ [ `}
@@ -617,6 +617,7 @@ export default function SetupPage({
               <input
                 className="setupCompanies-input"
                 type="text"
+                required
                 placeholder="חברה"
                 value={companyBody?.companyName}
                 onChange={(e) => {
@@ -633,6 +634,7 @@ export default function SetupPage({
             <input
               className="setupCompanies-input"
               type="text"
+              required
               placeholder="עבודה"
               value={taskBody?.taskName}
               onChange={(e) =>
