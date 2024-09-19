@@ -23,6 +23,8 @@ export default function EditItem({
     const thisProps = getCollectionProps(collReq);
     if (!thisProps) return;
     for (let i in itemsValues) {
+      console.log(itemsValues[i]);
+
       if (itemsValues[i] === "" && thisProps.includes(i)) return true;
     }
   };
@@ -68,6 +70,18 @@ export default function EditItem({
           itemsValues.tax !== item.tax ||
           itemsValues.colored !== item.colored ||
           itemsValues.quantity !== item.quantity ||
+          itemsValues.totalAmount !== item.totalAmount
+        );
+      case "/institutionTax":
+        return (
+          itemsValues.date !== item.date ||
+          itemsValues.clientName !== item.clientName ||
+          itemsValues.name !== item.name ||
+          itemsValues.number !== item.number ||
+          itemsValues.taxNumber !== item.taxNumber ||
+          itemsValues.withholdingTax !== item.withholdingTax ||
+          itemsValues.paymentDate !== item.paymentDate ||
+          itemsValues.colored !== item.colored ||
           itemsValues.totalAmount !== item.totalAmount
         );
       case "/salesToCompanies":
@@ -158,6 +172,25 @@ export default function EditItem({
             colored: itemsValues.colored,
             tax: itemsValues.tax,
             quantity: itemsValues.quantity,
+            totalAmount: itemsValues.totalAmount,
+          },
+          {
+            headers: headers,
+          }
+        );
+        break;
+      case "/institutionTax":
+        await Api.patch(
+          `${collReq}/${item._id}`,
+          {
+            date: itemsValues.date,
+            clientName: itemsValues.clientName,
+            name: itemsValues.name,
+            number: itemsValues.number,
+            taxNumber: itemsValues.taxNumber,
+            withholdingTax: itemsValues.withholdingTax,
+            paymentDate: itemsValues.paymentDate,
+            colored: itemsValues.colored,
             totalAmount: itemsValues.totalAmount,
           },
           {

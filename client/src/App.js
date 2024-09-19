@@ -21,6 +21,7 @@ import OrderPage from "./components/Order_Components/OrderPage";
 import FreeBidPage from "./components/Bid_components/FreeBidPage";
 import Calender from "./components/calender/Calender";
 import SalesToCompanies from "./components/SalesToCompanies/SalesToCompanies";
+import InstitutionTaxes from "./components/institutionTaxes/InstitutionTaxes";
 
 function App() {
   const navigate = useNavigate();
@@ -40,7 +41,7 @@ function App() {
 
   return (
     <div>
-      <IdleTimer timeout={10 * 60 * 1000} onIdle={handleIdle} />
+      <IdleTimer timeout={20 * 60 * 1000} onIdle={handleIdle} />
       <Navbar></Navbar>
       {fetchingStatus.message && (
         <h5 className="message">{fetchingStatus.message}</h5>
@@ -78,6 +79,10 @@ function App() {
           <Route
             path="/salesToCompanies"
             element={<SalesToCompanies></SalesToCompanies>}
+          ></Route>
+          <Route
+            path="/institutionTax"
+            element={<InstitutionTaxes></InstitutionTaxes>}
           ></Route>
           <Route path="/bids" element={<BidPage></BidPage>}></Route>
 

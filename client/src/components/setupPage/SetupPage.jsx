@@ -130,6 +130,8 @@ export default function SetupPage({
         setFetchingData(fetchingData.salesData);
       } else if (collReq === "/salesToCompanies") {
         setFetchingData(fetchingData.salesToCompaniesData);
+      } else if (collReq === "/institutionTax") {
+        setFetchingData(fetchingData.institutionTaxData);
       } else if (collReq === "/expenses") {
         setFetchingData(fetchingData.expensesData);
       } else if (collReq === "/workersExpenses") {
@@ -157,10 +159,17 @@ export default function SetupPage({
         const { data: providers } = await Api.get("/providers", { headers });
         setProviders(providers);
       }
+      if (collReq === "/institutionTax") {
+        const { data: institutionTax } = await Api.get("/institutionTax", {
+          headers,
+        });
+        setProviders(institutionTax);
+      }
       if (report === undefined) {
         if (
           collReq === "/sales" ||
           collReq === "/salesToCompanies" ||
+          collReq === "/institutionsTax" ||
           collReq === "/sleevesBids" ||
           collReq === "/workersExpenses" ||
           collReq === "/expenses"
@@ -309,6 +318,10 @@ export default function SetupPage({
           (a, b) => parseFloat(a.sale) - parseFloat(b.sale)
         );
       case "expenses":
+        return fetchedData?.sort(
+          (a, b) => parseFloat(a.expenses) - parseFloat(b.expenses)
+        );
+      case "withholdingTax":
         return fetchedData?.sort(
           (a, b) => parseFloat(a.expenses) - parseFloat(b.expenses)
         );
@@ -676,6 +689,7 @@ export default function SetupPage({
         {(collReq === "/sleevesBids" ||
           collReq === "/expenses" ||
           collReq === "/salesToCompanies" ||
+          collReq === "/institutionTax" ||
           collReq === "/workersExpenses" ||
           collReq === "/sales") && (
           <button
@@ -706,6 +720,7 @@ export default function SetupPage({
         {report?.type !== "/salesToCompanies" &&
           (collReq === "/sales" ||
             collReq === "/workersExpenses" ||
+            collReq === "/institutionTax" ||
             collReq === "/salesToCompanies" ||
             collReq === "/sleevesBids") && (
             <button
@@ -754,22 +769,16 @@ export default function SetupPage({
               maxWidth:
                 collReq === "/inventories" || collReq === "/providers"
                   ? "62%"
-                  : collReq === "/sales" ||
-                    collReq === "/expenses" ||
-                    collReq === "/contacts" ||
-                    collReq === "/salesToCompanies"
-                  ? "18%"
+                  : collReq === "/institutionTax"
+                  ? "15%"
                   : report?.type
                   ? "45%"
                   : "18%",
               minWidth:
                 collReq === "/inventories" || collReq === "/providers"
                   ? "62%"
-                  : collReq === "/sales" ||
-                    collReq === "/expenses" ||
-                    collReq === "/contacts" ||
-                    collReq === "/salesToCompanies"
-                  ? "18%"
+                  : collReq === "/institutionTax"
+                  ? "15%"
                   : report?.type
                   ? "45%"
                   : "18%",
@@ -783,7 +792,7 @@ export default function SetupPage({
               ? "שם"
               : collReq === "/contacts"
               ? "שם חברה"
-              : collReq === "/salesToCompanies"
+              : collReq === "/salesToCompanies" || collReq === "/sales"
               ? "עבודה"
               : "מוצר"}
           </button>
@@ -810,6 +819,8 @@ export default function SetupPage({
                 ? "5%"
                 : collReq === "/contacts" || collReq === "/expenses"
                 ? "8%"
+                : collReq === "/institutionTax"
+                ? "5%"
                 : "15%",
           }}
           onClick={(e) => {
@@ -819,6 +830,7 @@ export default function SetupPage({
         >
           {collReq === "/inventories" ||
           collReq === "/sales" ||
+          collReq === "/institutionTax" ||
           collReq === "/sleevesBids"
             ? "מחיר"
             : collReq === "/expenses" ||
@@ -908,11 +920,11 @@ export default function SetupPage({
           </button>
         )}
 
-        {collReq === "/expenses" && (
+        {(collReq === "/expenses" || collReq === "/institutionTax") && (
           <button
             id="taxNumber"
             className="input_show_item head"
-            style={{ width: "10%", textAlign: "center" }}
+            style={{ width: "9%", textAlign: "center" }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "taxNumber");
@@ -941,7 +953,7 @@ export default function SetupPage({
               : "חשב."}
           </button>
         )}
-        {collReq === "/expenses" && (
+        {(collReq === "/expenses" || collReq === "/institutionTax") && (
           <button
             id="paymentDate"
             className="input_show_item head"
@@ -954,8 +966,25 @@ export default function SetupPage({
             ת.תשלום{" "}
           </button>
         )}
+        {collReq === "/institutionTax" && (
+          <button
+            id="withholdingTax"
+            className="input_show_item head"
+            style={{
+              width: "6%",
+            }}
+            onClick={(e) => {
+              e.preventDefault();
+              setKindOfSort(() => "withholdingTax");
+            }}
+          >
+            נ.במקור{" "}
+          </button>
+        )}
         {(collReq === "/sleevesBids" ||
+          collReq === "/institutionTax" ||
           collReq === "/expenses" ||
+          collReq === "/institutionTax" ||
           collReq === "/sales") && (
           <button
             id="totalAmount"

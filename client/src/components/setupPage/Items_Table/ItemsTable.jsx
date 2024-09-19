@@ -39,6 +39,7 @@ export default function ItemsTable({
     date: "",
     tax: false,
     taxNumber: "",
+    withholdingTax: 0,
     paymentDate: "",
     totalAmount: 0,
   });
@@ -62,6 +63,7 @@ export default function ItemsTable({
           colored: thisItem.colored ? thisItem.colored : false,
           date: thisItem.date ? thisItem.date : "",
           tax: thisItem.tax ? thisItem.tax : false,
+          withholdingTax: thisItem.withholdingTax ? thisItem.withholdingTax : 0,
           taxNumber: thisItem.taxNumber ? thisItem.taxNumber : "",
           paymentDate: thisItem.paymentDate ? thisItem.paymentDate : "",
           totalAmount: thisItem.totalAmount ? thisItem.totalAmount : "",
@@ -168,6 +170,7 @@ export default function ItemsTable({
         {(collReq === "/sleevesBids" ||
           collReq === "/expenses" ||
           collReq === "/salesToCompanies" ||
+          collReq === "/institutionTax" ||
           collReq === "/workersExpenses" ||
           collReq === "/sales") && (
           <input
@@ -229,6 +232,7 @@ export default function ItemsTable({
 
         {(collReq === "/sales" ||
           collReq === "/workersExpenses" ||
+          collReq === "/institutionTax" ||
           collReq === "/sleevesBids") && (
           <input
             id="clientName"
@@ -338,14 +342,22 @@ export default function ItemsTable({
               id="name"
               className="input_show_item"
               style={{
-                width:
+                maxWidth:
                   collReq === "/inventories" || collReq === "/providers"
                     ? "62%"
-                    : collReq === "/sales" || collReq === "/contacts"
-                    ? "18%"
+                    : collReq === "/institutionTax"
+                    ? "15%"
                     : report?.type
                     ? "45%"
-                    : "25%",
+                    : "18%",
+                minWidth:
+                  collReq === "/inventories" || collReq === "/providers"
+                    ? "62%"
+                    : collReq === "/institutionTax"
+                    ? "15%"
+                    : report?.type
+                    ? "45%"
+                    : "18%",
               }}
               disabled={changeStatus.disabled}
               value={itemsValues.name}
@@ -365,6 +377,8 @@ export default function ItemsTable({
                 ? "5%"
                 : collReq === "/contacts" || collReq === "/expenses"
                 ? "8%"
+                : collReq === "/institutionTax"
+                ? "5%"
                 : "15%",
           }}
           onDoubleClick={changeColorOfClientName}
@@ -385,6 +399,8 @@ export default function ItemsTable({
                   ? +prev.quantity
                     ? +e.target.value * +prev.quantity
                     : +e.target.value
+                  : collReq === "/institutionTax"
+                  ? +e.target.value - +e.target.value * prev.withholdingTax
                   : (+e.target.value -
                       (+e.target.value * +prev.discount) / 100) *
                       +prev.quantity -
@@ -498,11 +514,11 @@ export default function ItemsTable({
             }}
           ></input>
         )}
-        {collReq === "/expenses" && (
+        {(collReq === "/expenses" || collReq === "/institutionTax") && (
           <input
             id="taxNumber"
             className="input_show_item"
-            style={{ width: "10%" }}
+            style={{ width: "9%" }}
             disabled={changeStatus.disabled}
             value={itemsValues.taxNumber}
             onChange={(e) => {
@@ -534,9 +550,9 @@ export default function ItemsTable({
             required
           />
         )}
-        {collReq === "/expenses" && (
+        {(collReq === "/expenses" || collReq === "/institutionTax") && (
           <input
-            id="date"
+            id="paymentDate"
             type="date"
             className="input_show_item"
             style={{ width: report?.type ? "15%" : "13%" }}
@@ -549,9 +565,27 @@ export default function ItemsTable({
             }}
           ></input>
         )}
-
+        {collReq === "/institutionTax" && (
+          <input
+            id="withholdingTax"
+            className="input_show_item"
+            style={{ width: report?.type ? "15%" : "6%" }}
+            disabled={changeStatus.disabled}
+            value={itemsValues.withholdingTax}
+            onChange={(e) => {
+              setItemsValues((prev) => {
+                return {
+                  ...prev,
+                  withholdingTax: e.target.value,
+                  totalAmount: +prev.number - +e.target.value * +prev.number,
+                };
+              });
+            }}
+          />
+        )}
         {(collReq === "/sleevesBids" ||
           collReq === "/expenses" ||
+          collReq === "/institutionTax" ||
           collReq === "/sales") && (
           <input
             id="totalAmount"
