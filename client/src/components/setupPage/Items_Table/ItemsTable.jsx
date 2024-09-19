@@ -395,12 +395,14 @@ export default function ItemsTable({
                 number: e.target.value,
                 sale:
                   +e.target.value - (+prev.discount * +e.target.value) / 100,
-                totalAmount: !(collReq === "/sales")
+                totalAmount: !(
+                  collReq === "/sales" || collReq === "/institutionTax"
+                )
                   ? +prev.quantity
                     ? +e.target.value * +prev.quantity
                     : +e.target.value
                   : collReq === "/institutionTax"
-                  ? +e.target.value - +e.target.value * prev.withholdingTax
+                  ? +e.target.value - +e.target.value * +prev.withholdingTax
                   : (+e.target.value -
                       (+e.target.value * +prev.discount) / 100) *
                       +prev.quantity -
