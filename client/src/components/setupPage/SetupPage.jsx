@@ -6,13 +6,12 @@ import ItemsTable from "./Items_Table/ItemsTable";
 import { FetchingStatus } from "../../utils/context";
 import "./SetupPage.css";
 import { useEffect } from "react";
-import Select from "react-select";
-
-import Modal from "react-modal";
 import { useNavigate } from "react-router";
 import { Api } from "../../utils/Api";
 import { clearTokens, getAccessToken } from "../../utils/tokensStorage";
 import { refreshMyToken } from "../../utils/setNewAccessToken";
+import SetupModal from "./SetupModal";
+import { sortedInventory } from "../../utils/sortData";
 
 export default function SetupPage({
   collReq,
@@ -27,23 +26,8 @@ export default function SetupPage({
   const navigate = useNavigate();
   // eslint-disable-next-line
   const [fetchedData, setFetchingData] = useState([]);
-  const [setupSelection, setSetupSelection] = useState({
-    category: null,
-    function: null,
-    companyName: null,
-    task: null,
-  });
+
   const [pageUpdate, setPageUpdate] = useState(false);
-  const [method, setMethod] = useState("get");
-  const [endPoint, setEndPoint] = useState("/companies/");
-  const [companyId, setCompanyId] = useState("");
-  const [taskId, setTaskId] = useState("");
-  const [taskBody, setTaskBody] = useState({
-    name: "",
-  });
-  const [companyBody, setCompanyBody] = useState({
-    description: "",
-  });
 
   const [fetchingStatus, setFetchingStatus] = useContext(FetchingStatus);
   const [itemInChange, setItemInChange] = useState(false);
@@ -57,68 +41,28 @@ export default function SetupPage({
   const [companies, setCompanies] = useState([]);
   const [providers, setProviders] = useState([]);
 
-  const customStyles = {
-    content: {
-      top: "50%",
-      left: "50%",
-      right: "auto",
-      bottom: "auto",
-      marginRight: "-50%",
-      transform: "translate(-50%, -50%)",
-      width: "600px",
-      maxWidth: "90%",
-      textAlign: "center",
-    },
-  };
-  let subtitle;
-  const [modalIsOpen, setIsOpen] = React.useState(false);
-
-  function openModal() {
-    setIsOpen(true);
-  }
-
-  function afterOpenModal() {
-    // references are now sync'd and can be accessed.
-    subtitle.style.color = "#0e6486";
-  }
-  const initialSetupSelection = {
-    category: null,
-    function: null,
-    companyName: null,
-    task: null,
-  };
-
-  const initialCompanyBody = {
-    companyName: "",
-  };
-
-  const initialTaskBody = {
-    taskName: "",
-  };
-  function closeModal() {
-    setSetupSelection(initialSetupSelection);
-    setCompanyBody(initialCompanyBody);
-    setTaskBody(initialTaskBody);
-    setEndPoint("");
-    setMethod("");
-    setCompanyId("");
-    setTaskId("");
-    setIsOpen(false);
-  }
-
   const getTotals = () => {
     let total = 0;
     if (collReq === "/workersExpenses") {
-      filterByReport(sortedInventory(kindOfSort)).forEach((element) => {
-        total += element.number;
-      });
+      filterByReport(sortedInventory(fetchedData, kindOfSort)).forEach(
+        (element) => {
+          total += element.number;
+        }
+      );
     } else {
-      filterByReport(sortedInventory(kindOfSort)).forEach((element) => {
-        total += element.totalAmount;
-      });
+      filterByReport(sortedInventory(fetchedData, kindOfSort)).forEach(
+        (element) => {
+          total += element.totalAmount;
+        }
+      );
     }
     return total;
   };
+  function openModal() {
+    setIsOpen(true);
+  }
+  const [modalIsOpen, setIsOpen] = React.useState(false);
+
   const sendRequest = async (token) => {
     const headers = { Authorization: token };
     setFetchingStatus((prev) => {
@@ -148,7 +92,7 @@ export default function SetupPage({
         });
         setInventories(inventories);
       }
-      if (collReq === "/salesToCompanies") {
+      if (collReq === "/salesToCompanies" || collReq === "/institutionTax") {
         const { data: companies } = await Api.get("/companies", {
           headers,
         });
@@ -295,170 +239,11 @@ export default function SetupPage({
     }
   };
 
-  const sortedInventory = (kindOfSort) => {
-    switch (kindOfSort) {
-      case "number":
-        return fetchedData?.sort(
-          (a, b) => parseFloat(a.number) - parseFloat(b.number)
-        );
-      case "clientName":
-        return fetchedData?.sort((a, b) =>
-          a.clientName > b.clientName ? 1 : -1
-        );
-      case "totalAmount":
-        return fetchedData?.sort(
-          (a, b) => parseFloat(a.totalAmount) - parseFloat(b.totalAmount)
-        );
-      case "discount":
-        return fetchedData?.sort(
-          (a, b) => parseFloat(a.discount) - parseFloat(b.discount)
-        );
-      case "sale":
-        return fetchedData?.sort(
-          (a, b) => parseFloat(a.sale) - parseFloat(b.sale)
-        );
-      case "expenses":
-        return fetchedData?.sort(
-          (a, b) => parseFloat(a.expenses) - parseFloat(b.expenses)
-        );
-      case "withholdingTax":
-        return fetchedData?.sort(
-          (a, b) => parseFloat(a.expenses) - parseFloat(b.expenses)
-        );
-      case "quantity":
-        return fetchedData?.sort(
-          (a, b) => parseFloat(a.quantity) - parseFloat(b.quantity)
-        );
-      case "name":
-        return fetchedData?.sort((a, b) => (a.name > b.name ? 1 : -1));
-      case "tax":
-        return fetchedData?.sort((a, b) => (a.tax > b.tax ? 1 : -1));
-      case "taxNumber":
-        return fetchedData?.sort((a, b) =>
-          a.taxNumber > b.taxNumber ? 1 : -1
-        );
-      case "location":
-        return fetchedData?.sort((a, b) => (a.location > b.location ? 1 : -1));
-      case "equipment":
-        return fetchedData?.sort((a, b) =>
-          a.equipment > b.equipment ? 1 : -1
-        );
-      case "date":
-        return fetchedData?.sort((a, b) => (a.date > b.date ? 1 : -1));
-      case "paymentDate":
-        return fetchedData?.sort((a, b) =>
-          a.paymentDate > b.paymentDate ? 1 : -1
-        );
-      case "mail":
-        return fetchedData?.sort((a, b) => (a.mail > b.mail ? 1 : -1));
-      case "bankProps":
-        return fetchedData?.sort((a, b) =>
-          a.bankProps > b.bankProps ? 1 : -1
-        );
-      default:
-        return fetchedData?.sort((a, b) => (a.date > b.date ? 1 : -1));
-    }
-  };
-  const getCompanyList = () => {
-    return companies?.map((item) => {
-      return { value: item._id, label: item.name };
-    });
-  };
-  const getTasksFromCompanyList = () => {
-    if (!setupSelection?.companyName?.label) {
-      return [];
-    }
-
-    const companyNameObj = companies?.find(
-      (company) => company.name === setupSelection?.companyName.label
-    );
-
-    return companyNameObj?.tasks?.map((item) => {
-      return { value: item._id, label: item.description };
-    });
-  };
-
-  const applyCompaniesAndTaskRequest = async (e) => {
-    e.preventDefault();
-    const accessToken = getAccessToken(); // Get the token once and reuse it
-
-    if (!accessToken) {
-      console.error("No access token found");
-      return;
-    }
-
-    const body =
-      endPoint === "/companies/" && method === "put"
-        ? { name: companyBody?.companyName }
-        : endPoint === "/companies/"
-        ? {
-            name: companyBody?.companyName,
-            taskDescription: taskBody?.taskName,
-          }
-        : { newDescription: taskBody?.taskName };
-
-    try {
-      setFetchingStatus((prev) => ({
-        ...prev,
-        status: true,
-        loading: true,
-        message: null,
-      }));
-      const headers = { Authorization: getAccessToken() };
-      if (method === "post" || method === "put" || method === "patch") {
-        await Api[method](
-          `${endPoint}${companyId ?? ""}${taskId ?? ""}`,
-          body,
-          { headers }
-        );
-      } else {
-        await Api[method](`${endPoint}${companyId ?? ""}${taskId ?? ""}`, {
-          headers,
-        });
-      }
-
-      setFetchingStatus((prev) => ({
-        ...prev,
-        status: false,
-        loading: false,
-        message: "הבקשה בוצעה בהצלחה",
-      }));
-
-      setTimeout(() => {
-        setFetchingStatus((prev) => ({
-          ...prev,
-          status: false,
-          loading: false,
-          message: null,
-        }));
-      }, 1000);
-      setPageUpdate((prev) => !prev);
-    } catch (e) {
-      console.error(e); // Log the error for debugging
-
-      // Update fetching status on failure
-      setFetchingStatus((prev) => ({
-        ...prev,
-        status: false,
-        loading: false,
-        message: ".. תקלה ביבוא הנתונים", // Error message in Hebrew
-      }));
-
-      // Clear the error message after a short delay
-      setTimeout(() => {
-        setFetchingStatus((prev) => ({
-          ...prev,
-          status: false,
-          loading: false,
-          message: null,
-        }));
-      }, 1000);
-    }
-  };
-
   return (
     <div className="inventory-container">
-      {(getTotals() > 0 || collReq === "/salesToCompanies") && (
+      {(getTotals() > 0 ||
+        collReq === "/salesToCompanies" ||
+        collReq === "/institutionTax") && (
         <div
           style={{
             width: "60%",
@@ -467,14 +252,15 @@ export default function SetupPage({
             borderBottom: "2px solid orange",
           }}
         >
-          {collReq === "/salesToCompanies" && !report?.type && (
-            <img
-              src="/setupIcon.png"
-              onClick={() => openModal()}
-              alt=""
-              style={{ width: "4%", margin: "0 2%", cursor: "pointer" }}
-            />
-          )}
+          {(collReq === "/salesToCompanies" || collReq === "/institutionTax") &&
+            !report?.type && (
+              <img
+                src="/setupIcon.png"
+                onClick={() => openModal()}
+                alt=""
+                style={{ width: "4%", margin: "0 2%", cursor: "pointer" }}
+              />
+            )}
           <label
             htmlFor=""
             style={{
@@ -500,183 +286,12 @@ export default function SetupPage({
           </label>
         </div>
       )}
-      <Modal
-        isOpen={modalIsOpen}
-        onAfterOpen={afterOpenModal}
-        onRequestClose={closeModal}
-        style={customStyles}
-        contentLabel="הגדרות חברות ועבודות"
-      >
-        <h2
-          style={{ borderBottom: "1px solid rgb(60, 85, 60)" }}
-          ref={(_subtitle) => (subtitle = _subtitle)}
-        >
-          הגדרות חברות ועבודות
-        </h2>
-        <form onSubmit={applyCompaniesAndTaskRequest}>
-          <Select
-            options={[
-              { value: "01", label: "חברה" },
-              { value: "02", label: "עבודה" },
-            ]}
-            className="setup-select select-product-in-add "
-            placeholder={"בחר קטגוריה"}
-            required
-            onChange={(e) => {
-              setSetupSelection((prev) => {
-                return {
-                  ...prev,
-                  category: e || "",
-                };
-              });
-              setEndPoint(
-                e?.value === "01" ? "/companies/" : "/companies/task/"
-              );
-            }}
-            value={setupSelection.category || null}
-            styles={customStyles}
-            isClearable
-          ></Select>
-          <Select
-            options={[
-              { value: "01", label: "הוספה" },
-              { value: "02", label: "מחיקה" },
-              { value: "03", label: "עדכון" },
-            ]}
-            className="setup-select select-product-in-add "
-            placeholder={"בחר פעולה"}
-            required
-            styles={customStyles}
-            onChange={(e) => {
-              setSetupSelection((prev) => {
-                return {
-                  ...prev,
-                  function: e,
-                };
-              });
-              setMethod(
-                e?.value === "01"
-                  ? "post"
-                  : e?.value === "02"
-                  ? "delete"
-                  : "put"
-              );
-            }}
-            value={setupSelection.function || null}
-            isClearable
-          ></Select>
-          {!(
-            setupSelection?.function?.label === "הוספה" &&
-            setupSelection?.category?.label === "חברה"
-          ) && (
-            <Select
-              options={getCompanyList()}
-              className="setup-select select-product-in-add "
-              placeholder={"בחר חברה"}
-              styles={customStyles}
-              menuPlacement="auto"
-              required
-              defaultValue={setupSelection?.companyName}
-              onChange={(e) => {
-                setSetupSelection((prev) => {
-                  return {
-                    ...prev,
-                    companyName: e,
-                  };
-                });
-                setCompanyId(
-                  endPoint === "/companies/" ||
-                    (endPoint === "/companies/task/" && method === "post")
-                    ? e?.value
-                    : ""
-                );
-              }}
-              value={setupSelection.companyName || null}
-              isClearable
-            ></Select>
-          )}
-          {setupSelection?.function?.label !== "הוספה" &&
-            !(
-              setupSelection?.function?.label === "מחיקה" &&
-              setupSelection?.category?.label === "חברה"
-            ) &&
-            !(
-              setupSelection?.function?.label === "עדכון" &&
-              setupSelection?.category?.label === "חברה"
-            ) && (
-              <Select
-                options={getTasksFromCompanyList()}
-                className="setup-select select-product-in-add"
-                placeholder={"בחר עבודה"}
-                styles={customStyles}
-                menuPlacement="auto"
-                required
-                onChange={(e) => {
-                  setSetupSelection((prev) => ({
-                    ...prev,
-                    task: e,
-                  }));
-                  setTaskId(e?.value);
-                  // setCompanyId(method === "post" ? "" : e?.value);
-                }}
-                value={setupSelection.task || null}
-                isClearable
-              />
-            )}
-
-          {setupSelection.category?.label === "חברה" &&
-            (setupSelection.function?.label === "הוספה" ||
-              setupSelection.function?.label === "עדכון") && (
-              <input
-                className="setupCompanies-input"
-                type="text"
-                required
-                placeholder="חברה"
-                value={companyBody?.companyName}
-                onChange={(e) => {
-                  setCompanyBody((prev) => {
-                    return { ...prev, companyName: e.target.value };
-                  });
-                }}
-              />
-            )}
-          <br></br>
-          {(setupSelection.function?.label === "הוספה" ||
-            (setupSelection.function?.label === "עדכון" &&
-              setupSelection?.category?.label !== "חברה")) && (
-            <input
-              className="setupCompanies-input"
-              type="text"
-              required
-              placeholder="עבודה"
-              value={taskBody?.taskName}
-              onChange={(e) =>
-                setTaskBody((prev) => {
-                  return { ...prev, taskName: e.target.value };
-                })
-              }
-            />
-          )}
-          {fetchingStatus.message && (
-            <h5
-              className="message"
-              style={{ borderRadius: 0, backgroundColor: "white" }}
-            >
-              {fetchingStatus.message}
-            </h5>
-          )}
-          <div className="buttons-in-modal">
-            <button
-              type="button"
-              onClick={() => closeModal()}
-              style={{ backgroundColor: "rgb(180, 58, 58)" }}
-            >
-              ביטול
-            </button>
-            <button type="submit">אישור</button>
-          </div>
-        </form>
-      </Modal>
+      <SetupModal
+        modalIsOpen={modalIsOpen}
+        companies={companies}
+        setPageUpdate={setPageUpdate}
+        setIsOpen={setIsOpen}
+      ></SetupModal>
       <form
         className="Item_form"
         style={{
@@ -730,8 +345,9 @@ export default function SetupPage({
                 width:
                   report?.type || collReq === "/sleevesBids"
                     ? "23%"
-                    : collReq === "/salesToCompanies"
-                    ? "18%"
+                    : collReq === "/salesToCompanies" ||
+                      collReq === "/institutionTax"
+                    ? "14%"
                     : "13%",
               }}
               onClick={(e) => {
@@ -792,7 +408,9 @@ export default function SetupPage({
               ? "שם"
               : collReq === "/contacts"
               ? "שם חברה"
-              : collReq === "/salesToCompanies" || collReq === "/sales"
+              : collReq === "/salesToCompanies" ||
+                collReq === "/sales" ||
+                collReq === "/institutionTax"
               ? "עבודה"
               : "מוצר"}
           </button>
@@ -957,7 +575,7 @@ export default function SetupPage({
           <button
             id="paymentDate"
             className="input_show_item head"
-            style={{ width: report?.type ? "15%" : "13%" }}
+            style={{ width: report?.type ? "15%" : "12%" }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "paymentDate");
@@ -1026,7 +644,7 @@ export default function SetupPage({
       </form>
 
       {(!fetchingStatus.loading || fetchedData.length > 0) &&
-        filterByReport(sortedInventory(kindOfSort)).map((item) => {
+        filterByReport(sortedInventory(fetchedData, kindOfSort)).map((item) => {
           return (
             <ItemsTable
               key={`item${item._id}`}

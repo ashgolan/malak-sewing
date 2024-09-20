@@ -146,6 +146,11 @@ export default function ItemsTable({
       return { value: item._id, label: item.name };
     });
   };
+  const getInstitutionsList = () => {
+    return companies
+      ?.filter((item) => item.isInstitution)
+      .map((item) => ({ value: item._id, label: item.name }));
+  };
   const getTasksFromCompanyList = () => {
     const companyNameObj = companies?.find(
       (company) => company.name === itemsValues?.clientName
@@ -202,10 +207,14 @@ export default function ItemsTable({
             }}
           ></input>
         )}
-        {report?.type !== "/salesToCompanies" &&
-          collReq === "/salesToCompanies" && (
+        {(collReq === "/institutionTax" || collReq === "/salesToCompanies") &&
+          report?.type !== "/salesToCompanies" && (
             <Select
-              options={getCompanyList()}
+              options={
+                collReq === "/institutionTax"
+                  ? getInstitutionsList()
+                  : getCompanyList()
+              }
               className="input_show_item select-product-head "
               placeholder={
                 itemsValues?.clientName ? itemsValues.clientName : "בחר חברה"
@@ -232,7 +241,6 @@ export default function ItemsTable({
 
         {(collReq === "/sales" ||
           collReq === "/workersExpenses" ||
-          collReq === "/institutionTax" ||
           collReq === "/sleevesBids") && (
           <input
             id="clientName"
@@ -291,6 +299,8 @@ export default function ItemsTable({
             options={
               collReq === "/salesToCompanies"
                 ? getTasksFromCompanyList()
+                : collReq === "/institutionTax"
+                ? getInstitutionsList()
                 : allSelectData
             }
             className="input_show_item select-product-head "
@@ -557,7 +567,7 @@ export default function ItemsTable({
             id="paymentDate"
             type="date"
             className="input_show_item"
-            style={{ width: report?.type ? "15%" : "13%" }}
+            style={{ width: report?.type ? "15%" : "12%" }}
             disabled={changeStatus.disabled}
             value={itemsValues.paymentDate}
             onChange={(e) => {

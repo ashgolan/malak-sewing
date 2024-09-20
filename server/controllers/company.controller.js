@@ -3,11 +3,15 @@ import { Task } from "../models/taskOfCompany.model.js";
 
 export const createCompanyWithTask = async (req, res) => {
   try {
-    const { name, taskDescription } = req.body;
+    const { name, isInstitution, taskDescription } = req.body;
 
     const task = await Task.create({ description: taskDescription });
 
-    const company = await CompanyWithTask.create({ name, tasks: [task] });
+    const company = await CompanyWithTask.create({
+      name,
+      isInstitution,
+      tasks: [task],
+    });
 
     res.status(201).json({ message: "Company created successfully", company });
   } catch (error) {
@@ -119,12 +123,12 @@ export const getCompany = async (req, res) => {
 export const updateCompany = async (req, res) => {
   try {
     const companyId = req.params.id; // Get company ID from URL
-    const { name } = req.body; // Get the new company name from request body
+    const { name, isInstitution } = req.body; // Get the new company name from request body
 
     // Find the company by ID and update its name
     const updatedCompany = await CompanyWithTask.findByIdAndUpdate(
       { _id: companyId },
-      { name }, // Update the company name
+      { name, isInstitution }, // Update the company name
       { new: true } // Return the updated document
     );
 

@@ -41,6 +41,7 @@ export default function AddItem({
     taxNumber: "",
     sale: 0,
     colored: false,
+    withholdingTax: 0,
     paymentDate: year + "-" + month + "-" + day,
     date: year + "-" + month + "-" + day,
     totalAmount: 0,
@@ -134,6 +135,25 @@ export default function AddItem({
             tax: itemsValues.tax,
             colored: itemsValues.colored,
             quantity: itemsValues.quantity,
+            totalAmount: itemsValues.totalAmount,
+          },
+          {
+            headers: headers,
+          }
+        );
+        break;
+      case "/institutionTax":
+        await Api.post(
+          collReq,
+          {
+            date: itemsValues.date,
+            clientName: itemsValues.clientName,
+            name: itemsValues.name,
+            number: itemsValues.number,
+            paymentDate: itemsValues.paymentDate,
+            taxNumber: itemsValues.taxNumber,
+            withholdingTax: itemsValues.withholdingTax,
+            colored: itemsValues.colored,
             totalAmount: itemsValues.totalAmount,
           },
           {
@@ -279,6 +299,11 @@ export default function AddItem({
       return { value: item._id, label: item.name };
     });
   };
+  const getInstitutionsList = () => {
+    return companies
+      ?.filter((item) => item.isInstitution)
+      .map((item) => ({ value: item._id, label: item.name }));
+  };
   const getTasksFromCompanyList = () => {
     const companyNameObj = companies?.find(
       (company) => company.name === itemsValues?.clientName
@@ -297,6 +322,7 @@ export default function AddItem({
     >
       <div className="add-row">
         {(collReq === "/sleevesBids" ||
+          collReq === "/institutionTax" ||
           collReq === "/expenses" ||
           collReq === "/salesToCompanies" ||
           collReq === "/workersExpenses" ||
@@ -305,7 +331,14 @@ export default function AddItem({
             name="date"
             type="date"
             id="date"
-            style={{ width: collReq === "/sales" ? "11%" : "25%" }}
+            style={{
+              width:
+                collReq === "/sales"
+                  ? "11%"
+                  : collReq === "/institutionTax"
+                  ? "17%"
+                  : "25%",
+            }}
             required
             className="add_item"
             placeholder="בחר תאריך"
@@ -334,9 +367,13 @@ export default function AddItem({
             value={itemsValues.location}
           ></input>
         )}
-        {collReq === "/salesToCompanies" && (
+        {(collReq === "/salesToCompanies" || collReq === "/institutionTax") && (
           <Select
-            options={getCompanyList()}
+            options={
+              collReq === "/institutionTax"
+                ? getInstitutionsList()
+                : getCompanyList()
+            }
             className="add_item select-product-in-add "
             placeholder={
               itemsValues?.clientName ? itemsValues.clientName : "בחר חברה"
@@ -470,12 +507,14 @@ export default function AddItem({
               required
               autoFocus={true}
               className="add_item"
-              style={{ width: "35%" }}
+              style={{ width: collReq === "/institutionTax" ? "25%" : "35%" }}
               placeholder={
                 collReq === "/providers" || collReq === "/expenses"
                   ? "שם"
                   : collReq === "/contacts"
                   ? "שם חברה"
+                  : collReq === "/institutionTax"
+                  ? "עבודה"
                   : "מוצר"
               }
               onChange={(e) =>
@@ -490,7 +529,12 @@ export default function AddItem({
           name="number"
           id="number"
           style={{
-            width: collReq === "/sales" ? "6%" : "15%",
+            width:
+              collReq === "/sales"
+                ? "6%"
+                : collReq === "/institutionTax"
+                ? "10%"
+                : "15%",
           }}
           required
           className="add_item"
@@ -654,7 +698,7 @@ export default function AddItem({
             value={itemsValues.quantity}
           ></input>
         )}
-        {collReq === "/expenses" && (
+        {(collReq === "/expenses" || collReq === "/institutionTax") && (
           <input
             name="taxNumber"
             id="taxNumber"
@@ -697,14 +741,18 @@ export default function AddItem({
             required
           />
         )}
-        {collReq === "/expenses" && (
+        {(collReq === "/expenses" || collReq === "/institutionTax") && (
           <input
             name="paymentDate"
             type="date"
             id="paymentDate"
             style={{
               width:
-                collReq === "/sales" || collReq === "/expenses" ? "11%" : "25%",
+                collReq === "/sales" || collReq === "/expenses"
+                  ? "11%"
+                  : collReq === "/institutionTax"
+                  ? "15%"
+                  : "25%",
             }}
             required
             className="add_item"
@@ -716,7 +764,24 @@ export default function AddItem({
               })
             }
           ></input>
-        )}{" "}
+        )}
+        {collReq === "/institutionTax" && (
+          <input
+            id="withholdingTax"
+            className="add_item"
+            style={{ width: "6%" }}
+            value={itemsValues.withholdingTax}
+            onChange={(e) => {
+              setItemsValues((prev) => {
+                return {
+                  ...prev,
+                  withholdingTax: e.target.value,
+                  totalAmount: +prev.number - +e.target.value * +prev.number,
+                };
+              });
+            }}
+          />
+        )}
       </div>
       <div
         style={{

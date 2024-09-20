@@ -3,6 +3,7 @@ import { Task } from "./taskOfCompany.model.js";
 
 const companyWithTask = new Schema({
   name: { type: String, required: true },
+  isInstitution: { type: Boolean, default: false },
   tasks: [{ type: Schema.Types.ObjectId, ref: "Task" }],
 });
 
