@@ -14,6 +14,7 @@ export default function AddItem({
   selectData,
   companies,
   taxValues,
+  pageUpdate,
 }) {
   const date = new Date();
   const year = date.getFullYear();
@@ -57,8 +58,8 @@ export default function AddItem({
           collReq,
           {
             date: itemsValues.date,
-            clientName: itemsValues.clientName,
-            name: itemsValues.name,
+            clientName: itemsValues.clientName.trim(),
+            name: itemsValues.name.trim(),
             number: itemsValues.number,
             totalAmount: itemsValues.totalAmount,
           },
@@ -72,7 +73,7 @@ export default function AddItem({
           collReq,
           {
             date: itemsValues.date,
-            clientName: itemsValues.clientName,
+            clientName: itemsValues.clientName.trim(),
             number: itemsValues.number,
             quantity: itemsValues.quantity,
             tax: itemsValues.tax,
@@ -89,7 +90,7 @@ export default function AddItem({
           {
             date: itemsValues.date,
             location: itemsValues.location,
-            clientName: itemsValues.clientName,
+            clientName: itemsValues.clientName.trim(),
             equipment: itemsValues.equipment,
             number: itemsValues.number,
             colored: itemsValues.colored,
@@ -105,7 +106,7 @@ export default function AddItem({
         await Api.post(
           collReq,
           {
-            name: itemsValues.name,
+            name: itemsValues.name.trim(),
             number: itemsValues.number,
             discount: itemsValues.discount,
             date: itemsValues.date,
@@ -125,9 +126,9 @@ export default function AddItem({
           collReq,
           {
             date: itemsValues.date,
-            clientName: itemsValues.clientName,
+            clientName: itemsValues.clientName.trim(),
             remark: itemsValues.remark,
-            name: itemsValues.name,
+            name: itemsValues.name.trim(),
             number: itemsValues.number,
             discount: itemsValues.discount,
             sale: itemsValues.sale,
@@ -147,8 +148,8 @@ export default function AddItem({
           collReq,
           {
             date: itemsValues.date,
-            clientName: itemsValues.clientName,
-            name: itemsValues.name,
+            clientName: itemsValues.clientName.trim(),
+            name: itemsValues.name.trim(),
             number: itemsValues.number,
             paymentDate: itemsValues.paymentDate,
             taxNumber: itemsValues.taxNumber,
@@ -164,7 +165,7 @@ export default function AddItem({
         await Api.post(
           collReq,
           {
-            name: itemsValues.name,
+            name: itemsValues.name.trim(),
             number: itemsValues.number,
             mail: itemsValues.mail,
             bankProps: itemsValues.bankProps,
@@ -177,7 +178,7 @@ export default function AddItem({
       default:
         await Api.post(
           collReq,
-          { name: itemsValues.name, number: itemsValues.number },
+          { name: itemsValues.name.trim(), number: itemsValues.number },
           {
             headers: headers,
           }

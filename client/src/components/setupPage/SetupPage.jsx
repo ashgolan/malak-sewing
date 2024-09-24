@@ -299,6 +299,7 @@ export default function SetupPage({
       <form
         className="Item_form"
         style={{
+          display: taxValues?.masValue ? "flex" : "none",
           width:
             collReq === "/inventories" || collReq === "/providers"
               ? "60%"
@@ -679,6 +680,7 @@ export default function SetupPage({
           companies={companies}
           taxValues={taxValues}
           selectData={collReq === "/expenses" ? providers : inventories}
+          pageUpdate={pageUpdate}
         ></AddItem>
       )}
     </div>
