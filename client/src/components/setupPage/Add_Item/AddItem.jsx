@@ -778,14 +778,6 @@ export default function AddItem({
               +itemsValues?.number *
               (+taxValues?.masValue / 100)
             ).toFixed(1)}
-            // onChange={(e) => {
-            //   setItemsValues((prev) => {
-            //     return {
-            //       ...prev,
-            //       totalAmount: +prev.number - +e.target.value * +prev.number,
-            //     };
-            //   });
-            // }}
           />
         )}
       </div>

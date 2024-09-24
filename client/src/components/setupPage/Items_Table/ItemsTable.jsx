@@ -584,15 +584,6 @@ export default function ItemsTable({
             style={{ width: report?.type ? "15%" : "8%" }}
             disabled
             value={+itemsValues?.number * (+taxValues?.masValue / 100)}
-            // onChange={(e) => {
-            //   setItemsValues((prev) => {
-            //     return {
-            //       ...prev,
-            //       withholdingTax:+prev.number * e.target.value,
-            //       totalAmount: +prev.number - +e.target.value * +prev.number,
-            //     };
-            //   });
-            // }}
           />
         )}
         {(collReq === "/sleevesBids" ||

@@ -155,10 +155,7 @@ export default function Navbar({ taxValues, setTaxValues }) {
         <NavLink to={"/sales"} style={{ backgroundColor: "lightsalmon" }}>
           <button name="sales">מכירות</button>
         </NavLink>
-        <NavLink
-          to={"/salesToCompanies"}
-          style={{ backgroundColor: "lightsalmon" }}
-        >
+        <NavLink to={"/salesToCompanies"} style={{ backgroundColor: "orchid" }}>
           <button name="sales">מכירות לחברות</button>
         </NavLink>
         <NavLink
@@ -170,9 +167,9 @@ export default function Navbar({ taxValues, setTaxValues }) {
         <NavLink to={"/orders"} style={{ backgroundColor: "#9DBC98" }}>
           <button name="orders">הזמנוות</button>
         </NavLink>
-        <NavLink to={"/"} style={{ backgroundColor: "#ff00dd" }}>
+        <NavLink to={"/"} style={{ backgroundColor: "gold" }}>
           <button name="taxValues" onClick={() => openModal()}>
-            ערכי חישוב
+            💰 ערכי חישוב
           </button>
         </NavLink>
         <TaxValuesModal
