@@ -15,6 +15,7 @@ export default function ItemsTable({
   selectData,
   report,
   companies,
+  taxValues,
 }) {
   const [changeStatus, setChangeStatus] = useState({
     editText: "עריכה",
@@ -39,10 +40,10 @@ export default function ItemsTable({
     date: "",
     tax: false,
     taxNumber: "",
-    withholdingTax: 0,
     paymentDate: "",
     totalAmount: 0,
   });
+
   useEffect(() => {
     const getData = async () => {
       const thisItem = myData?.find((t) => t._id === item._id);
@@ -63,7 +64,6 @@ export default function ItemsTable({
           colored: thisItem.colored ? thisItem.colored : false,
           date: thisItem.date ? thisItem.date : "",
           tax: thisItem.tax ? thisItem.tax : false,
-          withholdingTax: thisItem.withholdingTax ? thisItem.withholdingTax : 0,
           taxNumber: thisItem.taxNumber ? thisItem.taxNumber : "",
           paymentDate: thisItem.paymentDate ? thisItem.paymentDate : "",
           totalAmount: thisItem.totalAmount ? thisItem.totalAmount : "",
@@ -405,18 +405,18 @@ export default function ItemsTable({
                 number: e.target.value,
                 sale:
                   +e.target.value - (+prev.discount * +e.target.value) / 100,
-                totalAmount: !(
-                  collReq === "/sales" || collReq === "/institutionTax"
-                )
-                  ? +prev.quantity
-                    ? +e.target.value * +prev.quantity
-                    : +e.target.value
-                  : collReq === "/institutionTax"
-                  ? +e.target.value - +e.target.value * +prev.withholdingTax
-                  : (+e.target.value -
-                      (+e.target.value * +prev.discount) / 100) *
-                      +prev.quantity -
-                    +prev.expenses,
+                totalAmount:
+                  collReq === "/institutionTax"
+                    ? +e.target.value -
+                      +e.target.value * (+taxValues?.masValue / 100)
+                    : !(collReq === "/sales")
+                    ? +prev.quantity
+                      ? +e.target.value * +prev.quantity
+                      : +e.target.value
+                    : (+e.target.value -
+                        (+e.target.value * +prev.discount) / 100) *
+                        +prev.quantity -
+                      +prev.expenses,
               };
             });
           }}
@@ -530,7 +530,7 @@ export default function ItemsTable({
           <input
             id="taxNumber"
             className="input_show_item"
-            style={{ width: "9%" }}
+            style={{ width: "7%" }}
             disabled={changeStatus.disabled}
             value={itemsValues.taxNumber}
             onChange={(e) => {
@@ -581,18 +581,18 @@ export default function ItemsTable({
           <input
             id="withholdingTax"
             className="input_show_item"
-            style={{ width: report?.type ? "15%" : "6%" }}
-            disabled={changeStatus.disabled}
-            value={itemsValues.withholdingTax}
-            onChange={(e) => {
-              setItemsValues((prev) => {
-                return {
-                  ...prev,
-                  withholdingTax: e.target.value,
-                  totalAmount: +prev.number - +e.target.value * +prev.number,
-                };
-              });
-            }}
+            style={{ width: report?.type ? "15%" : "8%" }}
+            disabled
+            value={+itemsValues?.number * (+taxValues?.masValue / 100)}
+            // onChange={(e) => {
+            //   setItemsValues((prev) => {
+            //     return {
+            //       ...prev,
+            //       withholdingTax:+prev.number * e.target.value,
+            //       totalAmount: +prev.number - +e.target.value * +prev.number,
+            //     };
+            //   });
+            // }}
           />
         )}
         {(collReq === "/sleevesBids" ||

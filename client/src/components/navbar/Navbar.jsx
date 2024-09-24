@@ -1,13 +1,19 @@
 import React from "react";
 import "./navbar.css";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   clearTokens,
   getAccessToken,
   getUserId,
 } from "../../utils/tokensStorage";
 import { Api } from "../../utils/Api";
-export default function Navbar() {
+import TaxValuesModal from "./TaxValuesModal";
+export default function Navbar({ taxValues, setTaxValues }) {
+  function openModal() {
+    setIsOpen(true);
+  }
+  const [modalIsOpen, setIsOpen] = React.useState(false);
+
   const navigate = useNavigate();
   const logout = async (e) => {
     e.preventDefault();
@@ -164,6 +170,18 @@ export default function Navbar() {
         <NavLink to={"/orders"} style={{ backgroundColor: "#9DBC98" }}>
           <button name="orders">הזמנוות</button>
         </NavLink>
+        <NavLink to={"/"} style={{ backgroundColor: "#ff00dd" }}>
+          <button name="taxValues" onClick={() => openModal()}>
+            ערכי חישוב
+          </button>
+        </NavLink>
+        <TaxValuesModal
+          taxValues={taxValues}
+          setTaxValues={setTaxValues}
+          modalIsOpen={modalIsOpen}
+          // setPageUpdate={setPageUpdate}
+          setIsOpen={setIsOpen}
+        ></TaxValuesModal>
       </div>
     </nav>
   );

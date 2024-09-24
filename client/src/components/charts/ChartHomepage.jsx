@@ -9,7 +9,7 @@ import { clearTokens, getAccessToken } from "../../utils/tokensStorage";
 import { refreshMyToken } from "../../utils/setNewAccessToken";
 import { useNavigate } from "react-router-dom";
 
-function ChartHomepage() {
+function ChartHomepage({ taxValues }) {
   const [report, setReport] = useState({
     typeName: "",
     clientName: "",
@@ -362,6 +362,7 @@ function ChartHomepage() {
                 fetchingData={fetchingData}
                 isFetching={true}
                 report={report}
+                taxValues={taxValues}
               ></SetupPage>
             )}
           {report.type &&

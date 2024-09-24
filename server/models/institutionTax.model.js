@@ -13,7 +13,6 @@ const institutionTaxSchema = new Schema({
   number: { type: Number, default: "0" },
   paymentDate: { type: String, default: year + "-" + month + "-" + day },
   colored: { type: Boolean, default: false },
-  withholdingTax: { type: Number, default: 0 },
   totalAmount: { type: Number },
 });
 

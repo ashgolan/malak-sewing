@@ -19,6 +19,7 @@ export default function SetupPage({
   updatedReport,
   isFetching,
   fetchingData,
+  taxValues,
 }) {
   const date = new Date();
   const year = date.getFullYear();
@@ -275,10 +276,13 @@ export default function SetupPage({
             {report?.type === "/salesToCompanies" && `  ש"ח כולל מע"מ [ `}
             {report?.type === "/salesToCompanies" && (
               <span style={{ fontSize: "0.8rem", color: "darkblue" }}>
-                {(getTotals() / (1 + 17 / 100)).toFixed(2)}
+                {(getTotals() / (1 + taxValues?.maamValue / 100)).toFixed(2)}
                 {`  ש"ח  `}
-                {` + מע"מ 17% ( `}
-                {(getTotals() - getTotals() / (1 + 17 / 100)).toFixed(2)}{" "}
+                {` + ${taxValues?.maamValue}% מע"מ  ( `}
+                {(
+                  getTotals() -
+                  getTotals() / (1 + taxValues?.maamValue / 100)
+                ).toFixed(2)}{" "}
                 {`  ש"ח )  `}
               </span>
             )}
@@ -542,7 +546,7 @@ export default function SetupPage({
           <button
             id="taxNumber"
             className="input_show_item head"
-            style={{ width: "9%", textAlign: "center" }}
+            style={{ width: "7%", textAlign: "center" }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "taxNumber");
@@ -589,14 +593,14 @@ export default function SetupPage({
             id="withholdingTax"
             className="input_show_item head"
             style={{
-              width: "6%",
+              width: "8%",
             }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "withholdingTax");
             }}
           >
-            נ.במקור{" "}
+            נ.במקור{` %${taxValues?.masValue}`}
           </button>
         )}
         {(collReq === "/sleevesBids" ||
@@ -647,6 +651,7 @@ export default function SetupPage({
         filterByReport(sortedInventory(fetchedData, kindOfSort)).map((item) => {
           return (
             <ItemsTable
+              taxValues={taxValues}
               key={`item${item._id}`}
               item={item}
               itemInChange={itemInChange}
@@ -672,6 +677,7 @@ export default function SetupPage({
           setItemIsUpdated={setItemIsUpdated}
           collReq={collReq}
           companies={companies}
+          taxValues={taxValues}
           selectData={collReq === "/expenses" ? providers : inventories}
         ></AddItem>
       )}

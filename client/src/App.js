@@ -1,9 +1,8 @@
-import logo from "./logo.svg";
 import "./App.css";
 import Navbar from "./components/navbar/Navbar";
 import { FetchingStatus } from "./utils/context";
 import { Route, Routes, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Login from "./components/login/Login";
 import HomePage from "./components/homepage/HomePage";
 import IdleTimer from "./utils/IdleTimer";
@@ -22,10 +21,12 @@ import FreeBidPage from "./components/Bid_components/FreeBidPage";
 import Calender from "./components/calender/Calender";
 import SalesToCompanies from "./components/SalesToCompanies/SalesToCompanies";
 import InstitutionTaxes from "./components/institutionTaxes/InstitutionTaxes";
+import { Api } from "./utils/Api";
 
 function App() {
   const navigate = useNavigate();
   const [loggedIn, setLoggedIn] = useState(false);
+  const [taxValues, setTaxValues] = useState({});
   const [fetchingStatus, setFetchingStatus] = useState({
     loading: false,
     error: false,
@@ -38,11 +39,27 @@ function App() {
     setLoggedIn(false);
     navigate("/homepage");
   };
+  useEffect(() => {
+    const getTaxValues = async () => {
+      const headers = { Authorization: `Bearer ${getAccessToken()}` };
+      try {
+        const { data: taxValuesData } = await Api.get("/taxValues", {
+          headers,
+        });
+        console.log(taxValuesData);
+
+        setTaxValues(taxValuesData[0]);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    getTaxValues();
+  }, []);
 
   return (
     <div>
       <IdleTimer timeout={20 * 60 * 1000} onIdle={handleIdle} />
-      <Navbar></Navbar>
+      <Navbar taxValues={taxValues} setTaxValues={setTaxValues}></Navbar>
       {fetchingStatus.message && (
         <h5 className="message">{fetchingStatus.message}</h5>
       )}
@@ -82,7 +99,9 @@ function App() {
           ></Route>
           <Route
             path="/institutionTax"
-            element={<InstitutionTaxes></InstitutionTaxes>}
+            element={
+              <InstitutionTaxes taxValues={taxValues}></InstitutionTaxes>
+            }
           ></Route>
           <Route path="/bids" element={<BidPage></BidPage>}></Route>
 
@@ -93,7 +112,7 @@ function App() {
           <Route path="/orders" element={<OrderPage></OrderPage>}></Route>
           <Route
             path="/chartHomepage"
-            element={<ChartHomepage></ChartHomepage>}
+            element={<ChartHomepage taxValues={taxValues}></ChartHomepage>}
           ></Route>
           <Route path="/homePage" element={<HomePage></HomePage>}></Route>
           <Route path="/calender" element={<Calender></Calender>}></Route>

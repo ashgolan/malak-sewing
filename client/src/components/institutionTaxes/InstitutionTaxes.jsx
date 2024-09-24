@@ -1,10 +1,10 @@
 import React from "react";
 import SetupPage from "../setupPage/SetupPage";
 
-function InstitutionTaxes() {
+function InstitutionTaxes({ taxValues }) {
   return (
     <>
-      <SetupPage collReq={"/institutionTax"}></SetupPage>
+      <SetupPage taxValues={taxValues} collReq={"/institutionTax"}></SetupPage>
     </>
   );
 }

@@ -16,6 +16,7 @@ import { eventsRouter } from "./routers/events.router.js";
 import { saleToCompanyRouter } from "./routers/saleToCompany.router.js";
 import { companyRouter } from "./routers/company.router.js";
 import { InstitutionRouter } from "./routers/institutionTax.router.js";
+import { taxValuesRouter } from "./routers/taxValues.router.js";
 
 const app = Express();
 const __dirname = url.fileURLToPath(new URL("./", import.meta.url));
@@ -40,6 +41,7 @@ app.use("/workersExpenses", workersExpensesRouter);
 app.use("/events", eventsRouter);
 app.use("/companies", companyRouter);
 app.use("/institutionTax", InstitutionRouter);
+app.use("/taxValues", taxValuesRouter);
 app.listen(PORT, () => {
   console.log("connecting to port", PORT);
 });

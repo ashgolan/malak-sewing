@@ -120,6 +120,19 @@ nav a.active {
   border-radius: 0;
   border-bottom: 2px solid gold;
 }
+
+.taxValues-inputs {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+}
+.taxValues-inputs > input {
+  direction: rtl;
+}
+.taxValues-inputs > label {
+  width: 200px;
+}
+
 @media screen and (max-width: 1000px) {
   .img-bottomNav-left {
     width: 90%;

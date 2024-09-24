@@ -13,6 +13,7 @@ export default function AddItem({
   collReq,
   selectData,
   companies,
+  taxValues,
 }) {
   const date = new Date();
   const year = date.getFullYear();
@@ -41,7 +42,6 @@ export default function AddItem({
     taxNumber: "",
     sale: 0,
     colored: false,
-    withholdingTax: 0,
     paymentDate: year + "-" + month + "-" + day,
     date: year + "-" + month + "-" + day,
     totalAmount: 0,
@@ -152,7 +152,6 @@ export default function AddItem({
             number: itemsValues.number,
             paymentDate: itemsValues.paymentDate,
             taxNumber: itemsValues.taxNumber,
-            withholdingTax: itemsValues.withholdingTax,
             colored: itemsValues.colored,
             totalAmount: itemsValues.totalAmount,
           },
@@ -555,14 +554,18 @@ export default function AddItem({
                 number: e.target.value,
                 sale:
                   +e.target.value - (+prev.discount * +e.target.value) / 100,
-                totalAmount: !(collReq === "/sales")
-                  ? +prev.quantity
-                    ? +e.target.value * +prev.quantity
-                    : +e.target.value
-                  : (+e.target.value -
-                      (+e.target.value * +prev.discount) / 100) *
-                      +prev.quantity -
-                    +prev.expenses,
+                totalAmount:
+                  collReq === "/institutionTax"
+                    ? +e.target.value -
+                      +e.target.value * (+taxValues?.masValue / 100)
+                    : !(collReq === "/sales")
+                    ? +prev.quantity
+                      ? +e.target.value * +prev.quantity
+                      : +e.target.value
+                    : (+e.target.value -
+                        (+e.target.value * +prev.discount) / 100) *
+                        +prev.quantity -
+                      +prev.expenses,
               };
             })
           }
@@ -770,16 +773,19 @@ export default function AddItem({
             id="withholdingTax"
             className="add_item"
             style={{ width: "6%" }}
-            value={itemsValues.withholdingTax}
-            onChange={(e) => {
-              setItemsValues((prev) => {
-                return {
-                  ...prev,
-                  withholdingTax: e.target.value,
-                  totalAmount: +prev.number - +e.target.value * +prev.number,
-                };
-              });
-            }}
+            disabled
+            value={(
+              +itemsValues?.number *
+              (+taxValues?.masValue / 100)
+            ).toFixed(1)}
+            // onChange={(e) => {
+            //   setItemsValues((prev) => {
+            //     return {
+            //       ...prev,
+            //       totalAmount: +prev.number - +e.target.value * +prev.number,
+            //     };
+            //   });
+            // }}
           />
         )}
       </div>
