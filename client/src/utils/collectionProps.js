@@ -29,7 +29,6 @@ export const getCollectionProps = (collReq) => {
       return [
         "date",
         "clientName",
-        "remark",
         "number",
         "tax",
         "name",

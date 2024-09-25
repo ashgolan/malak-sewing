@@ -778,7 +778,7 @@ export default function AddItem({
             value={(
               +itemsValues?.number *
               (+taxValues?.masValue / 100)
-            ).toFixed(1)}
+            ).toFixed(2)}
           />
         )}
       </div>

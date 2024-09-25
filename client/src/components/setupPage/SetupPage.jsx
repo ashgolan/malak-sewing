@@ -299,7 +299,6 @@ export default function SetupPage({
       <form
         className="Item_form"
         style={{
-          display: taxValues?.masValue ? "flex" : "none",
           width:
             collReq === "/inventories" || collReq === "/providers"
               ? "60%"
@@ -394,7 +393,7 @@ export default function SetupPage({
                   ? "15%"
                   : report?.type
                   ? "45%"
-                  : "18%",
+                  : "14%",
               minWidth:
                 collReq === "/inventories" || collReq === "/providers"
                   ? "62%"
@@ -402,7 +401,7 @@ export default function SetupPage({
                   ? "15%"
                   : report?.type
                   ? "45%"
-                  : "18%",
+                  : "14%",
             }}
             onClick={(e) => {
               e.preventDefault();
