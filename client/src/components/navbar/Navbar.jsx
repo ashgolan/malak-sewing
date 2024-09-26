@@ -180,13 +180,13 @@ export default function Navbar({ taxValues, setTaxValues }) {
         <NavLink to={"/orders"} style={{ backgroundColor: "#9DBC98" }}>
           <button name="orders">הזמנוות</button>
         </NavLink>
-        {taxValues?.masValue && (
-          <NavLink to={"/"} style={{ backgroundColor: "gold" }}>
-            <button name="taxValues" onClick={() => openModal()}>
-              💰 ערכי חישוב
-            </button>
-          </NavLink>
-        )}
+
+        <NavLink to={"/"} style={{ backgroundColor: "gold" }}>
+          <button name="taxValues" onClick={() => openModal()}>
+            💰 ערכי חישוב
+          </button>
+        </NavLink>
+
         <TaxValuesModal
           taxValues={taxValues}
           setTaxValues={setTaxValues}
