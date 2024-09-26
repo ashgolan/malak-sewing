@@ -137,7 +137,11 @@ export default function TaxValuesModal({
             className="setupCompanies-input"
             type="text"
             required
-            placeholder={` ${taxValues?.masValue}% ערך הניקוי במקור`}
+            placeholder={
+              taxValues?.masValue
+                ? ` ${taxValues?.masValue}% ערך הניקוי במקור`
+                : "בתהליך חישוב הערך ..."
+            }
             value={taxValues?.masValue ? `%${taxValues.masValue}` : ""}
             onChange={(e) => {
               const valueWithoutPercent = e.target.value.replace(/%/g, ""); // Remove '%' when updating state
@@ -154,7 +158,11 @@ export default function TaxValuesModal({
             className="setupCompanies-input"
             type="text"
             required
-            placeholder={` ${taxValues?.maamValue}% ערך המעמ`}
+            placeholder={
+              taxValues?.maamValue
+                ? ` ${taxValues?.maamValue}% ערך המעמ`
+                : "בתהלכך חישוב הערך ..."
+            }
             value={taxValues?.maamValue ? `%${taxValues.maamValue}` : ""}
             onChange={(e) => {
               const valueWithoutPercent = e.target.value.replace(/%/g, ""); // Remove '%' when updating state

@@ -602,7 +602,7 @@ export default function SetupPage({
               setKindOfSort(() => "withholdingTax");
             }}
           >
-            נ.במקור{` %${taxValues?.masValue}`}
+            נ.במקור{taxValues?.masValue && ` %${taxValues?.masValue}`}
           </button>
         )}
         {(collReq === "/sleevesBids" ||
