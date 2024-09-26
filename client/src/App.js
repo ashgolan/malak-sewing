@@ -114,7 +114,15 @@ function App() {
             path="/chartHomepage"
             element={<ChartHomepage taxValues={taxValues}></ChartHomepage>}
           ></Route>
-          <Route path="/homePage" element={<HomePage></HomePage>}></Route>
+          <Route
+            path="/homePage"
+            element={
+              <HomePage
+                taxValues={taxValues}
+                setTaxValues={setTaxValues}
+              ></HomePage>
+            }
+          ></Route>
           <Route path="/calender" element={<Calender></Calender>}></Route>
         </Routes>
       </FetchingStatus.Provider>
