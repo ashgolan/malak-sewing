@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./navbar.css";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
@@ -13,7 +13,20 @@ export default function Navbar({ taxValues, setTaxValues }) {
     setIsOpen(true);
   }
   const [modalIsOpen, setIsOpen] = React.useState(false);
-
+  useEffect(() => {
+    const getTaxValues = async () => {
+      const headers = { Authorization: `Bearer ${getAccessToken()}` };
+      try {
+        const { data: taxValuesData } = await Api.get("/taxValues", {
+          headers,
+        });
+        setTaxValues(taxValuesData[0]);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    getTaxValues();
+  }, []);
   const navigate = useNavigate();
   const logout = async (e) => {
     e.preventDefault();
@@ -167,11 +180,13 @@ export default function Navbar({ taxValues, setTaxValues }) {
         <NavLink to={"/orders"} style={{ backgroundColor: "#9DBC98" }}>
           <button name="orders">הזמנוות</button>
         </NavLink>
-        <NavLink to={"/"} style={{ backgroundColor: "gold" }}>
-          <button name="taxValues" onClick={() => openModal()}>
-            💰 ערכי חישוב
-          </button>
-        </NavLink>
+        {taxValues?.masValue && (
+          <NavLink to={"/"} style={{ backgroundColor: "gold" }}>
+            <button name="taxValues" onClick={() => openModal()}>
+              💰 ערכי חישוב
+            </button>
+          </NavLink>
+        )}
         <TaxValuesModal
           taxValues={taxValues}
           setTaxValues={setTaxValues}

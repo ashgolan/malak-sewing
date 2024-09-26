@@ -39,30 +39,11 @@ function App() {
     setLoggedIn(false);
     navigate("/homepage");
   };
-  useEffect(() => {
-    const getTaxValues = async () => {
-      const headers = { Authorization: `Bearer ${getAccessToken()}` };
-      try {
-        const { data: taxValuesData } = await Api.get("/taxValues", {
-          headers,
-        });
-        setTaxValues(taxValuesData[0]);
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    getTaxValues();
-  }, []);
 
   return (
     <div>
       <IdleTimer timeout={20 * 60 * 1000} onIdle={handleIdle} />
-      {/* <Navbar taxValues={taxValues} setTaxValues={setTaxValues}></Navbar> */}
-      {taxValues ? (
-        <Navbar taxValues={taxValues} setTaxValues={setTaxValues}></Navbar>
-      ) : (
-        <div>Loading tax values...</div> // Placeholder while tax values are loading
-      )}{" "}
+      <Navbar taxValues={taxValues} setTaxValues={setTaxValues}></Navbar>
       {fetchingStatus.message && (
         <h5 className="message">{fetchingStatus.message}</h5>
       )}
