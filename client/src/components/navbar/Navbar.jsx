@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./navbar.css";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
@@ -8,25 +8,24 @@ import {
 } from "../../utils/tokensStorage";
 import { Api } from "../../utils/Api";
 import TaxValuesModal from "./TaxValuesModal";
-export default function Navbar({ taxValues, setTaxValues }) {
-  function openModal() {
+export default function Navbar() {
+  const [taxValues, setTaxValues] = useState({});
+
+  const openModal = async () => {
     setIsOpen(true);
-  }
+    const headers = { Authorization: `Bearer ${getAccessToken()}` };
+    try {
+      const { data: taxValuesData } = await Api.get("/taxValues", {
+        headers,
+      });
+
+      setTaxValues(taxValuesData[0]);
+    } catch (e) {
+      console.log(e);
+    }
+  };
   const [modalIsOpen, setIsOpen] = React.useState(false);
-  useEffect(() => {
-    const getTaxValues = async () => {
-      const headers = { Authorization: `Bearer ${getAccessToken()}` };
-      try {
-        const { data: taxValuesData } = await Api.get("/taxValues", {
-          headers,
-        });
-        setTaxValues(taxValuesData[0]);
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    getTaxValues();
-  }, []);
+
   const navigate = useNavigate();
   const logout = async (e) => {
     e.preventDefault();
@@ -188,11 +187,10 @@ export default function Navbar({ taxValues, setTaxValues }) {
         </NavLink>
 
         <TaxValuesModal
+          modalIsOpen={modalIsOpen}
+          setIsOpen={setIsOpen}
           taxValues={taxValues}
           setTaxValues={setTaxValues}
-          modalIsOpen={modalIsOpen}
-          // setPageUpdate={setPageUpdate}
-          setIsOpen={setIsOpen}
         ></TaxValuesModal>
       </div>
     </nav>

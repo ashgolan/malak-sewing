@@ -9,7 +9,8 @@ export default function TaxValuesModal({
   closeModal,
   setIsOpen,
   modalIsOpen,
-  setPageUpdate,
+  taxValues,
+  setTaxValues,
 }) {
   const [fetchingStatus, setFetchingStatus] = useState({
     loading: false,
@@ -17,7 +18,6 @@ export default function TaxValuesModal({
     status: false,
     message: null,
   });
-  const [taxValues, setTaxValues] = useState({});
 
   const customStyles = {
     content: {
@@ -32,20 +32,6 @@ export default function TaxValuesModal({
       textAlign: "center",
     },
   };
-  useEffect(() => {
-    const getTaxValues = async () => {
-      const headers = { Authorization: `Bearer ${getAccessToken()}` };
-      try {
-        const { data: taxValuesData } = await Api.get("/taxValues", {
-          headers,
-        });
-        setTaxValues(taxValuesData[0]);
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    getTaxValues();
-  }, []);
 
   function afterOpenModal() {
     subtitle.style.color = "#0e6486";

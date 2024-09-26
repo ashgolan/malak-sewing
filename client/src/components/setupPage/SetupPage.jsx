@@ -97,10 +97,6 @@ export default function SetupPage({
         const { data: companies } = await Api.get("/companies", {
           headers,
         });
-        const { data: taxValuesData } = await Api.get("/taxValues", {
-          headers,
-        });
-        setTaxValues(taxValuesData[0]);
 
         setCompanies(companies?.companies);
       }
@@ -108,16 +104,7 @@ export default function SetupPage({
         const { data: providers } = await Api.get("/providers", { headers });
         setProviders(providers);
       }
-      if (collReq === "/institutionTax") {
-        const { data: institutionTax } = await Api.get("/institutionTax", {
-          headers,
-        });
-        const { data: taxValuesData } = await Api.get("/taxValues", {
-          headers,
-        });
-        setProviders(institutionTax);
-        setTaxValues(taxValuesData[0]);
-      }
+
       if (report === undefined) {
         if (
           collReq === "/sales" ||
@@ -141,6 +128,10 @@ export default function SetupPage({
         setFetchingData(data);
       }
     }
+    const { data: taxValuesData } = await Api.get("/taxValues", {
+      headers,
+    });
+    setTaxValues(taxValuesData[0]);
     setFetchingStatus((prev) => {
       return {
         ...prev,
@@ -398,7 +389,8 @@ export default function SetupPage({
               maxWidth:
                 collReq === "/inventories" || collReq === "/providers"
                   ? "62%"
-                  : collReq === "/institutionTax"
+                  : collReq === "/institutionTax" ||
+                    collReq === "/salesToCompanies"
                   ? "15%"
                   : report?.type
                   ? "45%"
@@ -406,7 +398,8 @@ export default function SetupPage({
               minWidth:
                 collReq === "/inventories" || collReq === "/providers"
                   ? "62%"
-                  : collReq === "/institutionTax"
+                  : collReq === "/institutionTax" ||
+                    collReq === "/salesToCompanies"
                   ? "15%"
                   : report?.type
                   ? "45%"
