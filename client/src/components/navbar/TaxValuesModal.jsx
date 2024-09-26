@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import Modal from "react-modal";
 import { getAccessToken } from "../../utils/tokensStorage";
@@ -10,8 +10,6 @@ export default function TaxValuesModal({
   setIsOpen,
   modalIsOpen,
   setPageUpdate,
-  taxValues,
-  setTaxValues,
 }) {
   const [fetchingStatus, setFetchingStatus] = useState({
     loading: false,
@@ -19,6 +17,8 @@ export default function TaxValuesModal({
     status: false,
     message: null,
   });
+  const [taxValues, setTaxValues] = useState({});
+
   const customStyles = {
     content: {
       top: "50%",
@@ -32,6 +32,20 @@ export default function TaxValuesModal({
       textAlign: "center",
     },
   };
+  useEffect(() => {
+    const getTaxValues = async () => {
+      const headers = { Authorization: `Bearer ${getAccessToken()}` };
+      try {
+        const { data: taxValuesData } = await Api.get("/taxValues", {
+          headers,
+        });
+        setTaxValues(taxValuesData[0]);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    getTaxValues();
+  }, []);
 
   function afterOpenModal() {
     subtitle.style.color = "#0e6486";

@@ -19,10 +19,10 @@ export default function SetupPage({
   updatedReport,
   isFetching,
   fetchingData,
-  taxValues,
 }) {
   const date = new Date();
   const year = date.getFullYear();
+  const [taxValues, setTaxValues] = useState({});
 
   const navigate = useNavigate();
   // eslint-disable-next-line
@@ -97,6 +97,10 @@ export default function SetupPage({
         const { data: companies } = await Api.get("/companies", {
           headers,
         });
+        const { data: taxValuesData } = await Api.get("/taxValues", {
+          headers,
+        });
+        setTaxValues(taxValuesData[0]);
 
         setCompanies(companies?.companies);
       }
@@ -108,7 +112,11 @@ export default function SetupPage({
         const { data: institutionTax } = await Api.get("/institutionTax", {
           headers,
         });
+        const { data: taxValuesData } = await Api.get("/taxValues", {
+          headers,
+        });
         setProviders(institutionTax);
+        setTaxValues(taxValuesData[0]);
       }
       if (report === undefined) {
         if (
@@ -141,6 +149,7 @@ export default function SetupPage({
       };
     });
   };
+
   useEffect(() => {
     const fetchData = async () => {
       try {

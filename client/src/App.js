@@ -26,7 +26,6 @@ import { Api } from "./utils/Api";
 function App() {
   const navigate = useNavigate();
   const [loggedIn, setLoggedIn] = useState(false);
-  const [taxValues, setTaxValues] = useState({});
   const [fetchingStatus, setFetchingStatus] = useState({
     loading: false,
     error: false,
@@ -43,7 +42,7 @@ function App() {
   return (
     <div>
       <IdleTimer timeout={20 * 60 * 1000} onIdle={handleIdle} />
-      <Navbar taxValues={taxValues} setTaxValues={setTaxValues}></Navbar>
+      <Navbar></Navbar>
       {fetchingStatus.message && (
         <h5 className="message">{fetchingStatus.message}</h5>
       )}
@@ -83,9 +82,7 @@ function App() {
           ></Route>
           <Route
             path="/institutionTax"
-            element={
-              <InstitutionTaxes taxValues={taxValues}></InstitutionTaxes>
-            }
+            element={<InstitutionTaxes></InstitutionTaxes>}
           ></Route>
           <Route path="/bids" element={<BidPage></BidPage>}></Route>
 
@@ -96,17 +93,9 @@ function App() {
           <Route path="/orders" element={<OrderPage></OrderPage>}></Route>
           <Route
             path="/chartHomepage"
-            element={<ChartHomepage taxValues={taxValues}></ChartHomepage>}
+            element={<ChartHomepage></ChartHomepage>}
           ></Route>
-          <Route
-            path="/homePage"
-            element={
-              <HomePage
-                taxValues={taxValues}
-                setTaxValues={setTaxValues}
-              ></HomePage>
-            }
-          ></Route>
+          <Route path="/homePage" element={<HomePage></HomePage>}></Route>
           <Route path="/calender" element={<Calender></Calender>}></Route>
         </Routes>
       </FetchingStatus.Provider>
