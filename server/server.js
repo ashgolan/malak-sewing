@@ -17,6 +17,7 @@ import { saleToCompanyRouter } from "./routers/saleToCompany.router.js";
 import { companyRouter } from "./routers/company.router.js";
 import { InstitutionRouter } from "./routers/institutionTax.router.js";
 import { taxValuesRouter } from "./routers/taxValues.router.js";
+import { bouncedCheckRouter } from "./routers/bouncedCheck.router.js";
 
 const app = Express();
 const __dirname = url.fileURLToPath(new URL("./", import.meta.url));
@@ -42,6 +43,7 @@ app.use("/events", eventsRouter);
 app.use("/companies", companyRouter);
 app.use("/institutionTax", InstitutionRouter);
 app.use("/taxValues", taxValuesRouter);
+app.use("/bouncedChecks", bouncedCheckRouter);
 app.listen(PORT, () => {
   console.log("connecting to port", PORT);
 });

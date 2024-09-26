@@ -46,8 +46,6 @@ function App() {
         const { data: taxValuesData } = await Api.get("/taxValues", {
           headers,
         });
-        console.log(taxValuesData);
-
         setTaxValues(taxValuesData[0]);
       } catch (e) {
         console.log(e);
@@ -59,7 +57,12 @@ function App() {
   return (
     <div>
       <IdleTimer timeout={20 * 60 * 1000} onIdle={handleIdle} />
-      <Navbar taxValues={taxValues} setTaxValues={setTaxValues}></Navbar>
+      {/* <Navbar taxValues={taxValues} setTaxValues={setTaxValues}></Navbar> */}
+      {taxValues ? (
+        <Navbar taxValues={taxValues} setTaxValues={setTaxValues}></Navbar>
+      ) : (
+        <div>Loading tax values...</div> // Placeholder while tax values are loading
+      )}{" "}
       {fetchingStatus.message && (
         <h5 className="message">{fetchingStatus.message}</h5>
       )}

@@ -20,4 +20,4 @@ const bouncedCheckSchema = new Schema({
   totalAmount: { type: Number },
 });
 
-export const InstitutionTax = model("InstitutionTax", bouncedCheckSchema);
+export const BouncedCheck = model("BouncedCheck", bouncedCheckSchema);
