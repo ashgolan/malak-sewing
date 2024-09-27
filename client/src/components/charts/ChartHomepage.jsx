@@ -57,11 +57,15 @@ function ChartHomepage() {
     { type: "/expenses", name: "דוח הוצאות" },
     { type: "/sales", name: "דוח הכנסות" },
     { type: "/salesToCompanies", name: "דוח הכנסות מחברות" },
+    { type: "/institutionTax", name: "דוח חשבונות למוסדות" },
+    { type: "/bouncedChecks", name: "דוח שיקים דחויים" },
     { type: "/workersExpenses", name: "דוח עובדים" },
     { type: "sleevesBidsCharts", name: "תרשים שרוולים" },
     { type: "expensesCharts", name: "תרשים הוצאות" },
     { type: "salesCharts", name: "תרשים הכנסות" },
     { type: "salesToCompaniesCharts", name: "תרשים הכנסות מחברות" },
+    { type: "/institutionTaxCharts", name: "תרשים חשבונות למוסדות" },
+    { type: "/bouncedChecksCharts", name: "תרשים שיקים דחויים" },
     { type: "workersExpensesCharts", name: "תרשים עובדים" },
   ].map((item) => {
     return { value: item.type, label: item.name };
@@ -106,6 +110,12 @@ function ChartHomepage() {
     const { data: salesToCompaniesData } = await Api.get("/salesToCompanies", {
       headers,
     });
+    const { data: institutionTaxData } = await Api.get("/institutionTax", {
+      headers,
+    });
+    const { data: bouncedChecksData } = await Api.get("/bouncedChecks", {
+      headers,
+    });
     const { data: workersExpensesData } = await Api.get("/workersExpenses", {
       headers,
     });
@@ -123,6 +133,8 @@ function ChartHomepage() {
     setFetchingData({
       salesData: salesData,
       salesToCompaniesData: salesToCompaniesData,
+      institutionTaxData: institutionTaxData,
+      bouncedChecksData: bouncedChecksData,
       expensesData: expensesData,
       sleevesBidsData: sleevesBidsData,
       workersExpensesData: workersExpensesData,
@@ -183,7 +195,12 @@ function ChartHomepage() {
   }, []);
 
   const currentData =
-    report?.type === "/sales" || report?.type === "salesCharts"
+    report?.type === "/bouncedChecks" || report?.type === "bouncedChecksCharts"
+      ? "bouncedChecksData"
+      : report?.type === "/institutionTax" ||
+        report?.type === "institutionTaxCharts"
+      ? "institutionTaxData"
+      : report?.type === "/sales" || report?.type === "salesCharts"
       ? "salesData"
       : report?.type === "/salesToCompanies" ||
         report?.type === "salesToCompaniesCharts"
@@ -228,6 +245,10 @@ function ChartHomepage() {
               report?.type === "workersExpensesCharts" ||
               report?.type === "/salesToCompanies" ||
               report?.type === "salesToCompaniesCharts" ||
+              report?.type === "/bouncedChecks" ||
+              report?.type === "bouncedChecksCharts" ||
+              report?.type === "/institutionTax" ||
+              report?.type === "institutionTaxCharts" ||
               report?.type === "/sales" ||
               report?.type === "salesCharts") && (
               <Select
@@ -307,7 +328,9 @@ function ChartHomepage() {
                   report.type === "expensesCharts" ||
                   report.type === "salesCharts" ||
                   report.type === "sleevesBidsCharts" ||
-                  report.type === "salesToCompaniesCharts"
+                  report.type === "salesToCompaniesCharts" ||
+                  report.type === "institutionTaxCharts" ||
+                  report.type === "bouncedChecksCharts"
                     ? false
                     : true
                 }
@@ -326,34 +349,43 @@ function ChartHomepage() {
               </div>
             )}
           </div>
-          {report?.type === "/salesToCompanies" && report?.clientName && (
-            <div className="companyName-container">
-              <label htmlFor="">לכבוד :</label>
-              <label htmlFor="" style={{ marginLeft: "10%", width: "40%" }}>
-                {report?.clientName}
-              </label>
-              <label htmlFor="" style={{ marginRight: "10%" }}>
-                חודש :
-              </label>
-              {report?.month?.map((month, i) => {
-                return (
-                  <>
-                    <label htmlFor="" style={{ textAlign: "center" }}>
-                      {" "}
-                      {report?.month[i]?.label}{" "}
-                    </label>
-                    {i !== report?.month.length - 1 && (
-                      <label style={{ width: "1%" }}> + </label>
-                    )}
-                  </>
-                );
-              })}
-            </div>
-          )}
+          {(report?.type === "/salesToCompanies" ||
+            report?.type === "/bouncedChecks" ||
+            report?.type === "/institutionTax") &&
+            report?.clientName && (
+              <div className="companyName-container">
+                <label htmlFor="">לכבוד :</label>
+                <label htmlFor="" style={{ marginLeft: "10%", width: "40%" }}>
+                  {report?.clientName}
+                </label>
+                <label htmlFor="" style={{ marginRight: "10%" }}>
+                  {!report?.month?.length < 1 ? `חודש :` : `שנה :`}
+                </label>
+                {report?.month?.map((month, i) => {
+                  return (
+                    <>
+                      <label htmlFor="" style={{ textAlign: "center" }}>
+                        {" "}
+                        {report?.month[i]?.label}{" "}
+                      </label>
+                      {i !== report?.month.length - 1 && (
+                        <label style={{ width: "1%" }}> + </label>
+                      )}
+                    </>
+                  );
+                })}
+                <label htmlFor="" style={{ textAlign: "center" }}>
+                  {" "}
+                  {report?.year}{" "}
+                </label>
+              </div>
+            )}
           {report.type &&
             (report.type === "/expenses" ||
               report.type === "/sales" ||
               report.type === "/salesToCompanies" ||
+              report.type === "/institutionTax" ||
+              report.type === "/bouncedChecks" ||
               report.type === "/workersExpenses" ||
               report.type === "/sleevesBids") && (
               <SetupPage
@@ -369,6 +401,8 @@ function ChartHomepage() {
             (report.type === "expensesCharts" ||
               report.type === "salesCharts" ||
               report.type === "salesToCompaniesCharts" ||
+              report.type === "institutionTaxCharts" ||
+              report.type === "bouncedChecksCharts" ||
               report.type === "workersExpensesCharts" ||
               report.type === "sleevesBidsCharts") && (
               <ChartPage

@@ -324,7 +324,7 @@ export default function SetupPage({
           <button
             id="date"
             className="input_show_item head"
-            style={{ width: report?.type ? "17%" : "10%" }}
+            style={{ width: report?.type ? "14%" : "10%" }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "date");
@@ -358,14 +358,13 @@ export default function SetupPage({
               className="input_show_item head"
               style={{
                 width:
-                  report?.type || collReq === "/sleevesBids"
+                  report?.type && collReq === "/institutionTax"
+                    ? "15%"
+                    : report?.type || collReq === "/sleevesBids"
                     ? "23%"
-                    : collReq === "/salesToCompanies" ||
-                      collReq === "/institutionTax"
-                    ? "14%"
                     : collReq === "/bouncedChecks"
                     ? "10%"
-                    : "13%",
+                    : "15%",
               }}
               onClick={(e) => {
                 e.preventDefault();
@@ -447,7 +446,7 @@ export default function SetupPage({
             id="remark"
             className="input_show_item head"
             style={{
-              width: report?.type ? "10%" : "7%",
+              width: report?.type ? "10%" : "6%",
             }}
             onClick={(e) => {
               e.preventDefault();
@@ -465,23 +464,21 @@ export default function SetupPage({
               className="input_show_item head"
               style={{
                 maxWidth:
-                  collReq === "/inventories" || collReq === "/providers"
-                    ? "62%"
-                    : collReq === "/institutionTax" ||
-                      collReq === "/salesToCompanies"
+                  report?.type && collReq === "/institutionTax"
                     ? "15%"
+                    : collReq === "/inventories" || collReq === "/providers"
+                    ? "62%"
                     : report?.type
                     ? "45%"
-                    : "14%",
+                    : "15%",
                 minWidth:
-                  collReq === "/inventories" || collReq === "/providers"
-                    ? "62%"
-                    : collReq === "/institutionTax" ||
-                      collReq === "/salesToCompanies"
+                  report?.type && collReq === "/institutionTax"
                     ? "15%"
+                    : collReq === "/inventories" || collReq === "/providers"
+                    ? "62%"
                     : report?.type
                     ? "45%"
-                    : "14%",
+                    : "15%",
               }}
               onClick={(e) => {
                 e.preventDefault();
@@ -667,7 +664,7 @@ export default function SetupPage({
           <button
             id="paymentDate"
             className="input_show_item head"
-            style={{ width: report?.type ? "15%" : "10%" }}
+            style={{ width: report?.type ? "12%" : "10%" }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "paymentDate");

@@ -191,7 +191,7 @@ export default function ItemsTable({
             id="date"
             type="date"
             className="input_show_item"
-            style={{ width: report?.type ? "17%" : "10%" }}
+            style={{ width: report?.type ? "14%" : "10%" }}
             disabled={changeStatus.disabled}
             value={itemsValues.date}
             onChange={(e) => {
@@ -261,7 +261,7 @@ export default function ItemsTable({
                   ? "23%"
                   : collReq === "/bouncedChecks"
                   ? "10%"
-                  : "13%",
+                  : "15%",
               color: itemsValues.colored ? "rgb(255, 71, 46)" : "whitesmoke",
             }}
             disabled={changeStatus.disabled}
@@ -348,7 +348,7 @@ export default function ItemsTable({
             id="remark"
             className="input_show_item"
             style={{
-              width: report?.type ? "10%" : "7%",
+              width: report?.type ? "10%" : "6%",
               color: itemsValues.colored ? "rgb(255, 71, 46)" : "whitesmoke",
               textAlign: "center",
             }}
@@ -659,7 +659,7 @@ export default function ItemsTable({
             id="paymentDate"
             type="date"
             className="input_show_item"
-            style={{ width: report?.type ? "15%" : "10%" }}
+            style={{ width: report?.type ? "12%" : "10%" }}
             disabled={changeStatus.disabled}
             value={itemsValues.paymentDate}
             onChange={(e) => {
@@ -673,7 +673,7 @@ export default function ItemsTable({
           <input
             id="withholdingTax"
             className="input_show_item"
-            style={{ width: report?.type ? "15%" : "8%" }}
+            style={{ width: "8%" }}
             disabled
             value={+itemsValues?.number * (+taxValues?.masValue / 100)}
           />
