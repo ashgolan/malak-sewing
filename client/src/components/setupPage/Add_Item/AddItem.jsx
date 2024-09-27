@@ -295,9 +295,9 @@ export default function AddItem({
     });
   };
   const getCompanyList = () => {
-    return companies?.map((item) => {
-      return { value: item._id, label: item.name };
-    });
+    return companies
+      ?.filter((item) => !item.isInstitution)
+      .map((item) => ({ value: item._id, label: item.name }));
   };
   const getInstitutionsList = () => {
     return companies
