@@ -82,7 +82,7 @@ export default function SetupPage({
       } else if (collReq === "/workersExpenses") {
         setFetchingData(fetchingData.workersExpensesData);
       } else if (collReq === "/bouncedChecks") {
-        setFetchingData(fetchingData.bouncedChecks);
+        setFetchingData(fetchingData.bouncedChecksData);
       } else {
         setFetchingData(fetchingData.sleevesBidsData);
       }
