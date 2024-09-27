@@ -441,21 +441,11 @@ export default function ItemsTable({
                 maxWidth:
                   collReq === "/inventories" || collReq === "/providers"
                     ? "62%"
-                    : collReq === "/institutionTax" ||
-                      collReq === "/salesToCompanies"
-                    ? "15%"
-                    : report?.type
-                    ? "45%"
-                    : "14%",
+                    : "15%",
                 minWidth:
                   collReq === "/inventories" || collReq === "/providers"
                     ? "62%"
-                    : collReq === "/institutionTax" ||
-                      collReq === "/salesToCompanies"
-                    ? "15%"
-                    : report?.type
-                    ? "45%"
-                    : "14%",
+                    : "15%",
               }}
               disabled={changeStatus.disabled}
               value={itemsValues.name}

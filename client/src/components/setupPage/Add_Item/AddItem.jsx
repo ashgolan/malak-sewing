@@ -389,6 +389,7 @@ export default function AddItem({
         {collReq === "/bouncedChecks" && (
           <input
             name="checkNumber"
+            type="number"
             id="number"
             style={{
               width:
@@ -416,6 +417,7 @@ export default function AddItem({
         {collReq === "/bouncedChecks" && (
           <input
             name="bankNumber"
+            type="number"
             id="number"
             style={{
               width:
@@ -443,6 +445,7 @@ export default function AddItem({
         {collReq === "/bouncedChecks" && (
           <input
             name="branchNumber"
+            type="number"
             id="number"
             style={{
               width:
@@ -471,6 +474,7 @@ export default function AddItem({
         {collReq === "/bouncedChecks" && (
           <input
             name="accountNumber"
+            type="number"
             id="number"
             style={{
               width:
@@ -619,7 +623,10 @@ export default function AddItem({
             collReq === "/contacts" || collReq === "/providers"
               ? "מספר"
               : collReq === "/workersExpenses" ||
+                collReq === "/bouncedChecks" ||
                 collReq === "/sleevesBids" ||
+                collReq === "/institutionTax" ||
+                collReq === "/salesToCompanies" ||
                 collReq === "/expenses"
               ? "סכום"
               : "מחיר"

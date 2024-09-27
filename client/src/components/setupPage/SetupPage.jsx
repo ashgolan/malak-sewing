@@ -66,88 +66,80 @@ export default function SetupPage({
 
   const sendRequest = async (token) => {
     const headers = { Authorization: token };
-    setFetchingStatus((prev) => {
-      return { ...prev, status: true, loading: true };
-    });
+
+    setFetchingStatus({ status: true, loading: true });
 
     if (isFetching) {
-      if (collReq === "/sales") {
-        setFetchingData(fetchingData.salesData);
-      } else if (collReq === "/salesToCompanies") {
-        setFetchingData(fetchingData.salesToCompaniesData);
-      } else if (collReq === "/institutionTax") {
-        setFetchingData(fetchingData.institutionTaxData);
-      } else if (collReq === "/expenses") {
-        setFetchingData(fetchingData.expensesData);
-      } else if (collReq === "/workersExpenses") {
-        setFetchingData(fetchingData.workersExpensesData);
-      } else if (collReq === "/bouncedChecks") {
-        setFetchingData(fetchingData.bouncedChecksData);
-      } else {
-        setFetchingData(fetchingData.sleevesBidsData);
+      // Use already fetched data
+      switch (collReq) {
+        case "/sales":
+          setFetchingData(fetchingData.salesData);
+          break;
+        case "/salesToCompanies":
+          setFetchingData(fetchingData.salesToCompaniesData);
+          break;
+        case "/institutionTax":
+          setFetchingData(fetchingData.institutionTaxData);
+          break;
+        case "/expenses":
+          setFetchingData(fetchingData.expensesData);
+          break;
+        case "/workersExpenses":
+          setFetchingData(fetchingData.workersExpensesData);
+          break;
+        case "/bouncedChecks":
+          setFetchingData(fetchingData.bouncedChecksData);
+          break;
+        default:
+          setFetchingData(fetchingData.sleevesBidsData);
       }
     } else {
-      const { data } = await Api.get(collReq, { headers });
+      // Use Promise.all to fetch multiple requests concurrently
+      const dataFetches = [
+        Api.get(collReq, { headers }),
+        collReq === "/sales" && Api.get("/inventories", { headers }),
+        collReq === "/bouncedChecks" && Api.get("/bouncedChecks", { headers }),
+        (collReq === "/salesToCompanies" || collReq === "/institutionTax") &&
+          Api.get("/companies", { headers }),
+        collReq === "/expenses" && Api.get("/providers", { headers }),
+      ];
 
+      const [collReqData, inventories, bouncedChecks, companies, providers] =
+        await Promise.all(dataFetches);
+
+      // Conditionally set data based on the response
       if (collReq === "/sales") {
-        const { data: inventories } = await Api.get("/inventories", {
-          headers,
-        });
-        setInventories(inventories);
+        setInventories(inventories.data);
       }
       if (collReq === "/bouncedChecks") {
-        const { data: bouncedChecks } = await Api.get("/bouncedChecks", {
-          headers,
-        });
-        setBouncedChecks(bouncedChecks);
+        setBouncedChecks(bouncedChecks.data);
       }
       if (collReq === "/salesToCompanies" || collReq === "/institutionTax") {
-        const { data: companies } = await Api.get("/companies", {
-          headers,
-        });
-
-        setCompanies(companies?.companies);
+        setCompanies(companies?.data?.companies);
       }
       if (collReq === "/expenses") {
-        const { data: providers } = await Api.get("/providers", { headers });
-        setProviders(providers);
+        setProviders(providers.data);
       }
 
-      if (report === undefined) {
-        if (
-          collReq === "/sales" ||
-          collReq === "/salesToCompanies" ||
-          collReq === "/institutionsTax" ||
-          collReq === "/sleevesBids" ||
-          collReq === "/bouncedChecks" ||
-          collReq === "/workersExpenses" ||
-          collReq === "/expenses"
-        ) {
-          setFetchingData(
-            data.filter(
-              (item) =>
-                new Date(item.date).getFullYear() === year ||
-                item.colored === true
-            )
-          );
-        } else {
-          setFetchingData(data);
-        }
+      // Filter or directly set data based on the conditions
+      if (!report) {
+        setFetchingData(
+          collReqData.data.filter(
+            (item) =>
+              new Date(item.date).getFullYear() === year ||
+              item.colored === true
+          )
+        );
       } else {
-        setFetchingData(data);
+        setFetchingData(collReqData.data);
       }
     }
-    const { data: taxValuesData } = await Api.get("/taxValues", {
-      headers,
-    });
+
+    // Fetch tax values (this can also be cached or fetched less frequently)
+    const { data: taxValuesData } = await Api.get("/taxValues", { headers });
     setTaxValues(taxValuesData[0]);
-    setFetchingStatus((prev) => {
-      return {
-        ...prev,
-        status: false,
-        loading: false,
-      };
-    });
+
+    setFetchingStatus({ status: false, loading: false });
   };
 
   useEffect(() => {
@@ -375,6 +367,8 @@ export default function SetupPage({
                 ? "עובד"
                 : collReq === "/salesToCompanies"
                 ? "חברה"
+                : collReq === "/institutionTax"
+                ? "מוסד"
                 : "קליינט"}
             </button>
           )}
@@ -464,20 +458,12 @@ export default function SetupPage({
               className="input_show_item head"
               style={{
                 maxWidth:
-                  report?.type && collReq === "/institutionTax"
-                    ? "15%"
-                    : collReq === "/inventories" || collReq === "/providers"
+                  collReq === "/inventories" || collReq === "/providers"
                     ? "62%"
-                    : report?.type
-                    ? "45%"
                     : "15%",
                 minWidth:
-                  report?.type && collReq === "/institutionTax"
-                    ? "15%"
-                    : collReq === "/inventories" || collReq === "/providers"
+                  collReq === "/inventories" || collReq === "/providers"
                     ? "62%"
-                    : report?.type
-                    ? "45%"
                     : "15%",
               }}
               onClick={(e) => {
@@ -529,15 +515,15 @@ export default function SetupPage({
         >
           {collReq === "/inventories" ||
           collReq === "/sales" ||
-          collReq === "/institutionTax" ||
           collReq === "/sleevesBids"
             ? "מחיר"
             : collReq === "/expenses" ||
+              collReq === "/institutionTax" ||
               collReq === "/workersExpenses" ||
               collReq === "/bouncedChecks" ||
               collReq === "/salesToCompanies"
             ? "סכום"
-            : "מספר / טלפון"}
+            : "טלפון"}
         </button>
         {collReq === "/sales" && (
           <button
