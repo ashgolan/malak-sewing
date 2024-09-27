@@ -41,7 +41,7 @@ export default function SetupPage({
   const [inventories, setInventories] = useState([]);
   const [companies, setCompanies] = useState([]);
   const [providers, setProviders] = useState([]);
-
+  const [bouncedChecks, setBouncedChecks] = useState([]);
   const getTotals = () => {
     let total = 0;
     if (collReq === "/workersExpenses") {
@@ -81,6 +81,8 @@ export default function SetupPage({
         setFetchingData(fetchingData.expensesData);
       } else if (collReq === "/workersExpenses") {
         setFetchingData(fetchingData.workersExpensesData);
+      } else if (collReq === "/bouncedChecks") {
+        setFetchingData(fetchingData.bouncedChecks);
       } else {
         setFetchingData(fetchingData.sleevesBidsData);
       }
@@ -92,6 +94,12 @@ export default function SetupPage({
           headers,
         });
         setInventories(inventories);
+      }
+      if (collReq === "/bouncedChecks") {
+        const { data: bouncedChecks } = await Api.get("/bouncedChecks", {
+          headers,
+        });
+        setBouncedChecks(bouncedChecks);
       }
       if (collReq === "/salesToCompanies" || collReq === "/institutionTax") {
         const { data: companies } = await Api.get("/companies", {
@@ -111,6 +119,7 @@ export default function SetupPage({
           collReq === "/salesToCompanies" ||
           collReq === "/institutionsTax" ||
           collReq === "/sleevesBids" ||
+          collReq === "/bouncedChecks" ||
           collReq === "/workersExpenses" ||
           collReq === "/expenses"
         ) {
@@ -307,6 +316,7 @@ export default function SetupPage({
       >
         {(collReq === "/sleevesBids" ||
           collReq === "/expenses" ||
+          collReq === "/bouncedChecks" ||
           collReq === "/salesToCompanies" ||
           collReq === "/institutionTax" ||
           collReq === "/workersExpenses" ||
@@ -314,7 +324,7 @@ export default function SetupPage({
           <button
             id="date"
             className="input_show_item head"
-            style={{ width: report?.type ? "17%" : "11%" }}
+            style={{ width: report?.type ? "17%" : "10%" }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "date");
@@ -339,6 +349,7 @@ export default function SetupPage({
         {report?.type !== "/salesToCompanies" &&
           (collReq === "/sales" ||
             collReq === "/workersExpenses" ||
+            collReq === "/bouncedChecks" ||
             collReq === "/institutionTax" ||
             collReq === "/salesToCompanies" ||
             collReq === "/sleevesBids") && (
@@ -352,6 +363,8 @@ export default function SetupPage({
                     : collReq === "/salesToCompanies" ||
                       collReq === "/institutionTax"
                     ? "14%"
+                    : collReq === "/bouncedChecks"
+                    ? "10%"
                     : "13%",
               }}
               onClick={(e) => {
@@ -366,7 +379,70 @@ export default function SetupPage({
                 : "קליינט"}
             </button>
           )}
-        {(collReq === "/sales" || report?.type === "/sales") && (
+        {collReq === "/bouncedChecks" && (
+          <button
+            id="checkNumber"
+            className="input_show_item head"
+            style={{
+              width: report?.type ? "10%" : "7%",
+            }}
+            onClick={(e) => {
+              e.preventDefault();
+              setKindOfSort(() => "checkNumber");
+            }}
+          >
+            {"מס.שיק"}
+          </button>
+        )}
+        {collReq === "/bouncedChecks" && (
+          <button
+            id="bankNumber"
+            className="input_show_item head"
+            style={{
+              width: report?.type ? "10%" : "7%",
+            }}
+            onClick={(e) => {
+              e.preventDefault();
+              setKindOfSort(() => "bankNumber");
+            }}
+          >
+            {"מס.בנק"}
+          </button>
+        )}
+        {collReq === "/bouncedChecks" && (
+          <button
+            id="branchNumber"
+            className="input_show_item head"
+            style={{
+              width: report?.type ? "10%" : "5%",
+            }}
+            onClick={(e) => {
+              e.preventDefault();
+              setKindOfSort(() => "branchNumber");
+            }}
+          >
+            {"מס.סניף"}
+          </button>
+        )}
+        {collReq === "/bouncedChecks" && (
+          <button
+            id="accountNumber"
+            className="input_show_item head"
+            style={{
+              width: report?.type ? "10%" : "7%",
+            }}
+            onClick={(e) => {
+              e.preventDefault();
+              setKindOfSort(() => "accountNumber");
+            }}
+          >
+            {"מס.חשבון"}
+          </button>
+        )}
+        {(collReq === "/sales" ||
+          report?.type === "/sales" ||
+          collReq === "/bouncedChecks" ||
+          report?.type === "/bouncedChecks") && (
           <button
             id="remark"
             className="input_show_item head"
@@ -381,46 +457,48 @@ export default function SetupPage({
             {"הערה"}
           </button>
         )}
-        {collReq !== "/workersExpenses" && collReq !== "/sleevesBids" && (
-          <button
-            id="name"
-            className="input_show_item head"
-            style={{
-              maxWidth:
-                collReq === "/inventories" || collReq === "/providers"
-                  ? "62%"
-                  : collReq === "/institutionTax" ||
-                    collReq === "/salesToCompanies"
-                  ? "15%"
-                  : report?.type
-                  ? "45%"
-                  : "14%",
-              minWidth:
-                collReq === "/inventories" || collReq === "/providers"
-                  ? "62%"
-                  : collReq === "/institutionTax" ||
-                    collReq === "/salesToCompanies"
-                  ? "15%"
-                  : report?.type
-                  ? "45%"
-                  : "14%",
-            }}
-            onClick={(e) => {
-              e.preventDefault();
-              setKindOfSort(() => "name");
-            }}
-          >
-            {collReq === "/providers" || collReq === "/expenses"
-              ? "שם"
-              : collReq === "/contacts"
-              ? "שם חברה"
-              : collReq === "/salesToCompanies" ||
-                collReq === "/sales" ||
-                collReq === "/institutionTax"
-              ? "עבודה"
-              : "מוצר"}
-          </button>
-        )}
+        {collReq !== "/workersExpenses" &&
+          collReq !== "/sleevesBids" &&
+          collReq !== "/bouncedChecks" && (
+            <button
+              id="name"
+              className="input_show_item head"
+              style={{
+                maxWidth:
+                  collReq === "/inventories" || collReq === "/providers"
+                    ? "62%"
+                    : collReq === "/institutionTax" ||
+                      collReq === "/salesToCompanies"
+                    ? "15%"
+                    : report?.type
+                    ? "45%"
+                    : "14%",
+                minWidth:
+                  collReq === "/inventories" || collReq === "/providers"
+                    ? "62%"
+                    : collReq === "/institutionTax" ||
+                      collReq === "/salesToCompanies"
+                    ? "15%"
+                    : report?.type
+                    ? "45%"
+                    : "14%",
+              }}
+              onClick={(e) => {
+                e.preventDefault();
+                setKindOfSort(() => "name");
+              }}
+            >
+              {collReq === "/providers" || collReq === "/expenses"
+                ? "שם"
+                : collReq === "/contacts"
+                ? "שם חברה"
+                : collReq === "/salesToCompanies" ||
+                  collReq === "/sales" ||
+                  collReq === "/institutionTax"
+                ? "עבודה"
+                : "מוצר"}
+            </button>
+          )}
         {collReq === "/workersExpenses" && (
           <button
             id="equipment"
@@ -443,7 +521,7 @@ export default function SetupPage({
                 ? "5%"
                 : collReq === "/contacts" || collReq === "/expenses"
                 ? "8%"
-                : collReq === "/institutionTax"
+                : collReq === "/institutionTax" || collReq === "/bouncedChecks"
                 ? "5%"
                 : "15%",
           }}
@@ -459,6 +537,7 @@ export default function SetupPage({
             ? "מחיר"
             : collReq === "/expenses" ||
               collReq === "/workersExpenses" ||
+              collReq === "/bouncedChecks" ||
               collReq === "/salesToCompanies"
             ? "סכום"
             : "מספר / טלפון"}
@@ -544,11 +623,16 @@ export default function SetupPage({
           </button>
         )}
 
-        {(collReq === "/expenses" || collReq === "/institutionTax") && (
+        {(collReq === "/expenses" ||
+          collReq === "/institutionTax" ||
+          collReq === "/bouncedChecks") && (
           <button
             id="taxNumber"
             className="input_show_item head"
-            style={{ width: "7%", textAlign: "center" }}
+            style={{
+              width: collReq === "/bouncedChecks" ? "6%" : "7%",
+              textAlign: "center",
+            }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "taxNumber");
@@ -577,11 +661,13 @@ export default function SetupPage({
               : "חשב."}
           </button>
         )}
-        {(collReq === "/expenses" || collReq === "/institutionTax") && (
+        {(collReq === "/expenses" ||
+          collReq === "/institutionTax" ||
+          collReq === "/bouncedChecks") && (
           <button
             id="paymentDate"
             className="input_show_item head"
-            style={{ width: report?.type ? "15%" : "12%" }}
+            style={{ width: report?.type ? "15%" : "10%" }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "paymentDate");
@@ -607,6 +693,7 @@ export default function SetupPage({
         )}
         {(collReq === "/sleevesBids" ||
           collReq === "/institutionTax" ||
+          collReq === "/bouncedChecks" ||
           collReq === "/expenses" ||
           collReq === "/institutionTax" ||
           collReq === "/sales") && (

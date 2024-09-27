@@ -14,7 +14,6 @@ export default function AddItem({
   selectData,
   companies,
   taxValues,
-  pageUpdate,
 }) {
   const date = new Date();
   const year = date.getFullYear();
@@ -32,6 +31,10 @@ export default function AddItem({
     name: "",
     mail: "",
     bankProps: "",
+    bankNumber: "",
+    branchNumber: "",
+    checkNumber: "",
+    accountNumber: "",
     quantity: "",
     clientName: "",
     remark: "",
@@ -48,165 +51,126 @@ export default function AddItem({
     totalAmount: 0,
   });
   const sendPostRequest = async (token) => {
-    const headers = {
-      Authorization: token,
-    };
+    const headers = { Authorization: token };
     setFetchingStatus({ loading: true, error: false });
-    switch (collReq) {
-      case "/salesToCompanies":
-        await Api.post(
-          collReq,
-          {
-            date: itemsValues.date,
-            clientName: itemsValues.clientName.trim(),
-            name: itemsValues.name.trim(),
-            number: itemsValues.number,
-            totalAmount: itemsValues.totalAmount,
-          },
-          {
-            headers: headers,
-          }
-        );
-        break;
-      case "/sleevesBids":
-        await Api.post(
-          collReq,
-          {
-            date: itemsValues.date,
-            clientName: itemsValues.clientName.trim(),
-            number: itemsValues.number,
-            quantity: itemsValues.quantity,
-            tax: itemsValues.tax,
-            totalAmount: itemsValues.totalAmount,
-          },
-          {
-            headers: headers,
-          }
-        );
-        break;
-      case "/workersExpenses":
-        await Api.post(
-          collReq,
-          {
-            date: itemsValues.date,
-            location: itemsValues.location,
-            clientName: itemsValues.clientName.trim(),
-            equipment: itemsValues.equipment,
-            number: itemsValues.number,
-            colored: itemsValues.colored,
-            totalAmount: itemsValues.number,
-            tax: itemsValues.tax,
-          },
-          {
-            headers: headers,
-          }
-        );
-        break;
-      case "/expenses":
-        await Api.post(
-          collReq,
-          {
-            name: itemsValues.name.trim(),
-            number: itemsValues.number,
-            discount: itemsValues.discount,
-            date: itemsValues.date,
-            colored: itemsValues.colored,
-            tax: itemsValues.tax,
-            taxNumber: itemsValues.taxNumber,
-            paymentDate: itemsValues.paymentDate,
-            totalAmount: itemsValues.totalAmount,
-          },
-          {
-            headers: headers,
-          }
-        );
-        break;
-      case "/sales":
-        await Api.post(
-          collReq,
-          {
-            date: itemsValues.date,
-            clientName: itemsValues.clientName.trim(),
-            remark: itemsValues.remark,
-            name: itemsValues.name.trim(),
-            number: itemsValues.number,
-            discount: itemsValues.discount,
-            sale: itemsValues.sale,
-            expenses: itemsValues.expenses,
-            tax: itemsValues.tax,
-            colored: itemsValues.colored,
-            quantity: itemsValues.quantity,
-            totalAmount: itemsValues.totalAmount,
-          },
-          {
-            headers: headers,
-          }
-        );
-        break;
-      case "/institutionTax":
-        await Api.post(
-          collReq,
-          {
-            date: itemsValues.date,
-            clientName: itemsValues.clientName.trim(),
-            name: itemsValues.name.trim(),
-            number: itemsValues.number,
-            paymentDate: itemsValues.paymentDate,
-            taxNumber: itemsValues.taxNumber,
-            colored: itemsValues.colored,
-            totalAmount: itemsValues.totalAmount,
-          },
-          {
-            headers: headers,
-          }
-        );
-        break;
-      case "/contacts":
-        await Api.post(
-          collReq,
-          {
-            name: itemsValues.name.trim(),
-            number: itemsValues.number,
-            mail: itemsValues.mail,
-            bankProps: itemsValues.bankProps,
-          },
-          {
-            headers: headers,
-          }
-        );
-        break;
-      default:
-        await Api.post(
-          collReq,
-          { name: itemsValues.name.trim(), number: itemsValues.number },
-          {
-            headers: headers,
-          }
-        );
-    }
 
-    setItemIsUpdated((prev) => !prev);
+    // Define a mapping for the postData based on collReq
+    const postDataMap = {
+      "/salesToCompanies": {
+        date: itemsValues.date,
+        clientName: itemsValues.clientName.trim(),
+        name: itemsValues.name.trim(),
+        number: itemsValues.number,
+        totalAmount: itemsValues.totalAmount,
+      },
+      "/sleevesBids": {
+        date: itemsValues.date,
+        clientName: itemsValues.clientName.trim(),
+        number: itemsValues.number,
+        quantity: itemsValues.quantity,
+        tax: itemsValues.tax,
+        totalAmount: itemsValues.totalAmount,
+      },
+      "/workersExpenses": {
+        date: itemsValues.date,
+        location: itemsValues.location,
+        clientName: itemsValues.clientName.trim(),
+        equipment: itemsValues.equipment,
+        number: itemsValues.number,
+        colored: itemsValues.colored,
+        totalAmount: itemsValues.number,
+        tax: itemsValues.tax,
+      },
+      "/expenses": {
+        name: itemsValues.name.trim(),
+        number: itemsValues.number,
+        discount: itemsValues.discount,
+        date: itemsValues.date,
+        colored: itemsValues.colored,
+        tax: itemsValues.tax,
+        taxNumber: itemsValues.taxNumber,
+        paymentDate: itemsValues.paymentDate,
+        totalAmount: itemsValues.totalAmount,
+      },
+      "/sales": {
+        date: itemsValues.date,
+        clientName: itemsValues.clientName.trim(),
+        remark: itemsValues.remark,
+        name: itemsValues.name.trim(),
+        number: itemsValues.number,
+        discount: itemsValues.discount,
+        sale: itemsValues.sale,
+        expenses: itemsValues.expenses,
+        tax: itemsValues.tax,
+        colored: itemsValues.colored,
+        quantity: itemsValues.quantity,
+        totalAmount: itemsValues.totalAmount,
+      },
+      "/institutionTax": {
+        date: itemsValues.date,
+        clientName: itemsValues.clientName.trim(),
+        name: itemsValues.name.trim(),
+        number: itemsValues.number,
+        paymentDate: itemsValues.paymentDate,
+        taxNumber: itemsValues.taxNumber,
+        colored: itemsValues.colored,
+        totalAmount: itemsValues.totalAmount,
+      },
+      "/bouncedChecks": {
+        date: itemsValues.date,
+        clientName: itemsValues.clientName.trim(),
+        number: itemsValues.number,
+        checkNumber: itemsValues.checkNumber,
+        bankNumber: itemsValues.bankNumber,
+        branchNumber: itemsValues.branchNumber,
+        accountNumber: itemsValues.accountNumber,
+        paymentDate: itemsValues.paymentDate,
+        taxNumber: itemsValues.taxNumber,
+        colored: itemsValues.colored,
+        totalAmount: itemsValues.totalAmount,
+      },
+      "/contacts": {
+        name: itemsValues.name.trim(),
+        number: itemsValues.number,
+        mail: itemsValues.mail,
+        bankProps: itemsValues.bankProps,
+      },
+    };
 
-    setFetchingStatus((prev) => {
-      return {
-        ...prev,
+    // Default postData
+    const postData = postDataMap[collReq] || {
+      name: itemsValues.name.trim(),
+      number: itemsValues.number,
+    };
+
+    try {
+      await Api.post(collReq, postData, { headers });
+      setItemIsUpdated((prev) => !prev);
+      setFetchingStatus({
         status: false,
         loading: false,
         error: false,
         message: "המוצר נוסף בהצלחה",
-      };
-    });
-    setTimeout(() => {
-      setFetchingStatus((prev) => {
-        return {
-          ...prev,
+      });
+      setTimeout(() => {
+        setFetchingStatus({ status: false, loading: false, message: null });
+      }, 1000);
+    } catch (error) {
+      setFetchingStatus({
+        status: false,
+        loading: false,
+        error: true,
+        message: "Error occurred while adding item",
+      });
+      setTimeout(() => {
+        setFetchingStatus({
           status: false,
           loading: false,
           error: false,
           message: null,
-        };
-      });
-    }, 1000);
+        });
+      }, 1000);
+    }
   };
 
   const addItem = async () => {
@@ -318,11 +282,14 @@ export default function AddItem({
       ref={productFormData}
       onSubmit={confirmAddingItem}
       className="addItem_form"
-      style={{ width: collReq === "/sales" && "95%" }}
+      style={{
+        width: collReq === "/sales" && "95%",
+      }}
     >
       <div className="add-row">
         {(collReq === "/sleevesBids" ||
           collReq === "/institutionTax" ||
+          collReq === "/bouncedChecks" ||
           collReq === "/expenses" ||
           collReq === "/salesToCompanies" ||
           collReq === "/workersExpenses" ||
@@ -398,6 +365,7 @@ export default function AddItem({
         )}
         {(collReq === "/sales" ||
           collReq === "/workersExpenses" ||
+          collReq === "/bouncedChecks" ||
           collReq === "/sleevesBids") && (
           <input
             name="clientName"
@@ -418,11 +386,119 @@ export default function AddItem({
             value={itemsValues.clientName}
           ></input>
         )}
-        {collReq === "/sales" && (
+        {collReq === "/bouncedChecks" && (
+          <input
+            name="checkNumber"
+            id="number"
+            style={{
+              width:
+                collReq === "/sales"
+                  ? "6%"
+                  : collReq === "/institutionTax"
+                  ? "10%"
+                  : "15%",
+            }}
+            required
+            className="add_item"
+            placeholder={"מס שיק"}
+            onDoubleClick={changeColorOfClientName}
+            onChange={(e) =>
+              setItemsValues((prev) => {
+                return {
+                  ...prev,
+                  checkNumber: +e.target.value,
+                };
+              })
+            }
+            value={itemsValues.checkNumber}
+          ></input>
+        )}
+        {collReq === "/bouncedChecks" && (
+          <input
+            name="bankNumber"
+            id="number"
+            style={{
+              width:
+                collReq === "/sales"
+                  ? "6%"
+                  : collReq === "/institutionTax"
+                  ? "10%"
+                  : "15%",
+            }}
+            required
+            className="add_item"
+            placeholder={"מס בנק"}
+            onDoubleClick={changeColorOfClientName}
+            onChange={(e) =>
+              setItemsValues((prev) => {
+                return {
+                  ...prev,
+                  bankNumber: +e.target.value,
+                };
+              })
+            }
+            value={itemsValues.bankNumber}
+          ></input>
+        )}
+        {collReq === "/bouncedChecks" && (
+          <input
+            name="branchNumber"
+            id="number"
+            style={{
+              width:
+                collReq === "/sales"
+                  ? "6%"
+                  : collReq === "/institutionTax" ||
+                    collReq === "/bouncedChecks"
+                  ? "10%"
+                  : "15%",
+            }}
+            required
+            className="add_item"
+            placeholder={"סניף"}
+            onDoubleClick={changeColorOfClientName}
+            onChange={(e) =>
+              setItemsValues((prev) => {
+                return {
+                  ...prev,
+                  branchNumber: +e.target.value,
+                };
+              })
+            }
+            value={itemsValues.branchNumber}
+          ></input>
+        )}
+        {collReq === "/bouncedChecks" && (
+          <input
+            name="accountNumber"
+            id="number"
+            style={{
+              width:
+                collReq === "/sales"
+                  ? "6%"
+                  : collReq === "/institutionTax"
+                  ? "10%"
+                  : "15%",
+            }}
+            required
+            className="add_item"
+            placeholder={"מס חשבון"}
+            onDoubleClick={changeColorOfClientName}
+            onChange={(e) =>
+              setItemsValues((prev) => {
+                return {
+                  ...prev,
+                  accountNumber: +e.target.value,
+                };
+              })
+            }
+            value={itemsValues.accountNumber}
+          ></input>
+        )}
+        {(collReq === "/sales" || collReq === "/bouncedChecks") && (
           <input
             name="remark"
             id="remark"
-            required
             autoFocus={true}
             className="add_item"
             style={{
@@ -499,6 +575,7 @@ export default function AddItem({
         {collReq !== "/sales" &&
           collReq !== "/workersExpenses" &&
           collReq !== "/salesToCompanies" &&
+          collReq !== "/bouncedChecks" &&
           collReq !== "/expenses" &&
           collReq !== "/sleevesBids" && (
             <input
@@ -702,7 +779,9 @@ export default function AddItem({
             value={itemsValues.quantity}
           ></input>
         )}
-        {(collReq === "/expenses" || collReq === "/institutionTax") && (
+        {(collReq === "/expenses" ||
+          collReq === "/institutionTax" ||
+          collReq === "/bouncedChecks") && (
           <input
             name="taxNumber"
             id="taxNumber"
@@ -745,7 +824,9 @@ export default function AddItem({
             required
           />
         )}
-        {(collReq === "/expenses" || collReq === "/institutionTax") && (
+        {(collReq === "/expenses" ||
+          collReq === "/institutionTax" ||
+          collReq === "/bouncedChecks") && (
           <input
             name="paymentDate"
             type="date"
@@ -760,7 +841,9 @@ export default function AddItem({
             }}
             required
             className="add_item"
-            placeholder="בחר תאריך"
+            placeholder={
+              collReq === "/bouncedChecks" ? "תאריך הפקדה" : "בחר תאריך"
+            }
             value={itemsValues.paymentDate}
             onChange={(e) =>
               setItemsValues((prev) => {

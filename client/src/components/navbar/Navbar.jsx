@@ -170,6 +170,9 @@ export default function Navbar() {
         <NavLink to={"/salesToCompanies"} style={{ backgroundColor: "orchid" }}>
           <button name="sales">מכירות לחברות</button>
         </NavLink>
+        <NavLink to={"/bouncedChecks"} style={{ backgroundColor: "#FF7F50" }}>
+          <button name="bouncedChecks">שיקים דחויים</button>
+        </NavLink>
         <NavLink
           to={"/institutionTax"}
           style={{ backgroundColor: "rgb(0, 204, 255)" }}

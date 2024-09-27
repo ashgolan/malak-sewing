@@ -32,6 +32,14 @@ export const sortedInventory = (data, kindOfSort) => {
       return data?.sort((a, b) => (a.tax > b.tax ? 1 : -1));
     case "taxNumber":
       return data?.sort((a, b) => (a.taxNumber > b.taxNumber ? 1 : -1));
+    case "checkNumber":
+      return data?.sort((a, b) => (a.taxNumber > b.taxNumber ? 1 : -1));
+    case "bankNumber":
+      return data?.sort((a, b) => (a.taxNumber > b.taxNumber ? 1 : -1));
+    case "branchNumber":
+      return data?.sort((a, b) => (a.taxNumber > b.taxNumber ? 1 : -1));
+    case "accountNumber":
+      return data?.sort((a, b) => (a.taxNumber > b.taxNumber ? 1 : -1));
     case "location":
       return data?.sort((a, b) => (a.location > b.location ? 1 : -1));
     case "equipment":

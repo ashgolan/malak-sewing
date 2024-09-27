@@ -2,11 +2,11 @@ import "./App.css";
 import Navbar from "./components/navbar/Navbar";
 import { FetchingStatus } from "./utils/context";
 import { Route, Routes, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Login from "./components/login/Login";
 import HomePage from "./components/homepage/HomePage";
 import IdleTimer from "./utils/IdleTimer";
-import { clearTokens, getAccessToken } from "./utils/tokensStorage";
+import { clearTokens } from "./utils/tokensStorage";
 import Providers from "./components/providers/Providers";
 import Inventories from "./components/inventories/Inventories";
 import Contacts from "./components/contacts/Contacts";
@@ -21,7 +21,7 @@ import FreeBidPage from "./components/Bid_components/FreeBidPage";
 import Calender from "./components/calender/Calender";
 import SalesToCompanies from "./components/SalesToCompanies/SalesToCompanies";
 import InstitutionTaxes from "./components/institutionTaxes/InstitutionTaxes";
-import { Api } from "./utils/Api";
+import BouncedChecks from "./components/bouncedChecks/BouncedChecks";
 
 function App() {
   const navigate = useNavigate();
@@ -83,6 +83,10 @@ function App() {
           <Route
             path="/institutionTax"
             element={<InstitutionTaxes></InstitutionTaxes>}
+          ></Route>
+          <Route
+            path="/bouncedChecks"
+            element={<BouncedChecks></BouncedChecks>}
           ></Route>
           <Route path="/bids" element={<BidPage></BidPage>}></Route>
 

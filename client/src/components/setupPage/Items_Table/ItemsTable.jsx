@@ -26,6 +26,10 @@ export default function ItemsTable({
   const [itemsValues, setItemsValues] = useState({
     name: "",
     clientName: "",
+    checkNumber: 0,
+    bankNumber: 0,
+    branchNumber: 0,
+    accountNumber: 0,
     remark: "",
     number: "",
     discount: "",
@@ -53,6 +57,10 @@ export default function ItemsTable({
           clientName: thisItem.clientName ? thisItem.clientName : "",
           remark: thisItem.remark ? thisItem.remark : "-",
           number: thisItem.number ? thisItem.number : "",
+          checkNumber: thisItem.checkNumber ? thisItem.checkNumber : "",
+          bankNumber: thisItem.bankNumber ? thisItem.bankNumber : "",
+          branchNumber: thisItem.branchNumber ? thisItem.branchNumber : "",
+          accountNumber: thisItem.accountNumber ? thisItem.accountNumber : "",
           discount: thisItem.discount ? thisItem.discount : "",
           sale: thisItem.sale ? thisItem.sale : "",
           expenses: thisItem.expenses ? thisItem.expenses : "",
@@ -175,6 +183,7 @@ export default function ItemsTable({
         {(collReq === "/sleevesBids" ||
           collReq === "/expenses" ||
           collReq === "/salesToCompanies" ||
+          collReq === "/bouncedChecks" ||
           collReq === "/institutionTax" ||
           collReq === "/workersExpenses" ||
           collReq === "/sales") && (
@@ -182,7 +191,7 @@ export default function ItemsTable({
             id="date"
             type="date"
             className="input_show_item"
-            style={{ width: report?.type ? "17%" : "11%" }}
+            style={{ width: report?.type ? "17%" : "10%" }}
             disabled={changeStatus.disabled}
             value={itemsValues.date}
             onChange={(e) => {
@@ -241,12 +250,18 @@ export default function ItemsTable({
 
         {(collReq === "/sales" ||
           collReq === "/workersExpenses" ||
+          collReq === "/bouncedChecks" ||
           collReq === "/sleevesBids") && (
           <input
             id="clientName"
             className="input_show_item"
             style={{
-              width: report?.type || collReq === "/sleevesBids" ? "23%" : "13%",
+              width:
+                report?.type || collReq === "/sleevesBids"
+                  ? "23%"
+                  : collReq === "/bouncedChecks"
+                  ? "10%"
+                  : "13%",
               color: itemsValues.colored ? "rgb(255, 71, 46)" : "whitesmoke",
             }}
             disabled={changeStatus.disabled}
@@ -258,7 +273,77 @@ export default function ItemsTable({
             }}
           ></input>
         )}
-        {collReq === "/sales" && (
+
+        {collReq === "/bouncedChecks" && (
+          <input
+            id="checkNumber"
+            className="input_show_item"
+            style={{
+              width: report?.type ? "10%" : "7%",
+              color: itemsValues.colored ? "rgb(255, 71, 46)" : "whitesmoke",
+              textAlign: "center",
+            }}
+            disabled={changeStatus.disabled}
+            value={itemsValues.checkNumber}
+            onChange={(e) => {
+              setItemsValues((prev) => {
+                return { ...prev, checkNumber: e.target.value };
+              });
+            }}
+          ></input>
+        )}
+        {collReq === "/bouncedChecks" && (
+          <input
+            id="bankNumber"
+            className="input_show_item"
+            style={{
+              width: report?.type ? "10%" : "7%",
+              textAlign: "center",
+            }}
+            disabled={changeStatus.disabled}
+            value={itemsValues.bankNumber}
+            onChange={(e) => {
+              setItemsValues((prev) => {
+                return { ...prev, bankNumber: e.target.value };
+              });
+            }}
+          ></input>
+        )}
+        {collReq === "/bouncedChecks" && (
+          <input
+            id="branchNumber"
+            className="input_show_item"
+            style={{
+              width: report?.type ? "10%" : "5%",
+              textAlign: "center",
+            }}
+            disabled={changeStatus.disabled}
+            value={itemsValues.branchNumber}
+            onChange={(e) => {
+              setItemsValues((prev) => {
+                return { ...prev, branchNumber: e.target.value };
+              });
+            }}
+          ></input>
+        )}
+        {collReq === "/bouncedChecks" && (
+          <input
+            id="accountNumber"
+            className="input_show_item"
+            style={{
+              width: report?.type ? "10%" : "7%",
+              textAlign: "center",
+            }}
+            disabled={changeStatus.disabled}
+            value={itemsValues.accountNumber}
+            onChange={(e) => {
+              setItemsValues((prev) => {
+                return { ...prev, accountNumber: e.target.value };
+              });
+            }}
+          ></input>
+        )}
+        {(collReq === "/sales" || collReq === "/bouncedChecks") && (
           <input
             id="remark"
             className="input_show_item"
@@ -346,6 +431,7 @@ export default function ItemsTable({
         {collReq !== "/sales" &&
           collReq !== "/workersExpenses" &&
           collReq !== "/salesToCompanies" &&
+          collReq !== "/bouncedChecks" &&
           collReq !== "/expenses" &&
           collReq !== "/sleevesBids" && (
             <input
@@ -389,7 +475,7 @@ export default function ItemsTable({
                 ? "5%"
                 : collReq === "/contacts" || collReq === "/expenses"
                 ? "8%"
-                : collReq === "/institutionTax"
+                : collReq === "/institutionTax" || collReq === "/bouncedChecks"
                 ? "5%"
                 : "15%",
           }}
@@ -528,11 +614,13 @@ export default function ItemsTable({
             }}
           ></input>
         )}
-        {(collReq === "/expenses" || collReq === "/institutionTax") && (
+        {(collReq === "/expenses" ||
+          collReq === "/institutionTax" ||
+          collReq === "/bouncedChecks") && (
           <input
             id="taxNumber"
             className="input_show_item"
-            style={{ width: "7%" }}
+            style={{ width: collReq === "/bouncedChecks" ? "6%" : "7%" }}
             disabled={changeStatus.disabled}
             value={itemsValues.taxNumber}
             onChange={(e) => {
@@ -564,12 +652,14 @@ export default function ItemsTable({
             required
           />
         )}
-        {(collReq === "/expenses" || collReq === "/institutionTax") && (
+        {(collReq === "/expenses" ||
+          collReq === "/institutionTax" ||
+          collReq === "/bouncedChecks") && (
           <input
             id="paymentDate"
             type="date"
             className="input_show_item"
-            style={{ width: report?.type ? "15%" : "12%" }}
+            style={{ width: report?.type ? "15%" : "10%" }}
             disabled={changeStatus.disabled}
             value={itemsValues.paymentDate}
             onChange={(e) => {
@@ -591,6 +681,7 @@ export default function ItemsTable({
         {(collReq === "/sleevesBids" ||
           collReq === "/expenses" ||
           collReq === "/institutionTax" ||
+          collReq === "/bouncedChecks" ||
           collReq === "/sales") && (
           <input
             id="totalAmount"

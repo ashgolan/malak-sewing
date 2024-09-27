@@ -23,7 +23,10 @@ export const getBouncedCheck = async (req, res) => {
 
 export const createBouncedCheck = async (req, res) => {
   try {
-    const bouncedCheck = await BouncedCheck.create(req.body);
+    const bouncedCheck = await BouncedCheck.create({
+      ...req.body,
+      totalAmount: req.body.number,
+    });
     if (!bouncedCheck) throw Error("Bad data was inserted!");
     res.send(bouncedCheck);
   } catch (e) {
@@ -50,6 +53,7 @@ export const updateBouncedCheck = async (req, res) => {
       {
         $set: {
           ...req.body,
+          totalAmount: req.body.number,
         },
       }
     );
