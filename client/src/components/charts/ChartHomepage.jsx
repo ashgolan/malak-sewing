@@ -257,8 +257,11 @@ function ChartHomepage() {
                   (option) => option.value !== null
                 )}
                 placeholder={
-                  report?.type === "/salesToCompanies" ||
-                  report?.type === "salesToCompaniesCharts"
+                  report?.type === "/institutionTax" ||
+                  report?.type === "institutionTaxCharts"
+                    ? "בחר מוסד"
+                    : report?.type === "/salesToCompanies" ||
+                      report?.type === "salesToCompaniesCharts"
                     ? "בחר חברה"
                     : "בחר קליינט"
                 }

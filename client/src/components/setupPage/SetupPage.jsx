@@ -70,58 +70,76 @@ export default function SetupPage({
     });
 
     if (isFetching) {
-      if (collReq === "/sales") {
-        setFetchingData(fetchingData.salesData);
-      } else if (collReq === "/salesToCompanies") {
-        setFetchingData(fetchingData.salesToCompaniesData);
-      } else if (collReq === "/institutionTax") {
-        setFetchingData(fetchingData.institutionTaxData);
-      } else if (collReq === "/expenses") {
-        setFetchingData(fetchingData.expensesData);
-      } else if (collReq === "/workersExpenses") {
-        setFetchingData(fetchingData.workersExpensesData);
-      } else if (collReq === "/bouncedChecks") {
-        setFetchingData(fetchingData.bouncedChecksData);
-      } else {
-        setFetchingData(fetchingData.sleevesBidsData);
-      }
+      const dataMap = {
+        "/sales": fetchingData.salesData,
+        "/salesToCompanies": fetchingData.salesToCompaniesData,
+        "/institutionTax": fetchingData.institutionTaxData,
+        "/expenses": fetchingData.expensesData,
+        "/workersExpenses": fetchingData.workersExpensesData,
+        "/bouncedChecks": fetchingData.bouncedChecksData,
+      };
+
+      setFetchingData(dataMap[collReq] || fetchingData.sleevesBidsData);
     } else {
       const { data } = await Api.get(collReq, { headers });
 
-      if (collReq === "/sales") {
-        const { data: inventories } = await Api.get("/inventories", {
-          headers,
-        });
-        setInventories(inventories);
-      }
-      if (collReq === "/bouncedChecks") {
-        const { data: bouncedChecks } = await Api.get("/bouncedChecks", {
-          headers,
-        });
-        setBouncedChecks(bouncedChecks);
-      }
-      if (collReq === "/salesToCompanies" || collReq === "/institutionTax") {
-        const { data: companies } = await Api.get("/companies", {
-          headers,
-        });
+      const requests = [];
 
-        setCompanies(companies?.companies);
+      if (collReq === "/sales") {
+        requests.push(Api.get("/inventories", { headers }));
       }
+
+      if (collReq === "/bouncedChecks") {
+        requests.push(Api.get("/bouncedChecks", { headers }));
+      }
+
+      if (collReq === "/salesToCompanies" || collReq === "/institutionTax") {
+        requests.push(Api.get("/companies", { headers }));
+      }
+
       if (collReq === "/expenses") {
-        const { data: providers } = await Api.get("/providers", { headers });
-        setProviders(providers);
+        requests.push(Api.get("/providers", { headers }));
+      }
+
+      const [
+        inventoriesResponse,
+        bouncedChecksResponse,
+        companiesResponse,
+        providersResponse,
+      ] = await Promise.all(requests);
+
+      // Handle responses conditionally
+      if (collReq === "/sales" && inventoriesResponse) {
+        setInventories(inventoriesResponse.data);
+      }
+
+      if (collReq === "/bouncedChecks" && bouncedChecksResponse) {
+        setBouncedChecks(bouncedChecksResponse.data);
+      }
+
+      if (
+        (collReq === "/salesToCompanies" || collReq === "/institutionTax") &&
+        companiesResponse
+      ) {
+        setCompanies(companiesResponse.data?.companies);
+      }
+
+      if (collReq === "/expenses" && providersResponse) {
+        setProviders(providersResponse.data);
       }
 
       if (report === undefined) {
-        if (
-          collReq === "/sales" ||
-          collReq === "/salesToCompanies" ||
-          collReq === "/institutionsTax" ||
-          collReq === "/sleevesBids" ||
-          collReq === "/bouncedChecks" ||
-          collReq === "/workersExpenses" ||
-          collReq === "/expenses"
-        ) {
+        const filterableEndpoints = [
+          "/sales",
+          "/salesToCompanies",
+          "/institutionsTax",
+          "/sleevesBids",
+          "/bouncedChecks",
+          "/workersExpenses",
+          "/expenses",
+        ];
+
+        if (filterableEndpoints.includes(collReq)) {
           setFetchingData(
             data.filter(
               (item) =>
@@ -135,17 +153,18 @@ export default function SetupPage({
       } else {
         setFetchingData(data);
       }
-    }
-    const { data: taxValuesData } = await Api.get("/taxValues", {
-      headers,
-    });
-    setTaxValues(taxValuesData[0]);
-    setFetchingStatus((prev) => {
-      return {
+
+      const { data: taxValuesData } = await Api.get("/taxValues", { headers });
+      setTaxValues(taxValuesData[0]);
+
+      setFetchingStatus((prev) => ({
         ...prev,
         status: false,
         loading: false,
-      };
+      }));
+    }
+    setFetchingStatus((prev) => {
+      return { ...prev, status: false, loading: false };
     });
   };
   // const sendRequest = async (token) => {
