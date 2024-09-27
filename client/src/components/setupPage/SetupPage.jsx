@@ -63,84 +63,168 @@ export default function SetupPage({
     setIsOpen(true);
   }
   const [modalIsOpen, setIsOpen] = React.useState(false);
-
   const sendRequest = async (token) => {
     const headers = { Authorization: token };
-
-    setFetchingStatus({ status: true, loading: true });
+    setFetchingStatus((prev) => {
+      return { ...prev, status: true, loading: true };
+    });
 
     if (isFetching) {
-      // Use already fetched data
-      switch (collReq) {
-        case "/sales":
-          setFetchingData(fetchingData.salesData);
-          break;
-        case "/salesToCompanies":
-          setFetchingData(fetchingData.salesToCompaniesData);
-          break;
-        case "/institutionTax":
-          setFetchingData(fetchingData.institutionTaxData);
-          break;
-        case "/expenses":
-          setFetchingData(fetchingData.expensesData);
-          break;
-        case "/workersExpenses":
-          setFetchingData(fetchingData.workersExpensesData);
-          break;
-        case "/bouncedChecks":
-          setFetchingData(fetchingData.bouncedChecksData);
-          break;
-        default:
-          setFetchingData(fetchingData.sleevesBidsData);
+      if (collReq === "/sales") {
+        setFetchingData(fetchingData.salesData);
+      } else if (collReq === "/salesToCompanies") {
+        setFetchingData(fetchingData.salesToCompaniesData);
+      } else if (collReq === "/institutionTax") {
+        setFetchingData(fetchingData.institutionTaxData);
+      } else if (collReq === "/expenses") {
+        setFetchingData(fetchingData.expensesData);
+      } else if (collReq === "/workersExpenses") {
+        setFetchingData(fetchingData.workersExpensesData);
+      } else if (collReq === "/bouncedChecks") {
+        setFetchingData(fetchingData.bouncedChecksData);
+      } else {
+        setFetchingData(fetchingData.sleevesBidsData);
       }
     } else {
-      // Use Promise.all to fetch multiple requests concurrently
-      const dataFetches = [
-        Api.get(collReq, { headers }),
-        collReq === "/sales" && Api.get("/inventories", { headers }),
-        collReq === "/bouncedChecks" && Api.get("/bouncedChecks", { headers }),
-        (collReq === "/salesToCompanies" || collReq === "/institutionTax") &&
-          Api.get("/companies", { headers }),
-        collReq === "/expenses" && Api.get("/providers", { headers }),
-      ];
+      const { data } = await Api.get(collReq, { headers });
 
-      const [collReqData, inventories, bouncedChecks, companies, providers] =
-        await Promise.all(dataFetches);
-
-      // Conditionally set data based on the response
       if (collReq === "/sales") {
-        setInventories(inventories.data);
+        const { data: inventories } = await Api.get("/inventories", {
+          headers,
+        });
+        setInventories(inventories);
       }
       if (collReq === "/bouncedChecks") {
-        setBouncedChecks(bouncedChecks.data);
+        const { data: bouncedChecks } = await Api.get("/bouncedChecks", {
+          headers,
+        });
+        setBouncedChecks(bouncedChecks);
       }
       if (collReq === "/salesToCompanies" || collReq === "/institutionTax") {
-        setCompanies(companies?.data?.companies);
+        const { data: companies } = await Api.get("/companies", {
+          headers,
+        });
+
+        setCompanies(companies?.companies);
       }
       if (collReq === "/expenses") {
-        setProviders(providers.data);
+        const { data: providers } = await Api.get("/providers", { headers });
+        setProviders(providers);
       }
 
-      // Filter or directly set data based on the conditions
-      if (!report) {
-        setFetchingData(
-          collReqData.data.filter(
-            (item) =>
-              new Date(item.date).getFullYear() === year ||
-              item.colored === true
-          )
-        );
+      if (report === undefined) {
+        if (
+          collReq === "/sales" ||
+          collReq === "/salesToCompanies" ||
+          collReq === "/institutionsTax" ||
+          collReq === "/sleevesBids" ||
+          collReq === "/bouncedChecks" ||
+          collReq === "/workersExpenses" ||
+          collReq === "/expenses"
+        ) {
+          setFetchingData(
+            data.filter(
+              (item) =>
+                new Date(item.date).getFullYear() === year ||
+                item.colored === true
+            )
+          );
+        } else {
+          setFetchingData(data);
+        }
       } else {
-        setFetchingData(collReqData.data);
+        setFetchingData(data);
       }
     }
-
-    // Fetch tax values (this can also be cached or fetched less frequently)
-    const { data: taxValuesData } = await Api.get("/taxValues", { headers });
+    const { data: taxValuesData } = await Api.get("/taxValues", {
+      headers,
+    });
     setTaxValues(taxValuesData[0]);
-
-    setFetchingStatus({ status: false, loading: false });
+    setFetchingStatus((prev) => {
+      return {
+        ...prev,
+        status: false,
+        loading: false,
+      };
+    });
   };
+  // const sendRequest = async (token) => {
+  //   const headers = { Authorization: token };
+
+  //   setFetchingStatus({ status: true, loading: true });
+
+  //   if (isFetching) {
+  //     // Use already fetched data
+  //     switch (collReq) {
+  //       case "/sales":
+  //         setFetchingData(fetchingData.salesData);
+  //         break;
+  //       case "/salesToCompanies":
+  //         setFetchingData(fetchingData.salesToCompaniesData);
+  //         break;
+  //       case "/institutionTax":
+  //         setFetchingData(fetchingData.institutionTaxData);
+  //         break;
+  //       case "/expenses":
+  //         setFetchingData(fetchingData.expensesData);
+  //         break;
+  //       case "/workersExpenses":
+  //         setFetchingData(fetchingData.workersExpensesData);
+  //         break;
+  //       case "/bouncedChecks":
+  //         setFetchingData(fetchingData.bouncedChecksData);
+  //         break;
+  //       default:
+  //         setFetchingData(fetchingData.sleevesBidsData);
+  //     }
+  //   } else {
+  //     // Use Promise.all to fetch multiple requests concurrently
+  //     const dataFetches = [
+  //       Api.get(collReq, { headers }),
+  //       collReq === "/sales" && Api.get("/inventories", { headers }),
+  //       collReq === "/bouncedChecks" && Api.get("/bouncedChecks", { headers }),
+  //       (collReq === "/salesToCompanies" || collReq === "/institutionTax") &&
+  //         Api.get("/companies", { headers }),
+  //       collReq === "/expenses" && Api.get("/providers", { headers }),
+  //     ];
+
+  //     const [collReqData, inventories, bouncedChecks, companies, providers] =
+  //       await Promise.all(dataFetches);
+
+  //     // Conditionally set data based on the response
+  //     if (collReq === "/sales") {
+  //       setInventories(inventories.data);
+  //     }
+  //     if (collReq === "/bouncedChecks") {
+  //       setBouncedChecks(bouncedChecks.data);
+  //     }
+  //     if (collReq === "/salesToCompanies" || collReq === "/institutionTax") {
+  //       setCompanies(companies?.data?.companies);
+  //     }
+  //     if (collReq === "/expenses") {
+  //       setProviders(providers.data);
+  //     }
+
+  //     // Filter or directly set data based on the conditions
+  //     if (!report) {
+  //       setFetchingData(
+  //         collReqData.data.filter(
+  //           (item) =>
+  //             new Date(item.date).getFullYear() === year ||
+  //             item.colored === true
+  //         )
+  //       );
+  //     } else {
+  //       setFetchingData(collReqData.data);
+  //     }
+  //   }
+
+  //   // Fetch tax values (this can also be cached or fetched less frequently)
+  //   const { data: taxValuesData } = await Api.get("/taxValues", { headers });
+  //   setTaxValues(taxValuesData[0]);
+
+  //   setFetchingStatus({ status: false, loading: false });
+  // };
 
   useEffect(() => {
     const fetchData = async () => {
