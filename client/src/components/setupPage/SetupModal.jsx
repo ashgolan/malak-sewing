@@ -120,6 +120,7 @@ export default function SetupModal({
             taskDescription: taskBody?.taskName || "ללא עבודה",
           }
         : { newDescription: taskBody?.taskName };
+    console.log(body);
 
     try {
       setFetchingStatus((prev) => ({
@@ -129,8 +130,10 @@ export default function SetupModal({
         message: null,
       }));
       const headers = { Authorization: getAccessToken() };
+      console.log(endPoint, body, method);
+
       if (method === "post" || method === "put" || method === "patch") {
-        await Api[method](
+        const { data } = await Api[method](
           `${endPoint}${companyId ?? ""}${taskId ?? ""}`,
           body,
           { headers }

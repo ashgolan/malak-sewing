@@ -63,6 +63,7 @@ export default function SetupPage({
     setIsOpen(true);
   }
   const [modalIsOpen, setIsOpen] = React.useState(false);
+
   const sendRequest = async (token) => {
     const headers = { Authorization: token };
     setFetchingStatus((prev) => {
@@ -70,76 +71,49 @@ export default function SetupPage({
     });
 
     if (isFetching) {
-      const dataMap = {
-        "/sales": fetchingData.salesData,
-        "/salesToCompanies": fetchingData.salesToCompaniesData,
-        "/institutionTax": fetchingData.institutionTaxData,
-        "/expenses": fetchingData.expensesData,
-        "/workersExpenses": fetchingData.workersExpensesData,
-        "/bouncedChecks": fetchingData.bouncedChecksData,
-      };
-
-      setFetchingData(dataMap[collReq] || fetchingData.sleevesBidsData);
+      if (collReq === "/sales") {
+        setFetchingData(fetchingData.salesData);
+      } else if (collReq === "/salesToCompanies") {
+        setFetchingData(fetchingData.salesToCompaniesData);
+      } else if (collReq === "/institutionTax") {
+        setFetchingData(fetchingData.institutionTaxData);
+      } else if (collReq === "/expenses") {
+        setFetchingData(fetchingData.expensesData);
+      } else if (collReq === "/workersExpenses") {
+        setFetchingData(fetchingData.workersExpensesData);
+      } else {
+        setFetchingData(fetchingData.sleevesBidsData);
+      }
     } else {
       const { data } = await Api.get(collReq, { headers });
 
-      const requests = [];
-
       if (collReq === "/sales") {
-        requests.push(Api.get("/inventories", { headers }));
+        const { data: inventories } = await Api.get("/inventories", {
+          headers,
+        });
+        setInventories(inventories);
       }
-
-      if (collReq === "/bouncedChecks") {
-        requests.push(Api.get("/bouncedChecks", { headers }));
-      }
-
       if (collReq === "/salesToCompanies" || collReq === "/institutionTax") {
-        requests.push(Api.get("/companies", { headers }));
-      }
+        const { data: companies } = await Api.get("/companies", {
+          headers,
+        });
 
+        setCompanies(companies?.companies);
+      }
       if (collReq === "/expenses") {
-        requests.push(Api.get("/providers", { headers }));
-      }
-
-      const [
-        inventoriesResponse,
-        bouncedChecksResponse,
-        companiesResponse,
-        providersResponse,
-      ] = await Promise.all(requests);
-
-      // Handle responses conditionally
-      if (collReq === "/sales" && inventoriesResponse) {
-        setInventories(inventoriesResponse.data);
-      }
-
-      if (collReq === "/bouncedChecks" && bouncedChecksResponse) {
-        setBouncedChecks(bouncedChecksResponse.data);
-      }
-
-      if (
-        (collReq === "/salesToCompanies" || collReq === "/institutionTax") &&
-        companiesResponse
-      ) {
-        setCompanies(companiesResponse.data?.companies);
-      }
-
-      if (collReq === "/expenses" && providersResponse) {
-        setProviders(providersResponse.data);
+        const { data: providers } = await Api.get("/providers", { headers });
+        setProviders(providers);
       }
 
       if (report === undefined) {
-        const filterableEndpoints = [
-          "/sales",
-          "/salesToCompanies",
-          "/institutionsTax",
-          "/sleevesBids",
-          "/bouncedChecks",
-          "/workersExpenses",
-          "/expenses",
-        ];
-
-        if (filterableEndpoints.includes(collReq)) {
+        if (
+          collReq === "/sales" ||
+          collReq === "/salesToCompanies" ||
+          collReq === "/institutionsTax" ||
+          collReq === "/sleevesBids" ||
+          collReq === "/workersExpenses" ||
+          collReq === "/expenses"
+        ) {
           setFetchingData(
             data.filter(
               (item) =>
@@ -153,20 +127,127 @@ export default function SetupPage({
       } else {
         setFetchingData(data);
       }
-
-      const { data: taxValuesData } = await Api.get("/taxValues", { headers });
-      setTaxValues(taxValuesData[0]);
-
-      setFetchingStatus((prev) => ({
+    }
+    const { data: taxValuesData } = await Api.get("/taxValues", {
+      headers,
+    });
+    setTaxValues(taxValuesData[0]);
+    setFetchingStatus((prev) => {
+      return {
         ...prev,
         status: false,
         loading: false,
-      }));
-    }
-    setFetchingStatus((prev) => {
-      return { ...prev, status: false, loading: false };
+      };
     });
   };
+
+  //--------------------------------------------------------------------
+  // const sendRequest = async (token) => {
+  //   const headers = { Authorization: token };
+  //   setFetchingStatus((prev) => {
+  //     return { ...prev, status: true, loading: true };
+  //   });
+
+  //   if (isFetching) {
+  //     const dataMap = {
+  //       "/sales": fetchingData.salesData,
+  //       "/salesToCompanies": fetchingData.salesToCompaniesData,
+  //       "/institutionTax": fetchingData.institutionTaxData,
+  //       "/expenses": fetchingData.expensesData,
+  //       "/workersExpenses": fetchingData.workersExpensesData,
+  //       "/bouncedChecks": fetchingData.bouncedChecksData,
+  //     };
+
+  //     setFetchingData(dataMap[collReq] || fetchingData.sleevesBidsData);
+  //   } else {
+  //     const { data } = await Api.get(collReq, { headers });
+
+  //     const requests = [];
+
+  //     if (collReq === "/sales") {
+  //       requests.push(Api.get("/inventories", { headers }));
+  //     }
+
+  //     if (collReq === "/bouncedChecks") {
+  //       requests.push(Api.get("/bouncedChecks", { headers }));
+  //     }
+
+  //     if (collReq === "/salesToCompanies" || collReq === "/institutionTax") {
+  //       requests.push(Api.get("/companies", { headers }));
+  //     }
+
+  //     if (collReq === "/expenses") {
+  //       requests.push(Api.get("/providers", { headers }));
+  //     }
+
+  //     const [
+  //       inventoriesResponse,
+  //       bouncedChecksResponse,
+  //       companiesResponse,
+  //       providersResponse,
+  //     ] = await Promise.all(requests);
+
+  //     // Handle responses conditionally
+  //     if (collReq === "/sales" && inventoriesResponse) {
+  //       setInventories(inventoriesResponse.data);
+  //     }
+
+  //     if (collReq === "/bouncedChecks" && bouncedChecksResponse) {
+  //       setBouncedChecks(bouncedChecksResponse.data);
+  //     }
+
+  //     if (
+  //       (collReq === "/salesToCompanies" || collReq === "/institutionTax") &&
+  //       companiesResponse
+  //     ) {
+  //       setCompanies(companiesResponse.data);
+  //     }
+
+  //     if (collReq === "/expenses" && providersResponse) {
+  //       setProviders(providersResponse.data);
+  //     }
+
+  //     if (report === undefined) {
+  //       const filterableEndpoints = [
+  //         "/sales",
+  //         "/salesToCompanies",
+  //         "/institutionsTax",
+  //         "/sleevesBids",
+  //         "/bouncedChecks",
+  //         "/workersExpenses",
+  //         "/expenses",
+  //       ];
+
+  //       if (filterableEndpoints.includes(collReq)) {
+  //         setFetchingData(
+  //           data.filter(
+  //             (item) =>
+  //               new Date(item.date).getFullYear() === year ||
+  //               item.colored === true
+  //           )
+  //         );
+  //       } else {
+  //         setFetchingData(data);
+  //       }
+  //     } else {
+  //       setFetchingData(data);
+  //     }
+
+  //     const { data: taxValuesData } = await Api.get("/taxValues", { headers });
+  //     setTaxValues(taxValuesData[0]);
+
+  //     setFetchingStatus((prev) => ({
+  //       ...prev,
+  //       status: false,
+  //       loading: false,
+  //     }));
+  //   }
+  //   setFetchingStatus((prev) => {
+  //     return { ...prev, status: false, loading: false };
+  //   });
+  // };
+
+  //-----------------------------------------------------------------------------------------------
   // const sendRequest = async (token) => {
   //   const headers = { Authorization: token };
 

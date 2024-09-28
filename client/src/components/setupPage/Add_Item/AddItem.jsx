@@ -259,6 +259,8 @@ export default function AddItem({
     });
   };
   const getCompanyList = () => {
+    console.log(companies);
+
     return companies
       ?.filter((item) => !item.isInstitution)
       .map((item) => ({ value: item._id, label: item.name }));
