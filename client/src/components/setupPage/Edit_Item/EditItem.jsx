@@ -97,6 +97,10 @@ export default function EditItem({
         "date",
         "clientName",
         "name",
+        "containersNumbers",
+        "kindOfWork",
+        "afterTax",
+        "sending",
         "number",
         "colored",
         "totalAmount",
@@ -147,6 +151,13 @@ export default function EditItem({
         loading: false,
         message: "תקלה בעדכון המוצר. אנא נסה שוב",
       });
+      setTimeout(() => {
+        setFetchingStatus({
+          status: false,
+          loading: false,
+          message: null,
+        });
+      }, 1000);
       console.error("Error during the update:", error);
     }
   };
@@ -204,7 +215,7 @@ export default function EditItem({
   return (
     <button
       style={{
-        width: collReq === "/sales" ? "7%" : "11%",
+        width:  "6%" ,
         visibility:
           !itemInChange || changeStatus.itemId === item._id
             ? "visible"

@@ -23,7 +23,6 @@ export const createSaleToCompany = async (req, res) => {
   try {
     const saleToCompany = await SaleToCompany.create({
       ...req.body,
-      totalAmount: req.body.number,
     });
     if (!saleToCompany) throw Error("bad data was inserted!");
     res.send(saleToCompany);

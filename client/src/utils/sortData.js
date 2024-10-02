@@ -4,6 +4,14 @@ export const sortedInventory = (data, kindOfSort) => {
       return data?.sort((a, b) => parseFloat(a.number) - parseFloat(b.number));
     case "clientName":
       return data?.sort((a, b) => (a.clientName > b.clientName ? 1 : -1));
+    case "kindOfWork":
+      return data?.sort((a, b) => (a.kindOfWork > b.kindOfWork ? 1 : -1));
+    case "sending":
+      return data?.sort((a, b) => (a.sending > b.sending ? 1 : -1));
+    case "afterTax":
+      return data?.sort((a, b) => (a.afterTax > b.afterTax ? 1 : -1));
+    case "containersNumbers":
+      return data?.sort((a, b) => (a.containersNumbers > b.containersNumbers ? 1 : -1));
     case "totalAmount":
       return data?.sort(
         (a, b) => parseFloat(a.totalAmount) - parseFloat(b.totalAmount)

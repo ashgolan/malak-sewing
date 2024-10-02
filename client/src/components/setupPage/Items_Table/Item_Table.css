@@ -16,6 +16,8 @@
 .Item_form > .select-category,
 .Item_form > .select-product,
 .Item_form > .select-product-head,
+.Item_form > .select-product-head-salesToCompanies,
+.Item_form > .select-product-head-salesToCompanies-work,
 .head {
   height: 46px;
 }
@@ -44,6 +46,19 @@
   min-width: 15%;
   padding: 0.3% 0;
 }
+.select-product-head-salesToCompanies{
+  max-width: 8%;
+  min-width: 8%;
+  padding: 0.3% 0;
+  
+}
+.select-product-head-salesToCompanies-work{
+  max-width: 12%;
+  min-width: 12%;
+  padding: 0.3% 0;
+  
+}
+
 .desc-style {
   width: 24%;
 }
