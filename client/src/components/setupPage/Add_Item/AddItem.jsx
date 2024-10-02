@@ -637,6 +637,7 @@ export default function AddItem({
               { value: "01", label: "צפון" },
               { value: "02", label: "מרכז" },
               { value: "03", label: "דרום" },
+              { value: "04", label: "-" },
             ]}
             className="add_item select-product-in-add"
             placeholder={"משלוח"}

@@ -541,6 +541,7 @@ export default function ItemsTable({
                 { value: "01", label: "צפון" },
                 { value: "02", label: "מרכז" },
                 { value: "03", label: "דרום" },
+                { value: "04", label: "-" },
               ]}
               className="input_show_item select-product-head-salesToCompanies"
               placeholder={
