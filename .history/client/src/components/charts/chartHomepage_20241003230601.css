@@ -1,0 +1,73 @@
+@media screen and (max-width: 1000px) {
+  .charts-title {
+    width: 80% !important;
+  }
+  .chart-container {
+    width: 70% !important;
+  }
+}
+@media print {
+  .downloadPdf {
+    display: none !important;
+  }
+}
+.companyName-container {
+  direction: rtl;
+  display: flex;
+  width: 50% auto;
+  padding: 0 30%;
+  justify-content: space-around;
+  font-size: 1.2rem;
+  color: brown;
+  font-weight: bold;
+  border-bottom: 2px gold solid;
+}
+.companyName-container > label {
+  width: 10%;
+}
+.charts-title {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row-reverse;
+  width: 90%;
+  margin: 1% auto;
+}
+.charts-title > button {
+  border: none;
+  background-color: lightgreen;
+  border-radius: 2rem;
+  padding: 0.5% 10%;
+  cursor: pointer;
+}
+
+.chart-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  margin: auto;
+}
+.chart-container > button {
+  border: none;
+  border-radius: 2rem;
+  background-color: orangered;
+  color: white;
+  padding: 1% 20%;
+}
+.select-chart {
+  width: 30%;
+}
+.select-worker {
+  width: 20%;
+}
+.downloadPdf {
+  width: 5%;
+}
+.clientsInCharts {
+  width: 20%;
+}
+.downloadPdf > img {
+  width: 100%;
+  cursor: pointer;
+}

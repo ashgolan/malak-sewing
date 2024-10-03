@@ -1,0 +1,112 @@
+@media screen and (max-width: 1000px) {
+  .Item_form {
+    width: 95% !important;
+  }
+}
+.Item_form {
+  width: 95%;
+  padding: 0.3% 0;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+.Item_form > input,
+.Item_form > .select-category,
+.Item_form > .select-product,
+.Item_form > .select-product-head,
+.Item_form > .select-product-head-salesToCompanies,
+.Item_form > .select-product-head-salesToCompanies-work,
+.head {
+  height: 46px;
+}
+
+/* .input_show_item {
+  border: 0.5px whitesmoke solid;
+  background-color: rgb(48, 45, 45);
+  color: whitesmoke;
+  text-align: right;
+  padding: 0.5%;
+  direction: rtl;
+} */
+.input_show_item {
+  border: none;
+  border-bottom: 2px rgb(4, 64, 119) solid;
+  background-color: white;
+  color: rgb(44, 43, 43);
+  text-align: right;
+  padding: 0.5%;
+  direction: rtl;
+}
+.colored-circle{
+  cursor: "pointer",
+  outline: "none",
+  height: "46px",  // Keep this the same for the circular shape
+  width: "46px",   // Set width to match the height for a perfect circle
+  backgroundColor: itemsValues?.colored ? "red" : "rgb(48, 45, 45)",
+  borderRadius: "50%",  // This makes the element a circle
+  boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.2)",  // Adds a subtle shadow
+}
+.select-category {
+  max-width: 4%;
+  min-width: 4%;
+  padding: 0.3% 0;
+}
+.select-product {
+  max-width: 7%;
+  min-width: 7%;
+  padding: 0.3% 0;
+}
+
+.select-product-head {
+  max-width: 15%;
+  min-width: 15%;
+  padding: 0.3% 0;
+}
+.select-product-head-salesToCompanies{
+  max-width: 8%;
+  min-width: 8%;
+  padding: 0.3% 0;
+  
+}
+.select-product-head-salesToCompanies-work{
+  max-width: 12%;
+  min-width: 12%;
+  padding: 0.3% 0;
+  
+}
+
+.desc-style {
+  width: 24%;
+}
+@media screen and (max-width: 1000px) {
+  .Item_form {
+    width: 90%;
+  }
+  .desc-style {
+    width: 20%;
+  }
+  .select-category {
+    max-width: 9%;
+    min-width: 9%;
+  }
+  .select-product {
+    max-width: 17%;
+    min-width: 17%;
+  }
+}
+
+.head {
+  background-color: transparent;
+  border-color: transparent;
+  border-bottom: 2px solid rgb(96, 228, 124);
+  color: rgb(31, 51, 90);
+  font-weight: bold;
+  font-size: 1rem;
+  padding-bottom: 0;
+}
+.head:hover {
+  border-bottom: 2px solid rgb(228, 96, 96);
+  color: rgb(189, 10, 10);
+}

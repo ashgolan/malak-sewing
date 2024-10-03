@@ -15,11 +15,12 @@
   direction: rtl;
   display: flex;
   width: 50% auto;
+  padding: 0 20%;
   justify-content: space-around;
-  font-size: 1.5rem;
+  font-size: 1rem;
   color: brown;
   font-weight: bold;
-  border-bottom: 2px gold solid;
+  border-bottom: 1px gold solid;
 }
 .companyName-container > label {
   width: 10%;

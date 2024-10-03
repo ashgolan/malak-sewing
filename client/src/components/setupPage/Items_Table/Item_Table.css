@@ -20,16 +20,27 @@
 .Item_form > .select-product-head-salesToCompanies-work,
 .head {
   height: 46px;
+  margin: 0.1%;
 }
 
-.input_show_item {
+/* .input_show_item {
   border: 0.5px whitesmoke solid;
   background-color: rgb(48, 45, 45);
   color: whitesmoke;
   text-align: right;
   padding: 0.5%;
   direction: rtl;
+} */
+.input_show_item {
+  border: none;
+  border-bottom: 2px rgb(4, 64, 119) solid;
+  background-color: white;
+  color: rgb(44, 43, 43);
+  text-align: right;
+  padding: 0.5%;
+  direction: rtl;
 }
+
 .select-category {
   max-width: 4%;
   min-width: 4%;
@@ -42,8 +53,8 @@
 }
 
 .select-product-head {
-  max-width: 15%;
-  min-width: 15%;
+  max-width: 18%;
+  min-width: 18%;
   padding: 0.3% 0;
 }
 .select-product-head-salesToCompanies{
@@ -83,7 +94,7 @@
   background-color: transparent;
   border-color: transparent;
   border-bottom: 2px solid rgb(96, 228, 124);
-  color: rgb(30, 46, 75);
+  color: rgb(31, 51, 90);
   font-weight: bold;
   font-size: 1rem;
   padding-bottom: 0;
@@ -91,4 +102,28 @@
 .head:hover {
   border-bottom: 2px solid rgb(228, 96, 96);
   color: rgb(189, 10, 10);
+}
+
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 2px #f30000, inset 0 0 4px #ff0000 }
+  50% { box-shadow: 0 0 8px #f30000, inset 0 0 4px #ff0000 }
+  100% { box-shadow: 0 0 2px #f30000, inset 0 0 4px #ff0000 }
+}
+
+.inner, .notInner {
+  background-color: transparent;
+  width: 15px;
+  height: 15px;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+}
+
+.inner {
+  animation: pulse 2s linear 1s infinite;  /* Add standard animation */
+}
+
+.notInner {
+  box-shadow: 0 0 4px #f1ebeb, inset 0 0 4px #ddd6d6;
 }

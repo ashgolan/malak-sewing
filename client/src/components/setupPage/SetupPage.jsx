@@ -42,7 +42,6 @@ export default function SetupPage({
   const [inventories, setInventories] = useState([]);
   const [companies, setCompanies] = useState([]);
   const [providers, setProviders] = useState([]);
-  const [bouncedChecks, setBouncedChecks] = useState([]);
   const getTotals = () => {
     let total = 0;
     if (collReq === "/workersExpenses") {
@@ -65,84 +64,6 @@ export default function SetupPage({
   }
   const [modalIsOpen, setIsOpen] = React.useState(false);
 
-  const sendRequest = async (token) => {
-    const headers = { Authorization: token };
-    setFetchingStatus((prev) => {
-      return { ...prev, status: true, loading: true };
-    });
-
-    if (isFetching) {
-      if (collReq === "/sales") {
-        setFetchingData(fetchingData.salesData);
-      } else if (collReq === "/salesToCompanies") {
-        setFetchingData(fetchingData.salesToCompaniesData);
-      } else if (collReq === "/institutionTax") {
-        setFetchingData(fetchingData.institutionTaxData);
-      } else if (collReq === "/expenses") {
-        setFetchingData(fetchingData.expensesData);
-      } else if (collReq === "/workersExpenses") {
-        setFetchingData(fetchingData.workersExpensesData);
-      } else {
-        setFetchingData(fetchingData.sleevesBidsData);
-      }
-    } else {
-      const { data } = await Api.get(collReq, { headers });
-
-      if (collReq === "/sales") {
-        const { data: inventories } = await Api.get("/inventories", {
-          headers,
-        });
-        setInventories(inventories);
-      }
-      if (collReq === "/salesToCompanies" || collReq === "/institutionTax") {
-        const { data: companies } = await Api.get("/companies", {
-          headers,
-        });
-
-        setCompanies(companies?.companies);
-      }
-      if (collReq === "/expenses") {
-        const { data: providers } = await Api.get("/providers", { headers });
-        setProviders(providers);
-      }
-
-      if (report === undefined) {
-        if (
-          collReq === "/sales" ||
-          collReq === "/salesToCompanies" ||
-          collReq === "/institutionsTax" ||
-          collReq === "/sleevesBids" ||
-          collReq === "/workersExpenses" ||
-          collReq === "/expenses"
-        ) {
-          setFetchingData(
-            data.filter(
-              (item) =>
-                new Date(item.date).getFullYear() === year ||
-                item.colored === true
-            )
-          );
-        } else {
-          setFetchingData(data);
-        }
-      } else {
-        setFetchingData(data);
-      }
-    }
-    const { data: taxValuesData } = await Api.get("/taxValues", {
-      headers,
-    });
-    setTaxValues(taxValuesData[0]);
-    setFetchingStatus((prev) => {
-      return {
-        ...prev,
-        status: false,
-        loading: false,
-      };
-    });
-  };
-
-  //--------------------------------------------------------------------
   // const sendRequest = async (token) => {
   //   const headers = { Authorization: token };
   //   setFetchingStatus((prev) => {
@@ -150,76 +71,49 @@ export default function SetupPage({
   //   });
 
   //   if (isFetching) {
-  //     const dataMap = {
-  //       "/sales": fetchingData.salesData,
-  //       "/salesToCompanies": fetchingData.salesToCompaniesData,
-  //       "/institutionTax": fetchingData.institutionTaxData,
-  //       "/expenses": fetchingData.expensesData,
-  //       "/workersExpenses": fetchingData.workersExpensesData,
-  //       "/bouncedChecks": fetchingData.bouncedChecksData,
-  //     };
-
-  //     setFetchingData(dataMap[collReq] || fetchingData.sleevesBidsData);
+  //     if (collReq === "/sales") {
+  //       setFetchingData(fetchingData.salesData);
+  //     } else if (collReq === "/salesToCompanies") {
+  //       setFetchingData(fetchingData.salesToCompaniesData);
+  //     } else if (collReq === "/institutionTax") {
+  //       setFetchingData(fetchingData.institutionTaxData);
+  //     } else if (collReq === "/expenses") {
+  //       setFetchingData(fetchingData.expensesData);
+  //     } else if (collReq === "/workersExpenses") {
+  //       setFetchingData(fetchingData.workersExpensesData);
+  //     } else {
+  //       setFetchingData(fetchingData.sleevesBidsData);
+  //     }
   //   } else {
   //     const { data } = await Api.get(collReq, { headers });
 
-  //     const requests = [];
-
   //     if (collReq === "/sales") {
-  //       requests.push(Api.get("/inventories", { headers }));
+  //       const { data: inventories } = await Api.get("/inventories", {
+  //         headers,
+  //       });
+  //       setInventories(inventories);
   //     }
-
-  //     if (collReq === "/bouncedChecks") {
-  //       requests.push(Api.get("/bouncedChecks", { headers }));
-  //     }
-
   //     if (collReq === "/salesToCompanies" || collReq === "/institutionTax") {
-  //       requests.push(Api.get("/companies", { headers }));
-  //     }
+  //       const { data: companies } = await Api.get("/companies", {
+  //         headers,
+  //       });
 
+  //       setCompanies(companies?.companies);
+  //     }
   //     if (collReq === "/expenses") {
-  //       requests.push(Api.get("/providers", { headers }));
-  //     }
-
-  //     const [
-  //       inventoriesResponse,
-  //       bouncedChecksResponse,
-  //       companiesResponse,
-  //       providersResponse,
-  //     ] = await Promise.all(requests);
-
-  //     // Handle responses conditionally
-  //     if (collReq === "/sales" && inventoriesResponse) {
-  //       setInventories(inventoriesResponse.data);
-  //     }
-
-  //     if (collReq === "/bouncedChecks" && bouncedChecksResponse) {
-  //       setBouncedChecks(bouncedChecksResponse.data);
-  //     }
-
-  //     if (
-  //       (collReq === "/salesToCompanies" || collReq === "/institutionTax") &&
-  //       companiesResponse
-  //     ) {
-  //       setCompanies(companiesResponse.data);
-  //     }
-
-  //     if (collReq === "/expenses" && providersResponse) {
-  //       setProviders(providersResponse.data);
+  //       const { data: providers } = await Api.get("/providers", { headers });
+  //       setProviders(providers);
   //     }
 
   //     if (report === undefined) {
-  //       const filterableEndpoints = [
-  //         "/sales",
-  //         "/salesToCompanies",
-  //         "/institutionsTax",
-  //         "/sleevesBids",
-  //         "/bouncedChecks",
-  //         "/workersExpenses",
-  //         "/expenses",
-  //       ];
-
-  //       if (filterableEndpoints.includes(collReq)) {
+  //       if (
+  //         collReq === "/sales" ||
+  //         collReq === "/salesToCompanies" ||
+  //         collReq === "/institutionsTax" ||
+  //         collReq === "/sleevesBids" ||
+  //         collReq === "/workersExpenses" ||
+  //         collReq === "/expenses"
+  //       ) {
   //         setFetchingData(
   //           data.filter(
   //             (item) =>
@@ -233,100 +127,93 @@ export default function SetupPage({
   //     } else {
   //       setFetchingData(data);
   //     }
-
-  //     const { data: taxValuesData } = await Api.get("/taxValues", { headers });
-  //     setTaxValues(taxValuesData[0]);
-
-  //     setFetchingStatus((prev) => ({
+  //   }
+  //   const { data: taxValuesData } = await Api.get("/taxValues", {
+  //     headers,
+  //   });
+  //   setTaxValues(taxValuesData[0]);
+  //   setFetchingStatus((prev) => {
+  //     return {
   //       ...prev,
   //       status: false,
   //       loading: false,
-  //     }));
-  //   }
-  //   setFetchingStatus((prev) => {
-  //     return { ...prev, status: false, loading: false };
+  //     };
   //   });
   // };
 
-  //-----------------------------------------------------------------------------------------------
-  // const sendRequest = async (token) => {
-  //   const headers = { Authorization: token };
-
-  //   setFetchingStatus({ status: true, loading: true });
-
-  //   if (isFetching) {
-  //     // Use already fetched data
-  //     switch (collReq) {
-  //       case "/sales":
-  //         setFetchingData(fetchingData.salesData);
-  //         break;
-  //       case "/salesToCompanies":
-  //         setFetchingData(fetchingData.salesToCompaniesData);
-  //         break;
-  //       case "/institutionTax":
-  //         setFetchingData(fetchingData.institutionTaxData);
-  //         break;
-  //       case "/expenses":
-  //         setFetchingData(fetchingData.expensesData);
-  //         break;
-  //       case "/workersExpenses":
-  //         setFetchingData(fetchingData.workersExpensesData);
-  //         break;
-  //       case "/bouncedChecks":
-  //         setFetchingData(fetchingData.bouncedChecksData);
-  //         break;
-  //       default:
-  //         setFetchingData(fetchingData.sleevesBidsData);
-  //     }
-  //   } else {
-  //     // Use Promise.all to fetch multiple requests concurrently
-  //     const dataFetches = [
-  //       Api.get(collReq, { headers }),
-  //       collReq === "/sales" && Api.get("/inventories", { headers }),
-  //       collReq === "/bouncedChecks" && Api.get("/bouncedChecks", { headers }),
-  //       (collReq === "/salesToCompanies" || collReq === "/institutionTax") &&
-  //         Api.get("/companies", { headers }),
-  //       collReq === "/expenses" && Api.get("/providers", { headers }),
-  //     ];
-
-  //     const [collReqData, inventories, bouncedChecks, companies, providers] =
-  //       await Promise.all(dataFetches);
-
-  //     // Conditionally set data based on the response
-  //     if (collReq === "/sales") {
-  //       setInventories(inventories.data);
-  //     }
-  //     if (collReq === "/bouncedChecks") {
-  //       setBouncedChecks(bouncedChecks.data);
-  //     }
-  //     if (collReq === "/salesToCompanies" || collReq === "/institutionTax") {
-  //       setCompanies(companies?.data?.companies);
-  //     }
-  //     if (collReq === "/expenses") {
-  //       setProviders(providers.data);
-  //     }
-
-  //     // Filter or directly set data based on the conditions
-  //     if (!report) {
-  //       setFetchingData(
-  //         collReqData.data.filter(
-  //           (item) =>
-  //             new Date(item.date).getFullYear() === year ||
-  //             item.colored === true
-  //         )
-  //       );
-  //     } else {
-  //       setFetchingData(collReqData.data);
-  //     }
-  //   }
-
-  //   // Fetch tax values (this can also be cached or fetched less frequently)
-  //   const { data: taxValuesData } = await Api.get("/taxValues", { headers });
-  //   setTaxValues(taxValuesData[0]);
-
-  //   setFetchingStatus({ status: false, loading: false });
-  // };
-
+  const sendRequest = async (token) => {
+    const headers = { Authorization: token };
+    setFetchingStatus((prev) => ({ ...prev, status: true, loading: true }));
+  
+    try {
+      // If data is already being fetched (isFetching is true)
+      if (isFetching) {
+        const cachedDataMap = {
+          "/sales": fetchingData.salesData,
+          "/salesToCompanies": fetchingData.salesToCompaniesData,
+          "/institutionTax": fetchingData.institutionTaxData,
+          "/expenses": fetchingData.expensesData,
+          "/workersExpenses": fetchingData.workersExpensesData,
+          "/sleevesBids": fetchingData.sleevesBidsData,
+        };
+        setFetchingData(cachedDataMap[collReq] || fetchingData.sleevesBidsData);
+      } else {
+        // Prepare API calls
+        const dataRequest = Api.get(collReq, { headers });
+        let extraRequests = [];
+  
+        if (collReq === "/sales") {
+          extraRequests.push(Api.get("/inventories", { headers }));
+        } 
+        if (collReq === "/salesToCompanies" || collReq === "/institutionTax") {
+          extraRequests.push(Api.get("/companies", { headers }));
+        } 
+        if (collReq === "/expenses") {
+          extraRequests.push(Api.get("/providers", { headers }));
+        }
+  
+        // Execute API calls concurrently
+        const [dataResponse, ...extraResponses] = await Promise.all([dataRequest, ...extraRequests]);
+        const data = dataResponse.data;
+  
+        // Set data for inventories, companies, or providers based on requests
+        if (collReq === "/sales" && extraResponses.length > 0) {
+          setInventories(extraResponses[0].data);
+        } else if ((collReq === "/salesToCompanies" || collReq === "/institutionTax") && extraResponses.length > 0) {
+          setCompanies(extraResponses[0].data?.companies);
+        } else if (collReq === "/expenses" && extraResponses.length > 0) {
+          setProviders(extraResponses[0].data);
+        }
+  
+        // Filter or set data as needed
+        if (!report) {
+          const filterConditions = ["/sales", "/salesToCompanies", "/institutionsTax", "/sleevesBids", "/workersExpenses", "/expenses"];
+          if (filterConditions.includes(collReq)) {
+            setFetchingData(
+              data.filter(
+                (item) =>
+                  new Date(item.date).getFullYear() === year ||
+                  item.colored === true
+              )
+            );
+          } else {
+            setFetchingData(data);
+          }
+        } else {
+          setFetchingData(data);
+        }
+      }
+  
+      // Fetch tax values
+      const { data: taxValuesData } = await Api.get("/taxValues", { headers });
+      setTaxValues(taxValuesData[0]);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setFetchingStatus((prev) => ({ ...prev, status: false, loading: false }));
+    }
+  };
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -388,7 +275,9 @@ export default function SetupPage({
         const month =
           new Date(item.date).getMonth() + 1 < 10
             ? `0${new Date(item.date).getMonth() + 1}`
-            : new Date(item.date).getMonth() + 1;
+            : `${new Date(item.date).getMonth() + 1}`;
+            console.log(month);
+            
         if (report?.clientName)
           return (
             monthNames.includes(month) &&
@@ -488,7 +377,7 @@ export default function SetupPage({
           width:
             collReq === "/inventories" || collReq === "/providers"
               ? "80%"
-              : "95%",
+              : "98%",
         }}
       >
         <input
@@ -547,7 +436,7 @@ export default function SetupPage({
                       ? "23%"
                       : collReq === "/bouncedChecks"
                         ? "10%"
-                        : "15%",
+                        : "18%",
               }}
               onClick={(e) => {
                 e.preventDefault();
@@ -916,15 +805,18 @@ export default function SetupPage({
             id="afterTax"
             className="input_show_item head"
             style={{
-              width: "8%",
+              fontSize : "0.8em",
+              width: "6%",
             }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "afterTax");
             }}
           >
-            מע"מ{taxValues?.maamValue && ` %${taxValues?.maamValue}`}
-          </button>
+    מע"מ
+    {taxValues?.maamValue && (
+      <span style={{ fontSize: "0.7em" }}> %{taxValues?.maamValue}</span>
+    )}          </button>
         )}
         {(collReq === "/sleevesBids" ||
           collReq === "/institutionTax" ||

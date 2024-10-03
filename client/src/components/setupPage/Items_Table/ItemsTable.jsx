@@ -65,7 +65,9 @@ export default function ItemsTable({
           bankNumber: thisItem.bankNumber ? thisItem.bankNumber : "",
           branchNumber: thisItem.branchNumber ? thisItem.branchNumber : "",
           accountNumber: thisItem.accountNumber ? thisItem.accountNumber : "",
-          containersNumbers: thisItem.containersNumbers ? thisItem.containersNumbers : "",
+          containersNumbers: thisItem.containersNumbers
+            ? thisItem.containersNumbers
+            : "",
           kindOfWork: thisItem.kindOfWork ? thisItem.kindOfWork : "",
           sending: thisItem.sending ? thisItem.sending : "",
           discount: thisItem.discount ? thisItem.discount : "",
@@ -95,62 +97,98 @@ export default function ItemsTable({
   ].map((item) => {
     return { value: item.value, label: item.label };
   });
-
   const globalCustomStyles = {
     control: (base, state) => ({
       ...base,
       textAlign: "right",
-      backgroundColor: "rgb(48, 45, 45)",
       border: "none",
-      boxShadow: "none",
+      backgroundColor: "white",
       whiteSpace: "nowrap",
       overflow: "hidden",
       textOverflow: "ellipsis",
+      maxHeight: changeStatus.disabled && "40px",
     }),
     dropdownIndicator: (base) => ({
       ...base,
-      display: report?.type !== undefined && "none",
+      // display: report?.type !== undefined && "none",
+      display: "none",
+    }),
+    option: (provided, state) => ({
+      ...provided,
+      padding: "10px", // Adjust padding as needed
+      background: state.isFocused ? "gold" : "rgb#ffd900",
+      color: state.isFocused ? "rgb(48, 45, 45)" : "inherit",
+    }),
+    singleValue: (provided, styles, state) => ({
+      ...provided,
+      ...styles,
+      color: state?.isSelected ? "red" : "black",
+
+      margin: "0",
     }),
     placeholder: (provided) => ({
       ...provided,
-      color:
-        (collReq === "/expenses" || collReq === "/salesToCompanies") && itemsValues.colored
-          ? "rgb(255, 71, 46)"
-          : "whitesmoke",
+      color: itemsValues.colored ? "rgb(255, 71, 46)" : "black",
     }),
     menu: (base) => ({
       ...base,
       textAlign: "center",
-      backgroundColor: "rgb(48, 45, 45)",
-    }),
-    option: (provided, state) => ({
-      ...provided,
-      background: state.isFocused ? "gold" : "rgb(48, 45, 45)",
-      color: state.isFocused ? "rgb(48, 45, 45)" : "inherit",
-    }),
-    singleValue: (styles, state) => {
-      return {
-        ...styles,
-        color: state.isSelected ? "red" : "whitesmoke",
-      };
-    },
-
-    indicatorSeparator: (provided) => ({
-      ...provided,
-      display: "none",
     }),
   };
-  const salesToCompaniesStyles = {
 
-    ...globalCustomStyles,
-    placeholder: (provided) => ({
-      ...provided,
-      color: "whitesmoke", // Set the color to whitesmoke
-    }),
+  // const globalCustomStyles = {
+  //   control: (base, state) => ({
+  //     ...base,
+  //     textAlign: "right",
+  //     backgroundColor: "rgb(48, 45, 45)",
+  //     border: "none",
+  //     boxShadow: "none",
+  //     whiteSpace: "nowrap",
+  //     overflow: "hidden",
+  //     textOverflow: "ellipsis",
+  //   }),
+  //   dropdownIndicator: (base) => ({
+  //     ...base,
+  //     display: report?.type !== undefined && "none",
+  //   }),
+  //   placeholder: (provided) => ({
+  //     ...provided,
+  //     color:
+  //       (collReq === "/expenses" || collReq === "/salesToCompanies") && itemsValues.colored
+  //         ? "rgb(255, 71, 46)"
+  //         : "whitesmoke",
+  //   }),
+  //   menu: (base) => ({
+  //     ...base,
+  //     textAlign: "center",
+  //     backgroundColor: "rgb(48, 45, 45)",
+  //   }),
+  //   option: (provided, state) => ({
+  //     ...provided,
+  //     background: state.isFocused ? "gold" : "rgb(48, 45, 45)",
+  //     color: state.isFocused ? "rgb(48, 45, 45)" : "inherit",
+  //   }),
+  //   singleValue: (styles, state) => {
+  //     return {
+  //       ...styles,
+  //       color: state.isSelected ? "red" : "whitesmoke",
+  //     };
+  //   },
 
+  //   indicatorSeparator: (provided) => ({
+  //     ...provided,
+  //     display: "none",
+  //   }),
+  // };
+  // const salesToCompaniesStyles = {
 
+  //   ...globalCustomStyles,
+  //   placeholder: (provided) => ({
+  //     ...provided,
+  //     color: "whitesmoke", // Set the color to whitesmoke
+  //   }),
 
-  }
+  // }
   const specificCustomStyles = {
     ...globalCustomStyles,
     dropdownIndicator: (provided) => ({
@@ -159,7 +197,7 @@ export default function ItemsTable({
     }),
     placeholder: (provided) => ({
       ...provided,
-      color: "whitesmoke", // Set the color to whitesmoke
+      color: "black", // Set the color to whitesmoke
     }),
   };
   const allSelectData = selectData?.map((item) => {
@@ -200,17 +238,18 @@ export default function ItemsTable({
           width:
             collReq === "/inventories" || collReq === "/providers"
               ? "80%"
-              : "95%",
+              : "98%",
         }}
       >
-
-        <input
+        <label
           id="colored"
-          className="input_show_item"
-          style={{ cursor: "pointer", outline: "none", height: "46px", width: "1%", backgroundColor: itemsValues?.colored ? "red" : "rgb(48, 45, 45)" }}
+          className={itemsValues?.colored ? "inner" : "notInner"}
           disabled={changeStatus.disabled}
           onDoubleClick={changeColorOfClientName}
-
+          style={{
+            pointerEvents: changeStatus.disabled ? "none" : "auto", // Disable clicks when disabled
+            cursor: changeStatus.disabled ? "not-allowed" : "pointer", // Change cursor to indicate it's disabled
+          }}
         />
 
         {(collReq === "/sleevesBids" ||
@@ -220,20 +259,20 @@ export default function ItemsTable({
           collReq === "/institutionTax" ||
           collReq === "/workersExpenses" ||
           collReq === "/sales") && (
-            <input
-              id="date"
-              type="date"
-              className="input_show_item"
-              style={{ width: report?.type ? "14%" : "10%" }}
-              disabled={changeStatus.disabled}
-              value={itemsValues.date}
-              onChange={(e) => {
-                setItemsValues((prev) => {
-                  return { ...prev, date: e.target.value };
-                });
-              }}
-            ></input>
-          )}
+          <input
+            id="date"
+            type="date"
+            className="input_show_item"
+            style={{ width: report?.type ? "14%" : "10%" }}
+            disabled={changeStatus.disabled}
+            value={itemsValues.date}
+            onChange={(e) => {
+              setItemsValues((prev) => {
+                return { ...prev, date: e.target.value };
+              });
+            }}
+          ></input>
+        )}
         {collReq === "/workersExpenses" && (
           <input
             id="location"
@@ -285,27 +324,27 @@ export default function ItemsTable({
           collReq === "/workersExpenses" ||
           collReq === "/bouncedChecks" ||
           collReq === "/sleevesBids") && (
-            <input
-              id="clientName"
-              className="input_show_item"
-              style={{
-                width:
-                  report?.type || collReq === "/sleevesBids"
-                    ? "23%"
-                    : collReq === "/bouncedChecks"
-                      ? "10%"
-                      : "15%",
-                color: itemsValues.colored ? "rgb(255, 71, 46)" : "whitesmoke",
-              }}
-              disabled={changeStatus.disabled}
-              value={itemsValues.clientName}
-              onChange={(e) => {
-                setItemsValues((prev) => {
-                  return { ...prev, clientName: e.target.value };
-                });
-              }}
-            ></input>
-          )}
+          <input
+            id="clientName"
+            className="input_show_item"
+            style={{
+              width:
+                report?.type || collReq === "/sleevesBids"
+                  ? "23%"
+                  : collReq === "/bouncedChecks"
+                  ? "10%"
+                  : "18%",
+              color: itemsValues.colored ? "rgb(255, 71, 46)" : "black",
+            }}
+            disabled={changeStatus.disabled}
+            value={itemsValues.clientName}
+            onChange={(e) => {
+              setItemsValues((prev) => {
+                return { ...prev, clientName: e.target.value };
+              });
+            }}
+          ></input>
+        )}
 
         {collReq === "/bouncedChecks" && (
           <input
@@ -313,7 +352,7 @@ export default function ItemsTable({
             className="input_show_item"
             style={{
               width: report?.type ? "10%" : "7%",
-              color: itemsValues.colored ? "rgb(255, 71, 46)" : "whitesmoke",
+              color: itemsValues.colored ? "rgb(255, 71, 46)" : "black",
               textAlign: "center",
             }}
             disabled={changeStatus.disabled}
@@ -412,54 +451,60 @@ export default function ItemsTable({
         {(collReq === "/sales" ||
           collReq === "/expenses" ||
           collReq === "/salesToCompanies") && (
-            <Select
-              options={
-                collReq === "/salesToCompanies"
-                  ? getTasksFromCompanyList()
-                  : collReq === "/institutionTax"
-                    ? getInstitutionsList()
-                    : allSelectData
-              }
-              className="input_show_item select-product-head-salesToCompanies-work "
-              placeholder={itemsValues?.name ? itemsValues.name : "עבודה מוצר"}
-              isDisabled={changeStatus.disabled}
-              styles={globalCustomStyles} menuPlacement="auto"
-              required
-              defaultValue={itemsValues.name}
-              onChange={(e) => {
-                const filteredItem = selectData.find(
-                  (item) => item._id === e.value
-                );
-                setItemsValues((prev) => {
-                  return {
-                    ...prev,
-                    name: e.label,
-                    containersNumbers: e?.label === 'משלוח' ? "-" : prev.containersNumbers,
-                    kindOfWork: e?.label === 'משלוח' ? "-" : prev.kindOfWork,
-                    number:
-                      collReq === "/expenses" || collReq === "/salesToCompanies"
-                        ? prev.number
-                        : filteredItem?.number,
-                    sale:
-                      +filteredItem?.number -
-                      (+prev.discount * +filteredItem?.number) / 100,
-                    totalAmount: !(collReq === "/salesToCompanies")
+          <Select
+            options={
+              collReq === "/salesToCompanies"
+                ? getTasksFromCompanyList()
+                : collReq === "/institutionTax"
+                ? getInstitutionsList()
+                : allSelectData
+            }
+            className="input_show_item select-product-head-salesToCompanies-work "
+            placeholder={itemsValues?.name ? itemsValues.name : "עבודה מוצר"}
+            isDisabled={changeStatus.disabled}
+            styles={
+              itemsValues?.clientName
+                ? specificCustomStyles
+                : globalCustomStyles
+            }
+            menuPlacement="auto"
+            required
+            defaultValue={itemsValues.name}
+            onChange={(e) => {
+              const filteredItem = selectData.find(
+                (item) => item._id === e.value
+              );
+              setItemsValues((prev) => {
+                return {
+                  ...prev,
+                  name: e.label,
+                  containersNumbers:
+                    e?.label === "משלוח" ? "-" : prev.containersNumbers,
+                  kindOfWork: e?.label === "משלוח" ? "-" : prev.kindOfWork,
+                  number:
+                    collReq === "/expenses" || collReq === "/salesToCompanies"
                       ? prev.number
-                      : !(collReq === "/sales")
-                        ? +prev.quantity
-                          ? +filteredItem?.number * +prev.quantity
-                          : collReq === "/inventories"
-                            ? +filteredItem?.number
-                            : prev.number
-                        : (+filteredItem?.number -
-                          (+filteredItem?.number * +prev.discount) / 100) *
+                      : filteredItem?.number,
+                  sale:
+                    +filteredItem?.number -
+                    (+prev.discount * +filteredItem?.number) / 100,
+                  totalAmount: !(collReq === "/salesToCompanies")
+                    ? prev.number
+                    : !(collReq === "/sales")
+                    ? +prev.quantity
+                      ? +filteredItem?.number * +prev.quantity
+                      : collReq === "/inventories"
+                      ? +filteredItem?.number
+                      : prev.number
+                    : (+filteredItem?.number -
+                        (+filteredItem?.number * +prev.discount) / 100) *
                         +prev.quantity -
-                        +prev.expenses,
-                  };
-                });
-              }}
-            ></Select>
-          )}
+                      +prev.expenses,
+                };
+              });
+            }}
+          ></Select>
+        )}
         {collReq !== "/sales" &&
           collReq !== "/workersExpenses" &&
           collReq !== "/salesToCompanies" &&
@@ -505,65 +550,57 @@ export default function ItemsTable({
             }}
           ></input>
         )}
-        {
-          collReq === "/salesToCompanies" && (
-            <Select
-              options=
-              {[
-                { value: "tur", label: "טורקית" },
-                { value: "hud", label: "הודית" },
-                { value: "null", label: "-" },
-              ]}
-              className="input_show_item select-product-head-salesToCompanies "
-              placeholder={
-                itemsValues?.kindOfWork ? itemsValues.kindOfWork : "סוג הובלה"
-              }
-              isDisabled={changeStatus.disabled}
-              styles={salesToCompaniesStyles}
-              menuPlacement="auto"
-              required
-              defaultValue={itemsValues.kindOfWork}
-              onChange={(e) => {
-
-                setItemsValues((prev) => {
-                  return {
-                    ...prev,
-                    kindOfWork: e.label,
-                  };
-                });
-              }}
-            ></Select>
-          )}
-        {
-          collReq === "/salesToCompanies" && (
-            <Select
-              options={[
-                { value: "01", label: "צפון" },
-                { value: "02", label: "מרכז" },
-                { value: "03", label: "דרום" },
-                { value: "04", label: "-" },
-              ]}
-              className="input_show_item select-product-head-salesToCompanies"
-              placeholder={
-                itemsValues?.sending ? itemsValues.sending : "משלוח"
-              }
-              isDisabled={changeStatus.disabled}
-              styles={salesToCompaniesStyles}
-
-              menuPlacement="auto"
-              required
-              defaultValue={itemsValues.sending}
-              onChange={(e) => {
-
-                setItemsValues((prev) => {
-                  return {
-                    ...prev,
-                    sending: e.label,
-                  };
-                });
-              }}
-            ></Select>
-          )}
+        {collReq === "/salesToCompanies" && (
+          <Select
+            options={[
+              { value: "tur", label: "טורקית" },
+              { value: "hud", label: "הודית" },
+              { value: "null", label: "-" },
+            ]}
+            className="input_show_item select-product-head-salesToCompanies "
+            placeholder={
+              itemsValues?.kindOfWork ? itemsValues.kindOfWork : "סוג הובלה"
+            }
+            isDisabled={changeStatus.disabled}
+            styles={specificCustomStyles}
+            menuPlacement="auto"
+            required
+            defaultValue={itemsValues.kindOfWork}
+            onChange={(e) => {
+              setItemsValues((prev) => {
+                return {
+                  ...prev,
+                  kindOfWork: e.label,
+                };
+              });
+            }}
+          ></Select>
+        )}
+        {collReq === "/salesToCompanies" && (
+          <Select
+            options={[
+              { value: "01", label: "צפון" },
+              { value: "02", label: "מרכז" },
+              { value: "03", label: "דרום" },
+              { value: "04", label: "-" },
+            ]}
+            className="input_show_item select-product-head-salesToCompanies"
+            placeholder={itemsValues?.sending ? itemsValues.sending : "משלוח"}
+            isDisabled={changeStatus.disabled}
+            styles={specificCustomStyles}
+            menuPlacement="auto"
+            required
+            defaultValue={itemsValues.sending}
+            onChange={(e) => {
+              setItemsValues((prev) => {
+                return {
+                  ...prev,
+                  sending: e.label,
+                };
+              });
+            }}
+          ></Select>
+        )}
         <input
           id="number"
           className="input_show_item"
@@ -572,10 +609,12 @@ export default function ItemsTable({
               collReq === "/sales" || collReq === "/workersExpenses"
                 ? "5%"
                 : collReq === "/contacts" || collReq === "/expenses"
-                  ? "8%"
-                  : collReq === "/institutionTax" || collReq === "/bouncedChecks"
-                    ? "5%"
-                    : collReq === '/salesToCompanies' ? "6%" : "15%",
+                ? "8%"
+                : collReq === "/institutionTax" || collReq === "/bouncedChecks"
+                ? "5%"
+                : collReq === "/salesToCompanies"
+                ? "6%"
+                : "15%",
           }}
           disabled={changeStatus.disabled}
           value={
@@ -588,22 +627,24 @@ export default function ItemsTable({
               return {
                 ...prev,
                 number: e.target.value,
-                afterTax:(+e.target.value * +taxValues?.maamValue /100),
+                afterTax: (+e.target.value * +taxValues?.maamValue) / 100,
                 sale:
                   +e.target.value - (+prev.discount * +e.target.value) / 100,
                 totalAmount:
-                  collReq === '/salesToCompanies' ? +e.target.value + (+e.target.value * (taxValues?.maamValue / 100)) :
-                    collReq === "/institutionTax"
-                      ? +e.target.value -
+                  collReq === "/salesToCompanies"
+                    ? +e.target.value +
+                      +e.target.value * (taxValues?.maamValue / 100)
+                    : collReq === "/institutionTax"
+                    ? +e.target.value -
                       +e.target.value * (+taxValues?.masValue / 100)
-                      : !(collReq === "/sales")
-                        ? +prev.quantity
-                          ? +e.target.value * +prev.quantity
-                          : +e.target.value
-                        : (+e.target.value -
-                          (+e.target.value * +prev.discount) / 100) *
+                    : !(collReq === "/sales")
+                    ? +prev.quantity
+                      ? +e.target.value * +prev.quantity
+                      : +e.target.value
+                    : (+e.target.value -
+                        (+e.target.value * +prev.discount) / 100) *
                         +prev.quantity -
-                        +prev.expenses,
+                      +prev.expenses,
               };
             });
           }}
@@ -623,7 +664,7 @@ export default function ItemsTable({
                   sale: +prev.number - (+prev.number * +e.target.value) / 100,
                   totalAmount:
                     (+prev.number - (+prev.number * +e.target.value) / 100) *
-                    +prev.quantity -
+                      +prev.quantity -
                     +prev.expenses,
                 };
               });
@@ -654,8 +695,8 @@ export default function ItemsTable({
                   totalAmount:
                     collReq === "/sales"
                       ? (+prev.number - (+prev.number * +prev.discount) / 100) *
-                      +e.target.value -
-                      +prev.expenses
+                          +e.target.value -
+                        +prev.expenses
                       : e.target.value * prev.number,
                 };
               });
@@ -676,7 +717,7 @@ export default function ItemsTable({
                   expenses: e.target.value,
                   totalAmount:
                     (+prev.number - (+prev.number * +prev.discount) / 100) *
-                    +prev.quantity -
+                      +prev.quantity -
                     +e.target.value,
                 };
               });
@@ -716,58 +757,58 @@ export default function ItemsTable({
         {(collReq === "/expenses" ||
           collReq === "/institutionTax" ||
           collReq === "/bouncedChecks") && (
-            <input
-              id="taxNumber"
-              className="input_show_item"
-              style={{ width: collReq === "/bouncedChecks" ? "6%" : "7%" }}
-              disabled={changeStatus.disabled}
-              value={itemsValues.taxNumber}
-              onChange={(e) => {
-                setItemsValues((prev) => {
-                  return { ...prev, taxNumber: e.target.value };
-                });
-              }}
-            ></input>
-          )}
+          <input
+            id="taxNumber"
+            className="input_show_item"
+            style={{ width: collReq === "/bouncedChecks" ? "6%" : "7%" }}
+            disabled={changeStatus.disabled}
+            value={itemsValues.taxNumber}
+            onChange={(e) => {
+              setItemsValues((prev) => {
+                return { ...prev, taxNumber: e.target.value };
+              });
+            }}
+          ></input>
+        )}
 
         {(collReq === "/sleevesBids" ||
           collReq === "/sales" ||
           collReq === "/expenses" ||
           collReq === "/workersExpenses") && (
-            <Select
-              id="tax"
-              options={allTaxSelect}
-              className="input_show_item select-category"
-              isDisabled={changeStatus.disabled}
-              placeholder={itemsValues?.tax === true ? "כן" : "לא"}
-              defaultValue={itemsValues.tax}
-              onChange={(e) => {
-                setItemsValues((prev) => {
-                  return { ...prev, tax: e.value };
-                });
-              }}
-              menuPlacement="auto"
-              styles={specificCustomStyles}
-              required
-            />
-          )}
+          <Select
+            id="tax"
+            options={allTaxSelect}
+            className="input_show_item select-category"
+            isDisabled={changeStatus.disabled}
+            placeholder={itemsValues?.tax === true ? "כן" : "לא"}
+            defaultValue={itemsValues.tax}
+            onChange={(e) => {
+              setItemsValues((prev) => {
+                return { ...prev, tax: e.value };
+              });
+            }}
+            menuPlacement="auto"
+            styles={specificCustomStyles}
+            required
+          />
+        )}
         {(collReq === "/expenses" ||
           collReq === "/institutionTax" ||
           collReq === "/bouncedChecks") && (
-            <input
-              id="paymentDate"
-              type="date"
-              className="input_show_item"
-              style={{ width: report?.type ? "12%" : "10%" }}
-              disabled={changeStatus.disabled}
-              value={itemsValues.paymentDate}
-              onChange={(e) => {
-                setItemsValues((prev) => {
-                  return { ...prev, paymentDate: e.target.value };
-                });
-              }}
-            ></input>
-          )}
+          <input
+            id="paymentDate"
+            type="date"
+            className="input_show_item"
+            style={{ width: report?.type ? "12%" : "10%" }}
+            disabled={changeStatus.disabled}
+            value={itemsValues.paymentDate}
+            onChange={(e) => {
+              setItemsValues((prev) => {
+                return { ...prev, paymentDate: e.target.value };
+              });
+            }}
+          ></input>
+        )}
         {collReq === "/institutionTax" && (
           <input
             id="withholdingTax"
@@ -781,7 +822,7 @@ export default function ItemsTable({
           <input
             id="afterTax"
             className="input_show_item"
-            style={{ width: "8%" }}
+            style={{ width: "6%" }}
             disabled
             value={+itemsValues?.afterTax}
           />
@@ -792,20 +833,20 @@ export default function ItemsTable({
           collReq === "/salesToCompanies" ||
           collReq === "/bouncedChecks" ||
           collReq === "/sales") && (
-            <input
-              id="totalAmount"
-              className="input_show_item"
-              style={{
-                width: collReq === "/expenses" ? "10%" : "6%",
-              }}
-              disabled
-              value={
-                +itemsValues?.totalAmount == ""
-                  ? 0
-                  : +itemsValues?.totalAmount?.toFixed(2)
-              }
-            ></input>
-          )}
+          <input
+            id="totalAmount"
+            className="input_show_item"
+            style={{
+              width: collReq === "/expenses" ? "10%" : "6%",
+            }}
+            disabled
+            value={
+              +itemsValues?.totalAmount == ""
+                ? 0
+                : +itemsValues?.totalAmount?.toFixed(2)
+            }
+          ></input>
+        )}
         {!report?.type && (
           <EditItem
             item={item}
