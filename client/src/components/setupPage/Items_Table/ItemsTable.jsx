@@ -114,7 +114,7 @@ export default function ItemsTable({
     placeholder: (provided) => ({
       ...provided,
       color:
-        collReq === "/expenses" || collReq === "/salesToCompanies" && itemsValues.colored
+        (collReq === "/expenses" || collReq === "/salesToCompanies") && itemsValues.colored
           ? "rgb(255, 71, 46)"
           : "whitesmoke",
     }),

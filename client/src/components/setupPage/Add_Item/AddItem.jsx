@@ -609,7 +609,7 @@ export default function AddItem({
               value={itemsValues.containersNumbers}
             ></input>
           )}
-        {itemsValues?.name === "פריקה" && (
+        {(itemsValues?.name === "פריקה" || itemsValues?.name === "פריקה ומשלוח") && (
           <Select
             options={[
               { value: "tur", label: "טורקית" },
