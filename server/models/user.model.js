@@ -23,21 +23,34 @@ const userSchema = new Schema({
   role: { type: String, required: true },
 });
 
+// userSchema.methods.generateAuthToken = async
 userSchema.methods.generateAuthToken = async function () {
   const user = this;
+
+  // Generate access and refresh tokens
   const accessToken = jwt.sign(
     { _id: user._id.toString() },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: "120min" }
+    { expiresIn: "300min" }
   );
   const refreshToken = jwt.sign(
     { _id: user._id.toString() },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: "240min" }
+    { expiresIn: "940min" }
   );
 
+  // Store access token (optional: limit token array size)
   user.tokens = user.tokens.concat({ accessToken });
-  await user.save();
+  if (user.tokens.length > 10) {
+    user.tokens = user.tokens.slice(-10);  // Keep only the last 10 tokens
+  }
+
+  // Save user in the background without blocking the login process
+  user.save().catch((err) => {
+    console.error('Failed to save user tokens:', err);
+  });
+
+  // Return tokens immediately to speed up login
   return { accessToken, refreshToken, user };
 };
 
