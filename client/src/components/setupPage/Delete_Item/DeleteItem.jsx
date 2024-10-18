@@ -26,7 +26,7 @@ export default function DeleteItem({
       headers: headers,
     });
     setFetchingStatus((prev) => {
-      return { ...prev, loading: false, message: "המוצר נמחק בהצלחה" };
+      return { ...prev, loading: false, message: "המחיקה בוצעה בהצלחה" };
     });
     setTimeout(() => {
       setFetchingStatus((prev) => {

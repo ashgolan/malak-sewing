@@ -159,7 +159,7 @@ export default function AddItem({
         status: false,
         loading: false,
         error: false,
-        message: "המוצר נוסף בהצלחה",
+        message: "ההוספה בוצעה בהצלחה",
       });
       setTimeout(() => {
         setFetchingStatus({ status: false, loading: false, message: null });
