@@ -21,7 +21,6 @@ export default function Login({ setLoggedIn }) {
     password: "",
   });
 
-  const [validEmail, setValidEmail] = useState(null);
   const checklogin = async (e) => {
     e.preventDefault();
     try {
@@ -42,8 +41,9 @@ export default function Login({ setLoggedIn }) {
       setTokens(data.accessToken, data.refreshToken);
       setLoggedIn(true);
       navigate("homepage/");
-
-      setFetchingStatus({ status: false, loading: false });
+      setTimeout(() => {
+        setFetchingStatus({ status: false, loading: false, message: null });
+      }, 1000);
     } catch (e) {
       setFetchingStatus({
         status: true,
@@ -51,7 +51,9 @@ export default function Login({ setLoggedIn }) {
         error: true,
         message: e.message,
       });
-      setValidEmail(e.message);
+      setTimeout(() => {
+        setFetchingStatus({ status: false, loading: false, message: null });
+      }, 1000);
     }
   };
   return (
@@ -71,9 +73,9 @@ export default function Login({ setLoggedIn }) {
                     <input
                       type="email"
                       value={login.email}
+                      required
                       id="typeEmailX-2"
                       onChange={(e) => {
-                        setValidEmail("");
                         setLogin((prev) => {
                           return { ...prev, email: e.target.value };
                         });
@@ -88,6 +90,7 @@ export default function Login({ setLoggedIn }) {
                   <div className="form-outline mb-1">
                     <input
                       type="password"
+                      required
                       value={login.password}
                       onChange={(e) =>
                         setLogin((prev) => {
@@ -114,7 +117,6 @@ export default function Login({ setLoggedIn }) {
                       כניסה
                     </button>
                   </div>
-                  <label style={{ color: "brown" }}>{validEmail}</label>
                 </div>
               </div>
             </div>
