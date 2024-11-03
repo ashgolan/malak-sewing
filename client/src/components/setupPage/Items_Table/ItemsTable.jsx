@@ -635,8 +635,8 @@ export default function ItemsTable({
                     ? +e.target.value +
                       +e.target.value * (taxValues?.maamValue / 100)
                     : collReq === "/institutionTax"
-                    ? +e.target.value -
-                      +e.target.value * (+taxValues?.masValue / 100)
+                    ? (+e.target.value + (+e.target.value * +taxValues?.maamValue /100)) -
+                      (+e.target.value * (+taxValues?.masValue / 100))
                     : !(collReq === "/sales")
                     ? +prev.quantity
                       ? +e.target.value * +prev.quantity

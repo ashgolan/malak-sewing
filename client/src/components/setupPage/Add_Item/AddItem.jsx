@@ -722,8 +722,10 @@ export default function AddItem({
                 totalAmount:
                 collReq === '/salesToCompanies' ? +e.target.value + (+e.target.value * (taxValues?.maamValue / 100)) :
                   collReq === "/institutionTax"
-                    ? +e.target.value -
-                    +e.target.value * (+taxValues?.masValue / 100)
+                    ? 
+                    
+                    (+e.target.value + (+e.target.value * +taxValues?.maamValue /100)) -
+                      (+e.target.value * (+taxValues?.masValue / 100))
                     : !(collReq === "/sales")
                       ? +prev.quantity
                         ? +e.target.value * +prev.quantity
@@ -944,7 +946,7 @@ export default function AddItem({
           <input
             id="withholdingTax"
             className="add_item"
-            style={{ width: "6%" }}
+            style={{ width: "7%" }}
             disabled
             value={(
               +itemsValues?.number *
