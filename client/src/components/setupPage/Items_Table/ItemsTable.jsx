@@ -635,8 +635,11 @@ export default function ItemsTable({
                     ? +e.target.value +
                       +e.target.value * (taxValues?.maamValue / 100)
                     : collReq === "/institutionTax"
-                    ? (+e.target.value + (+e.target.value * +taxValues?.maamValue /100)) -
-                      (+e.target.value * (+taxValues?.masValue / 100))
+                    ? +e.target.value +
+                      (+e.target.value * +taxValues?.maamValue) / 100 -
+                      (+e.target.value +
+                        (+e.target.value * +taxValues?.maamValue) / 100) *
+                        (+taxValues?.masValue / 100)
                     : !(collReq === "/sales")
                     ? +prev.quantity
                       ? +e.target.value * +prev.quantity
@@ -815,7 +818,11 @@ export default function ItemsTable({
             className="input_show_item"
             style={{ width: "8%" }}
             disabled
-            value={+itemsValues?.number * (+taxValues?.masValue / 100)}
+            value={
+              (+itemsValues?.number +
+                +itemsValues?.number * (taxValues?.maamValue / 100)) *
+              (+taxValues?.masValue / 100)
+            }
           />
         )}
         {collReq === "/salesToCompanies" && (

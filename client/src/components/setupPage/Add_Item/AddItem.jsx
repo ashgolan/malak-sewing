@@ -38,7 +38,7 @@ export default function AddItem({
     quantity: "",
     clientName: "",
     remark: "",
-    afterTax : "" ,
+    afterTax: "",
     kindOfWork: "",
     sending: "",
     discount: "",
@@ -253,7 +253,6 @@ export default function AddItem({
       ...base,
       textAlign: "center",
       border: "none",
-      
     }),
     menu: (base) => ({
       ...base,
@@ -306,29 +305,29 @@ export default function AddItem({
           collReq === "/salesToCompanies" ||
           collReq === "/workersExpenses" ||
           collReq === "/sales") && (
-            <input
-              name="date"
-              type="date"
-              id="date"
-              style={{
-                width:
-                  collReq === "/sales" || "/salesToCompanies"
-                    ? "13%"
-                    : collReq === "/institutionTax"
-                      ? "17%"
-                      : "25%",
-              }}
-              required
-              className="add_item"
-              placeholder="בחר תאריך"
-              value={itemsValues.date}
-              onChange={(e) =>
-                setItemsValues((prev) => {
-                  return { ...prev, date: e.target.value };
-                })
-              }
-            ></input>
-          )}
+          <input
+            name="date"
+            type="date"
+            id="date"
+            style={{
+              width:
+                collReq === "/sales" || "/salesToCompanies"
+                  ? "13%"
+                  : collReq === "/institutionTax"
+                  ? "17%"
+                  : "25%",
+            }}
+            required
+            className="add_item"
+            placeholder="בחר תאריך"
+            value={itemsValues.date}
+            onChange={(e) =>
+              setItemsValues((prev) => {
+                return { ...prev, date: e.target.value };
+              })
+            }
+          ></input>
+        )}
         {collReq === "/workersExpenses" && (
           <input
             name="location"
@@ -379,25 +378,25 @@ export default function AddItem({
           collReq === "/workersExpenses" ||
           collReq === "/bouncedChecks" ||
           collReq === "/sleevesBids") && (
-            <input
-              name="clientName"
-              id="clientName"
-              required
-              autoFocus={true}
-              className="add_item"
-              style={{
-                width: collReq === "/sales" ? "10%" : "15%",
-                color: itemsValues.colored ? "rgb(255, 71, 46)" : "black",
-              }}
-              placeholder={collReq === "/workersExpenses" ? "עובד" : "קליינט"}
-              onChange={(e) =>
-                setItemsValues((prev) => {
-                  return { ...prev, clientName: e.target.value };
-                })
-              }
-              value={itemsValues.clientName}
-            ></input>
-          )}
+          <input
+            name="clientName"
+            id="clientName"
+            required
+            autoFocus={true}
+            className="add_item"
+            style={{
+              width: collReq === "/sales" ? "10%" : "15%",
+              color: itemsValues.colored ? "rgb(255, 71, 46)" : "black",
+            }}
+            placeholder={collReq === "/workersExpenses" ? "עובד" : "קליינט"}
+            onChange={(e) =>
+              setItemsValues((prev) => {
+                return { ...prev, clientName: e.target.value };
+              })
+            }
+            value={itemsValues.clientName}
+          ></input>
+        )}
         {collReq === "/bouncedChecks" && (
           <input
             name="checkNumber"
@@ -408,8 +407,8 @@ export default function AddItem({
                 collReq === "/sales"
                   ? "6%"
                   : collReq === "/institutionTax"
-                    ? "10%"
-                    : "15%",
+                  ? "10%"
+                  : "15%",
             }}
             required
             className="add_item"
@@ -436,8 +435,8 @@ export default function AddItem({
                 collReq === "/sales"
                   ? "6%"
                   : collReq === "/institutionTax"
-                    ? "10%"
-                    : "15%",
+                  ? "10%"
+                  : "15%",
             }}
             required
             className="add_item"
@@ -465,8 +464,8 @@ export default function AddItem({
                   ? "6%"
                   : collReq === "/institutionTax" ||
                     collReq === "/bouncedChecks"
-                    ? "10%"
-                    : "15%",
+                  ? "10%"
+                  : "15%",
             }}
             required
             className="add_item"
@@ -493,8 +492,8 @@ export default function AddItem({
                 collReq === "/sales"
                   ? "6%"
                   : collReq === "/institutionTax"
-                    ? "10%"
-                    : "15%",
+                  ? "10%"
+                  : "15%",
             }}
             required
             className="add_item"
@@ -511,26 +510,27 @@ export default function AddItem({
             value={itemsValues.accountNumber}
           ></input>
         )}
-        {(collReq === "/sales" ||
-          collReq === "/bouncedChecks") && (
-            <input
-              name="remark"
-              id="remark"
-              autoFocus={true}
-              className="add_item"
-              style={{
-                width: collReq === "/salesToCompanies" ? "20%" : "10%",
-                color: itemsValues.colored ? "rgb(255, 71, 46)" : "black",
-              }}
-              placeholder={collReq === "/salesToCompanies" ? "מס קונטיינר" : "הערה"}
-              onChange={(e) =>
-                setItemsValues((prev) => {
-                  return { ...prev, remark: e.target.value };
-                })
-              }
-              value={itemsValues.remark}
-            ></input>
-          )}
+        {(collReq === "/sales" || collReq === "/bouncedChecks") && (
+          <input
+            name="remark"
+            id="remark"
+            autoFocus={true}
+            className="add_item"
+            style={{
+              width: collReq === "/salesToCompanies" ? "20%" : "10%",
+              color: itemsValues.colored ? "rgb(255, 71, 46)" : "black",
+            }}
+            placeholder={
+              collReq === "/salesToCompanies" ? "מס קונטיינר" : "הערה"
+            }
+            onChange={(e) =>
+              setItemsValues((prev) => {
+                return { ...prev, remark: e.target.value };
+              })
+            }
+            value={itemsValues.remark}
+          ></input>
+        )}
         {collReq === "/workersExpenses" && (
           <input
             name="equipment"
@@ -551,65 +551,65 @@ export default function AddItem({
         {(collReq === "/sales" ||
           collReq === "/expenses" ||
           collReq === "/salesToCompanies") && (
-            <Select
-              options={
-                collReq === "/salesToCompanies"
-                  ? getTasksFromCompanyList()
-                  : allSelectData
-              }
-              className="add_item select-product-in-add "
-              placeholder={
-                collReq === "/expenses"
-                  ? "בחר ספק"
-                  : collReq === "/salesToCompanies"
-                    ? "בחר עבודה"
-                    : "בחר מוצר"
-              }
-              styles={customStyles}
-              menuPlacement="auto"
-              required
-              onChange={(e) => {
-                const filteredItem = selectData.filter(
-                  (item) => item._id === e.value
-                )[0];
-                setItemsValues((prev) => {
-                  return {
-                    ...prev,
-                    name: e.label,
-                    number:
-                      collReq === "/sales" ? filteredItem.number : prev.number,
-                    sale:
-                      collReq === "/sales" ? +filteredItem.number : +prev.number,
-                    totalAmount:
-                      (+prev.number - (+prev.number * +prev.discount) / 100) *
+          <Select
+            options={
+              collReq === "/salesToCompanies"
+                ? getTasksFromCompanyList()
+                : allSelectData
+            }
+            className="add_item select-product-in-add "
+            placeholder={
+              collReq === "/expenses"
+                ? "בחר ספק"
+                : collReq === "/salesToCompanies"
+                ? "בחר עבודה"
+                : "בחר מוצר"
+            }
+            styles={customStyles}
+            menuPlacement="auto"
+            required
+            onChange={(e) => {
+              const filteredItem = selectData.filter(
+                (item) => item._id === e.value
+              )[0];
+              setItemsValues((prev) => {
+                return {
+                  ...prev,
+                  name: e.label,
+                  number:
+                    collReq === "/sales" ? filteredItem.number : prev.number,
+                  sale:
+                    collReq === "/sales" ? +filteredItem.number : +prev.number,
+                  totalAmount:
+                    (+prev.number - (+prev.number * +prev.discount) / 100) *
                       +prev.quantity -
-                      +prev.expenses,
-                  };
-                });
-              }}
-            ></Select>
-          )}
-        {(
-          collReq === "/salesToCompanies") && (
-            <input
-              name="containersNumbers"
-              id="containersNumbers"
-              autoFocus={true}
-              className="add_item"
-              style={{
-                width: "20%",
-                color: itemsValues.colored ? "rgb(255, 71, 46)" : "black",
-              }}
-              placeholder={"מס קונטיינר"}
-              onChange={(e) =>
-                setItemsValues((prev) => {
-                  return { ...prev, containersNumbers: e.target.value };
-                })
-              }
-              value={itemsValues.containersNumbers}
-            ></input>
-          )}
-        {(itemsValues?.name === "פריקה" || itemsValues?.name === "פריקה ומשלוח") && (
+                    +prev.expenses,
+                };
+              });
+            }}
+          ></Select>
+        )}
+        {collReq === "/salesToCompanies" && (
+          <input
+            name="containersNumbers"
+            id="containersNumbers"
+            autoFocus={true}
+            className="add_item"
+            style={{
+              width: "20%",
+              color: itemsValues.colored ? "rgb(255, 71, 46)" : "black",
+            }}
+            placeholder={"מס קונטיינר"}
+            onChange={(e) =>
+              setItemsValues((prev) => {
+                return { ...prev, containersNumbers: e.target.value };
+              })
+            }
+            value={itemsValues.containersNumbers}
+          ></input>
+        )}
+        {(itemsValues?.name === "פריקה" ||
+          itemsValues?.name === "פריקה ומשלוח") && (
           <Select
             options={[
               { value: "tur", label: "טורקית" },
@@ -672,10 +672,10 @@ export default function AddItem({
                 collReq === "/providers" || collReq === "/expenses"
                   ? "שם"
                   : collReq === "/contacts"
-                    ? "שם חברה"
-                    : collReq === "/institutionTax"
-                      ? "עבודה"
-                      : "מוצר"
+                  ? "שם חברה"
+                  : collReq === "/institutionTax"
+                  ? "עבודה"
+                  : "מוצר"
               }
               onChange={(e) =>
                 setItemsValues((prev) => {
@@ -693,8 +693,8 @@ export default function AddItem({
               collReq === "/sales" || collReq === "/salesToCompanies"
                 ? "8%"
                 : collReq === "/institutionTax"
-                  ? "10%"
-                  : "15%",
+                ? "10%"
+                : "15%",
           }}
           required
           className="add_item"
@@ -707,8 +707,8 @@ export default function AddItem({
                 collReq === "/institutionTax" ||
                 collReq === "/salesToCompanies" ||
                 collReq === "/expenses"
-                ? "סכום"
-                : "מחיר"
+              ? "סכום"
+              : "מחיר"
           }
           onDoubleClick={changeColorOfClientName}
           onChange={(e) =>
@@ -716,23 +716,26 @@ export default function AddItem({
               return {
                 ...prev,
                 number: e.target.value,
-                afterTax:(+e.target.value * +taxValues?.maamValue /100),
+                afterTax: (+e.target.value * +taxValues?.maamValue) / 100,
                 sale:
                   +e.target.value - (+prev.discount * +e.target.value) / 100,
                 totalAmount:
-                collReq === '/salesToCompanies' ? +e.target.value + (+e.target.value * (taxValues?.maamValue / 100)) :
-                  collReq === "/institutionTax"
-                    ? 
-                    
-                    (+e.target.value + (+e.target.value * +taxValues?.maamValue /100)) -
-                      (+e.target.value * (+taxValues?.masValue / 100))
+                  collReq === "/salesToCompanies"
+                    ? +e.target.value +
+                      +e.target.value * (taxValues?.maamValue / 100)
+                    : collReq === "/institutionTax"
+                    ? +e.target.value +
+                      (+e.target.value * +taxValues?.maamValue) / 100 -
+                      (+e.target.value +
+                        (+e.target.value * +taxValues?.maamValue) / 100) *
+                        (+taxValues?.masValue / 100)
                     : !(collReq === "/sales")
-                      ? +prev.quantity
-                        ? +e.target.value * +prev.quantity
-                        : +e.target.value
-                      : (+e.target.value -
+                    ? +prev.quantity
+                      ? +e.target.value * +prev.quantity
+                      : +e.target.value
+                    : (+e.target.value -
                         (+e.target.value * +prev.discount) / 100) *
-                      +prev.quantity -
+                        +prev.quantity -
                       +prev.expenses,
               };
             })
@@ -755,7 +758,7 @@ export default function AddItem({
                   sale: +prev.number - (+prev.number * +e.target.value) / 100,
                   totalAmount:
                     (+prev.number - (+prev.number * +e.target.value) / 100) *
-                    +prev.quantity -
+                      +prev.quantity -
                     +prev.expenses,
                 };
               });
@@ -779,7 +782,7 @@ export default function AddItem({
                   sale: +prev.number - (+prev.number * +e.target.value) / 100,
                   totalAmount:
                     (+prev.number - (+prev.number * +e.target.value) / 100) *
-                    +prev.quantity -
+                      +prev.quantity -
                     +prev.expenses,
                 };
               });
@@ -803,7 +806,7 @@ export default function AddItem({
                   expenses: +e.target.value,
                   totalAmount:
                     (+prev.number - (+prev.number * +prev.discount) / 100) *
-                    +prev.quantity -
+                      +prev.quantity -
                     +e.target.value,
                 };
               });
@@ -860,8 +863,8 @@ export default function AddItem({
                   totalAmount:
                     collReq === "/sales"
                       ? (+prev.number - (+prev.number * +prev.discount) / 100) *
-                      +e.target.value -
-                      +prev.expenses
+                          +e.target.value -
+                        +prev.expenses
                       : +e.target.value * prev.number,
                 };
               });
@@ -872,86 +875,87 @@ export default function AddItem({
         {(collReq === "/expenses" ||
           collReq === "/institutionTax" ||
           collReq === "/bouncedChecks") && (
-            <input
-              name="taxNumber"
-              id="taxNumber"
-              style={{ width: collReq === "/sales" ? "5%" : "10%" }}
-              required
-              className="add_item"
-              placeholder={`מס חשבונית`}
-              onChange={(e) => {
-                setItemsValues((prev) => {
-                  return {
-                    ...prev,
-                    taxNumber: e.target.value,
-                  };
-                });
-              }}
-              value={itemsValues.taxNumber}
-            ></input>
-          )}
+          <input
+            name="taxNumber"
+            id="taxNumber"
+            style={{ width: collReq === "/sales" ? "5%" : "10%" }}
+            required
+            className="add_item"
+            placeholder={`מס חשבונית`}
+            onChange={(e) => {
+              setItemsValues((prev) => {
+                return {
+                  ...prev,
+                  taxNumber: e.target.value,
+                };
+              });
+            }}
+            value={itemsValues.taxNumber}
+          ></input>
+        )}
         {(collReq === "/sleevesBids" ||
           collReq === "/sales" ||
           collReq === "/expenses" ||
           collReq === "/workersExpenses") && (
-            <Select
-              id="tax"
-              options={allTaxSelect}
-              className="add_item select-category-add"
-              placeholder={
-                collReq === "/workersExpenses" || collReq === "/expenses"
-                  ? "שולם"
-                  : "חשבונית"
-              }
-              defaultValue={itemsValues.tax}
-              onChange={(e) => {
-                setItemsValues((prev) => {
-                  return { ...prev, tax: e.value };
-                });
-              }}
-              styles={customStyles}
-              menuPlacement="auto"
-              required
-            />
-          )}
+          <Select
+            id="tax"
+            options={allTaxSelect}
+            className="add_item select-category-add"
+            placeholder={
+              collReq === "/workersExpenses" || collReq === "/expenses"
+                ? "שולם"
+                : "חשבונית"
+            }
+            defaultValue={itemsValues.tax}
+            onChange={(e) => {
+              setItemsValues((prev) => {
+                return { ...prev, tax: e.value };
+              });
+            }}
+            styles={customStyles}
+            menuPlacement="auto"
+            required
+          />
+        )}
         {(collReq === "/expenses" ||
           collReq === "/institutionTax" ||
           collReq === "/bouncedChecks") && (
-            <input
-              name="paymentDate"
-              type="date"
-              id="paymentDate"
-              style={{
-                width:
-                  collReq === "/sales" || collReq === "/expenses"
-                    ? "11%"
-                    : collReq === "/institutionTax"
-                      ? "15%"
-                      : "25%",
-              }}
-              required
-              className="add_item"
-              placeholder={
-                collReq === "/bouncedChecks" ? "תאריך הפקדה" : "בחר תאריך"
-              }
-              value={itemsValues.paymentDate}
-              onChange={(e) =>
-                setItemsValues((prev) => {
-                  return { ...prev, paymentDate: e.target.value };
-                })
-              }
-            ></input>
-          )}
+          <input
+            name="paymentDate"
+            type="date"
+            id="paymentDate"
+            style={{
+              width:
+                collReq === "/sales" || collReq === "/expenses"
+                  ? "11%"
+                  : collReq === "/institutionTax"
+                  ? "15%"
+                  : "25%",
+            }}
+            required
+            className="add_item"
+            placeholder={
+              collReq === "/bouncedChecks" ? "תאריך הפקדה" : "בחר תאריך"
+            }
+            value={itemsValues.paymentDate}
+            onChange={(e) =>
+              setItemsValues((prev) => {
+                return { ...prev, paymentDate: e.target.value };
+              })
+            }
+          ></input>
+        )}
         {collReq === "/institutionTax" && (
           <input
             id="withholdingTax"
             className="add_item"
             style={{ width: "7%" }}
             disabled
-            value={(
-              +itemsValues?.number *
-              (+taxValues?.masValue / 100)
-            ).toFixed(2)}
+            value={
+              (+itemsValues?.number +
+                +itemsValues?.number * (taxValues?.maamValue / 100)) *
+              (+taxValues?.masValue / 100).toFixed(2)
+            }
           />
         )}
       </div>
