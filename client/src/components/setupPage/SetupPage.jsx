@@ -338,7 +338,7 @@ export default function SetupPage({
               setKindOfSort(() => "location");
             }}
           >
-            מיקום
+            עבודה
           </button>
         )}
         {report?.type !== "/salesToCompanies" &&
@@ -542,7 +542,7 @@ export default function SetupPage({
               setKindOfSort(() => "equipment");
             }}
           >
-            ציוד
+            מיקום
           </button>
         )}
         <button

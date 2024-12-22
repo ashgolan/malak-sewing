@@ -125,7 +125,6 @@ export default function Navbar() {
             style={{
               display: getAccessToken() ? "block" : "none",
               cursor: "pointer",
-              // width: "20%",
               padding: "1%",
             }}
             alt={""}
