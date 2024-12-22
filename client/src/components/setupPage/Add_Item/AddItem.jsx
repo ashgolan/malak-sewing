@@ -336,7 +336,7 @@ export default function AddItem({
             autoFocus={true}
             className="add_item"
             style={{ width: "15%" }}
-            placeholder={"מיקום"}
+            placeholder={"עבודה"}
             onChange={(e) =>
               setItemsValues((prev) => {
                 return { ...prev, location: e.target.value };
@@ -539,7 +539,7 @@ export default function AddItem({
             autoFocus={true}
             className="add_item"
             style={{ width: "15%" }}
-            placeholder={"ציוד"}
+            placeholder={"מיקום"}
             onChange={(e) =>
               setItemsValues((prev) => {
                 return { ...prev, equipment: e.target.value };
