@@ -819,9 +819,9 @@ export default function ItemsTable({
             style={{ width: "8%" }}
             disabled
             value={
-              (+itemsValues?.number +
+              ((+itemsValues?.number +
                 +itemsValues?.number * (taxValues?.maamValue / 100)) *
-              (+taxValues?.masValue / 100)
+              (+taxValues?.masValue / 100))?.toFixed(1)
             }
           />
         )}
