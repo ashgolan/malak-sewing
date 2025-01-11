@@ -90,6 +90,12 @@ export default function ItemsTable({
     };
     getData();
   }, [item._id, myData]);
+  function getMaam() {
+    const date = new Date(itemsValues?.date);
+    const insertedYear = date.getFullYear();
+    
+    return insertedYear <= 2024 ? 17 : +taxValues?.maamValue;
+  }
 
   const allTaxSelect = [
     { value: true, label: "כן" },
@@ -136,59 +142,6 @@ export default function ItemsTable({
     }),
   };
 
-  // const globalCustomStyles = {
-  //   control: (base, state) => ({
-  //     ...base,
-  //     textAlign: "right",
-  //     backgroundColor: "rgb(48, 45, 45)",
-  //     border: "none",
-  //     boxShadow: "none",
-  //     whiteSpace: "nowrap",
-  //     overflow: "hidden",
-  //     textOverflow: "ellipsis",
-  //   }),
-  //   dropdownIndicator: (base) => ({
-  //     ...base,
-  //     display: report?.type !== undefined && "none",
-  //   }),
-  //   placeholder: (provided) => ({
-  //     ...provided,
-  //     color:
-  //       (collReq === "/expenses" || collReq === "/salesToCompanies") && itemsValues.colored
-  //         ? "rgb(255, 71, 46)"
-  //         : "whitesmoke",
-  //   }),
-  //   menu: (base) => ({
-  //     ...base,
-  //     textAlign: "center",
-  //     backgroundColor: "rgb(48, 45, 45)",
-  //   }),
-  //   option: (provided, state) => ({
-  //     ...provided,
-  //     background: state.isFocused ? "gold" : "rgb(48, 45, 45)",
-  //     color: state.isFocused ? "rgb(48, 45, 45)" : "inherit",
-  //   }),
-  //   singleValue: (styles, state) => {
-  //     return {
-  //       ...styles,
-  //       color: state.isSelected ? "red" : "whitesmoke",
-  //     };
-  //   },
-
-  //   indicatorSeparator: (provided) => ({
-  //     ...provided,
-  //     display: "none",
-  //   }),
-  // };
-  // const salesToCompaniesStyles = {
-
-  //   ...globalCustomStyles,
-  //   placeholder: (provided) => ({
-  //     ...provided,
-  //     color: "whitesmoke", // Set the color to whitesmoke
-  //   }),
-
-  // }
   const specificCustomStyles = {
     ...globalCustomStyles,
     dropdownIndicator: (provided) => ({
@@ -329,7 +282,9 @@ export default function ItemsTable({
             className="input_show_item"
             style={{
               width:
-                report?.type || collReq === "/sleevesBids"
+                report?.type && collReq === "/institutionTax"
+                  ? "15%"
+                  : report?.type || collReq === "/sleevesBids"
                   ? "23%"
                   : collReq === "/bouncedChecks"
                   ? "10%"
@@ -627,18 +582,16 @@ export default function ItemsTable({
               return {
                 ...prev,
                 number: e.target.value,
-                afterTax: (+e.target.value * +taxValues?.maamValue) / 100,
+                afterTax: (+e.target.value * +getMaam()) / 100,
                 sale:
                   +e.target.value - (+prev.discount * +e.target.value) / 100,
                 totalAmount:
                   collReq === "/salesToCompanies"
-                    ? +e.target.value +
-                      +e.target.value * (taxValues?.maamValue / 100)
+                    ? +e.target.value + +e.target.value * (getMaam() / 100)
                     : collReq === "/institutionTax"
                     ? +e.target.value +
-                      (+e.target.value * +taxValues?.maamValue) / 100 -
-                      (+e.target.value +
-                        (+e.target.value * +taxValues?.maamValue) / 100) *
+                      (+e.target.value * +getMaam()) / 100 -
+                      (+e.target.value + (+e.target.value * +getMaam()) / 100) *
                         (+taxValues?.masValue / 100)
                     : !(collReq === "/sales")
                     ? +prev.quantity
@@ -818,11 +771,11 @@ export default function ItemsTable({
             className="input_show_item"
             style={{ width: "8%" }}
             disabled
-            value={
-              ((+itemsValues?.number +
-                +itemsValues?.number * (taxValues?.maamValue / 100)) *
-              (+taxValues?.masValue / 100))?.toFixed(1)
-            }
+            value={(
+              (+itemsValues?.number +
+                +itemsValues?.number * (getMaam() / 100)) *
+              (+taxValues?.masValue / 100)
+            )?.toFixed(1)}
           />
         )}
         {collReq === "/salesToCompanies" && (

@@ -795,7 +795,7 @@ export default function OrderPage({ customOnChange, placeholder }) {
         <div className="bottom-logo-of-bid" style={{ display: "flex" }}>
           <label htmlFor="">
             {" "}
-            הערה : יש להוסיף לסכום מע"מ 17% כחוק - הספקה תוך 15 ימים מתאריך
+            הערה : יש להוסיף לסכום מע"מ 18% כחוק - הספקה תוך 15 ימים מתאריך
             אישור ההזמנה
           </label>
           <label

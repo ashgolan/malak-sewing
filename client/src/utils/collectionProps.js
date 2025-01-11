@@ -49,7 +49,6 @@ export const getCollectionProps = (collReq) => {
         "name",
         "price",
         "sale",
-        "discount",
         "expenses",
         "totalAmount",
       ];

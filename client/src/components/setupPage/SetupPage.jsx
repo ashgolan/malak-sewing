@@ -62,6 +62,9 @@ export default function SetupPage({
   function openModal() {
     setIsOpen(true);
   }
+  function getMaam() {
+    return report?.year <= 2024 ? 17 : +taxValues?.maamValue ; ;
+  }
   const [modalIsOpen, setIsOpen] = React.useState(false);
 
   const sendRequest = async (token) => {
@@ -274,12 +277,12 @@ export default function SetupPage({
               {report?.type === "/salesToCompanies" && `  ש"ח כולל מע"מ [ `}
               {report?.type === "/salesToCompanies" && (
                 <span style={{ fontSize: "0.8rem", color: "darkblue" }}>
-                  {(getTotals() / (1 + taxValues?.maamValue / 100)).toFixed(2)}
+                  {(getTotals() / (1 + getMaam() / 100)).toFixed(2)}
                   {`  ש"ח  `}
-                  {` + ${taxValues?.maamValue}% מע"מ  ( `}
+                  {` + ${getMaam()}% מע"מ  ( `}
                   {(
                     getTotals() -
-                    getTotals() / (1 + taxValues?.maamValue / 100)
+                    getTotals() / (1 + getMaam() / 100)
                   ).toFixed(2)}{" "}
                   {`  ש"ח )  `}
                 </span>
@@ -354,7 +357,7 @@ export default function SetupPage({
               style={{
                 width:
                   report?.type && collReq === "/institutionTax"
-                    ? "15%"
+                    ? "18%"
                     : report?.type || collReq === "/sleevesBids"
                       ? "23%"
                       : collReq === "/bouncedChecks"
@@ -738,7 +741,7 @@ export default function SetupPage({
           >
     מע"מ
     {taxValues?.maamValue && (
-      <span style={{ fontSize: "0.7em" }}> %{taxValues?.maamValue}</span>
+      <span style={{ fontSize: "0.7em" }}> %{getMaam()}</span>
     )}          </button>
         )}
         {(collReq === "/sleevesBids" ||

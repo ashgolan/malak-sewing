@@ -54,6 +54,9 @@ export default function AddItem({
     date: year + "-" + month + "-" + day,
     totalAmount: 0,
   });
+
+  
+
   const sendPostRequest = async (token) => {
     const headers = { Authorization: token };
     setFetchingStatus({ loading: true, error: false });
