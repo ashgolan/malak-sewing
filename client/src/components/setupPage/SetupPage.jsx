@@ -112,22 +112,22 @@ export default function SetupPage({
         }
   
         // Filter or set data as needed
-        // if (!report) {
-        //   const filterConditions = ["/sales", "/salesToCompanies", "/institutionsTax", "/sleevesBids", "/workersExpenses", "/expenses"];
-        //   if (filterConditions.includes(collReq)) {
-        //     setFetchingData(
-        //       data.filter(
-        //         (item) =>
-        //           new Date(item.date).getFullYear() === year ||
-        //           item.colored === true
-        //       )
-        //     );
-        //   } else {
-        //     setFetchingData(data);
-        //   }
-        // } else {
+        if (!report) {
+          const filterConditions = ["/sales", "/salesToCompanies", "/institutionsTax", "/sleevesBids", "/workersExpenses", "/expenses"];
+          if (filterConditions.includes(collReq)) {
+            setFetchingData(
+              data.filter(
+                (item) =>
+                  new Date(item.date).getFullYear() === year ||
+                  item.colored === true
+              )
+            );
+          } else {
+            setFetchingData(data);
+          }
+        } else {
           setFetchingData(data);
-        // }
+        }
       }
   
       // Fetch tax values
