@@ -1,42 +1,41 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 
 const IdleTimer = ({ timeout, onIdle }) => {
-  const [idle, setIdle] = useState(false);
+  const timerRef = useRef(null);
 
   useEffect(() => {
-    let idleTimer;
-
-    const resetIdleTimer = () => {
-      clearTimeout(idleTimer);
-      if (!idle) {
-        setIdle(true);
-        onIdle(); // Trigger any action when the user becomes idle
-      }
-      idleTimer = setTimeout(() => {
-        setIdle(false);
+    const startIdleTimer = () => {
+      clearTimeout(timerRef.current);
+      timerRef.current = setTimeout(() => {
+        onIdle(); // Trigger logout after idle timeout
       }, timeout);
     };
 
     const handleUserActivity = () => {
-      resetIdleTimer();
+      startIdleTimer();
     };
 
-    // Attach event listeners for user activity
-    window.addEventListener("mousemove", handleUserActivity);
-    window.addEventListener("keydown", handleUserActivity);
+    // Start the timer initially
+    startIdleTimer();
 
-    // Initial setup of the idle timer
-    resetIdleTimer();
+    // Events to listen to
+    const events = ["mousemove", "keydown", "touchstart", "touchmove", "scroll"];
 
-    // Cleanup event listeners on component unmount
+    // Attach all events
+    events.forEach(event =>
+      window.addEventListener(event, handleUserActivity)
+    );
+
+    // Cleanup
     return () => {
-      clearTimeout(idleTimer);
-      window.removeEventListener("mousemove", handleUserActivity);
-      window.removeEventListener("keydown", handleUserActivity);
+      clearTimeout(timerRef.current);
+      events.forEach(event =>
+        window.removeEventListener(event, handleUserActivity)
+      );
     };
-  }, [timeout, onIdle, idle]);
+  }, [timeout, onIdle]);
 
-  return <>{/* Your application content */}</>;
+  return null;
 };
 
 export default IdleTimer;

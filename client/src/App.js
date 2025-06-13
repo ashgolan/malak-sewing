@@ -41,7 +41,7 @@ function App() {
 
   return (
     <div>
-      <IdleTimer timeout={20 * 60 * 1000} onIdle={handleIdle} />
+      <IdleTimer timeout={1000 * 60 * 5} onIdle={handleIdle} /> 
       <Navbar></Navbar>
       {fetchingStatus.message && (
         <h5 className="message">{fetchingStatus.message}</h5>
